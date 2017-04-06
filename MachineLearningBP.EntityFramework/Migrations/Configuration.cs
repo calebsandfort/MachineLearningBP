@@ -29,8 +29,10 @@ namespace MachineLearningBP.Migrations
                 new DefaultTenantCreator(context).Create();
                 new TenantRoleAndUserBuilder(context, 1).Create();
 
-                new SeasonsCreator(context).Create();
-                new TeamsCreator(context).Create();
+                //new MlbSeasonsCreator(context).Create();
+                //new MlbTeamsCreator(context).Create();
+                //new NbaSeasonsCreator(context).Create();
+                //new NbaTeamsCreator(context).Create();
             }
             else
             {

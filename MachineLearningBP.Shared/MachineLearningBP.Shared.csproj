@@ -110,6 +110,7 @@
     <Compile Include="GuerillaTimer\GuerillaTimer.cs" />
     <Compile Include="MachineLearningBPSharedModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlExecutor\ISqlExecuter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -122,16 +122,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataPointMethods\NbaMethods.cs" />
+    <Compile Include="Entities\Sports\Mlb\MlbTeam.cs" />
+    <Compile Include="Entities\Sports\Mlb\MlbGame.cs" />
+    <Compile Include="Entities\Sports\Mlb\MlbSeason.cs" />
+    <Compile Include="Entities\Sports\Mlb\MlbStatLine.cs" />
+    <Compile Include="Entities\Sports\Nba\NbaFourFactorsExample.cs" />
+    <Compile Include="Entities\Sports\Nba\NbaPointsExample.cs" />
+    <Compile Include="Entities\Sports\SportNumbersOnlyExampleGenerationInfo.cs" />
+    <Compile Include="Entities\Sports\SportNumbersOnlyExample.cs" />
     <Compile Include="Enums\Targets.cs" />
     <Compile Include="Framework\Extensions.cs" />
-    <Compile Include="Framework\ISqlExecuter.cs" />
     <Compile Include="Framework\MySettingProvider.cs" />
-    <Compile Include="Framework\NbaDomainService.cs" />
-    <Compile Include="Games\Game.cs" />
-    <Compile Include="Games\IGameDomainService.cs" />
-    <Compile Include="Games\NbaGameDomainService.cs" />
-    <Compile Include="Games\INbaGameDomainService.cs" />
-    <Compile Include="Games\NbaGame.cs" />
+    <Compile Include="Entities\Sports\Game.cs" />
+    <Compile Include="Services\Sports\IGameDomainService.cs" />
+    <Compile Include="Services\Sports\ISportNumbersOnlyExampleDomainService.cs" />
+    <Compile Include="Services\Sports\Mlb\IMlbGameDomainService.cs" />
+    <Compile Include="Services\Sports\Mlb\IMlbSeasonDomainService.cs" />
+    <Compile Include="Services\Sports\Mlb\MlbGameDomainService.cs" />
+    <Compile Include="Services\Sports\Mlb\MlbSeasonDomainService.cs" />
+    <Compile Include="Services\Sports\Nba\INbaGameDomainService.cs" />
+    <Compile Include="Services\Sports\Nba\INbaPointsExampleDomainService.cs" />
+    <Compile Include="Services\Sports\Nba\NbaGameDomainService.cs" />
+    <Compile Include="Entities\Sports\Nba\NbaGame.cs" />
     <Compile Include="MachineLearningBPConsts.cs" />
     <Compile Include="MachineLearningBPCoreModule.cs" />
     <Compile Include="Authorization\MachineLearningBPAuthorizationProvider.cs" />
@@ -148,15 +161,16 @@
     <Compile Include="Authorization\Roles\Role.cs" />
     <Compile Include="Authorization\Roles\RoleManager.cs" />
     <Compile Include="Authorization\Roles\RoleStore.cs" />
-    <Compile Include="Seasons\INbaSeasonDomainService.cs" />
-    <Compile Include="Seasons\ISeasonDomainService.cs" />
-    <Compile Include="Seasons\NbaSeason.cs" />
-    <Compile Include="Seasons\NbaSeasonDomainService.cs" />
-    <Compile Include="Seasons\Season.cs" />
-    <Compile Include="StatLines\NbaStatLine.cs" />
-    <Compile Include="StatLines\StatLine.cs" />
-    <Compile Include="Teams\NbaTeam.cs" />
-    <Compile Include="Teams\Team.cs" />
+    <Compile Include="Services\Sports\Nba\INbaSeasonDomainService.cs" />
+    <Compile Include="Entities\Sports\Nba\NbaSeason.cs" />
+    <Compile Include="Services\Sports\Nba\NbaPointsExampleDomainService.cs" />
+    <Compile Include="Services\Sports\Nba\NbaSeasonDomainService.cs" />
+    <Compile Include="Entities\Sports\Season.cs" />
+    <Compile Include="Entities\Sports\Nba\NbaStatLine.cs" />
+    <Compile Include="Entities\Sports\SportStatLine.cs" />
+    <Compile Include="Entities\Sports\Nba\NbaTeam.cs" />
+    <Compile Include="Entities\Sports\Team.cs" />
+    <Compile Include="Services\Sports\SportNumbersOnlyExampleDomainService.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserStore.cs" />
@@ -198,6 +212,10 @@
     <Folder Include="Framework\Dtos\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MachineLearningBP.CollectiveIntelligence\MachineLearningBP.CollectiveIntelligence.csproj">
+      <Project>{7d1d8906-9c35-4a99-b46f-513377177665}</Project>
+      <Name>MachineLearningBP.CollectiveIntelligence</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MachineLearningBP.Shared\MachineLearningBP.Shared.csproj">
       <Project>{0b322986-37f2-4213-9785-a74775746d57}</Project>
       <Name>MachineLearningBP.Shared</Name>

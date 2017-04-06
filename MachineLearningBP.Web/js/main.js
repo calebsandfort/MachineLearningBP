@@ -1,7 +1,8 @@
 ﻿var MachineLearningBP;
 if (!MachineLearningBP) MachineLearningBP = {
     Console: {},
-    Nba: {}
+    Nba: {},
+    Mlb: {}
 };
 
 (function ($) {
@@ -54,8 +55,16 @@ MachineLearningBP.Console.writeLine = function (line) {
 MachineLearningBP.Nba.populateGames = function () {
     MachineLearningBP.Console.clear();
 
-    abp.services.app.nbaGame.populateGames().done(function (result) {
+    abp.services.app.nbaGame.populateSamples().done(function (result) {
         
+    });
+}
+
+MachineLearningBP.Nba.fillGames = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.nbaGame.fillSamples().done(function (result) {
+
     });
 }
 
@@ -63,6 +72,30 @@ MachineLearningBP.Nba.setSeasonsRollingWindowStart = function () {
     MachineLearningBP.Console.clear();
 
     abp.services.app.nbaSeason.setSeasonsRollingWindowStart().done(function (result) {
+
+    });
+}
+
+MachineLearningBP.Mlb.populateGames = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.mlbGame.populateSamples().done(function (result) {
+
+    });
+}
+
+MachineLearningBP.Mlb.fillGames = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.mlbGame.fillSamples().done(function (result) {
+
+    });
+}
+
+MachineLearningBP.Mlb.setSeasonsRollingWindowStart = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.mlbSeason.setSeasonsRollingWindowStart().done(function (result) {
 
     });
 }

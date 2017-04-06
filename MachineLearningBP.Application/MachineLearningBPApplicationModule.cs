@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
 using Abp.AutoMapper;
 using Abp.Modules;
+using MachineLearningBP.Shared;
 
 namespace MachineLearningBP
 {
-    [DependsOn(typeof(MachineLearningBPCoreModule), typeof(AbpAutoMapperModule))]
+    [DependsOn(typeof(MachineLearningBPCoreModule), typeof(AbpAutoMapperModule), typeof(MachineLearningBPCollectiveIntelligenceModule))]
     public class MachineLearningBPApplicationModule : AbpModule
     {
         public override void PreInitialize()

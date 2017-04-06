@@ -19,8 +19,23 @@ namespace MachineLearningBP.Framework
                         scopes: SettingScopes.Application
                         ),
                     new SettingDefinition(
-                        "RollingWindowPeriod",
+                        "NbaRollingWindowPeriod",
                         "10",
+                        scopes: SettingScopes.Application
+                        ),
+                    new SettingDefinition(
+                        "MlbRollingWindowPeriod",
+                        "20",
+                        scopes: SettingScopes.Application
+                        ),
+                    new SettingDefinition(
+                        "NbaScaleFactor",
+                        "100",
+                        scopes: SettingScopes.Application
+                        ),
+                    new SettingDefinition(
+                        "MlbScaleFactor",
+                        "100",
                         scopes: SettingScopes.Application
                         )
                 };

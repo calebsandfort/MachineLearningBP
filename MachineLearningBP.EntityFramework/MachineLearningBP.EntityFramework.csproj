@@ -144,21 +144,9 @@
     <Compile Include="Migrations\201701271145151_AbpZero_Initial.Designer.cs">
       <DependentUpon>201701271145151_AbpZero_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201703291726532_AddNbaSeasonAndGame.cs" />
-    <Compile Include="Migrations\201703291726532_AddNbaSeasonAndGame.Designer.cs">
-      <DependentUpon>201703291726532_AddNbaSeasonAndGame.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703291832305_AddNbaTeams.cs" />
-    <Compile Include="Migrations\201703291832305_AddNbaTeams.Designer.cs">
-      <DependentUpon>201703291832305_AddNbaTeams.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703302300053_AddNbaStatLines.cs" />
-    <Compile Include="Migrations\201703302300053_AddNbaStatLines.Designer.cs">
-      <DependentUpon>201703302300053_AddNbaStatLines.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703311536059_AddMoreNbaStats.cs" />
-    <Compile Include="Migrations\201703311536059_AddMoreNbaStats.Designer.cs">
-      <DependentUpon>201703311536059_AddMoreNbaStats.cs</DependentUpon>
+    <Compile Include="Migrations\201704061737474_Initial.cs" />
+    <Compile Include="Migrations\201704061737474_Initial.Designer.cs">
+      <DependentUpon>201704061737474_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AbpZeroDbMigrator.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -169,8 +157,10 @@
     <Compile Include="Migrations\SeedData\DefaultTenantCreator.cs" />
     <Compile Include="Migrations\SeedData\HostRoleAndUserCreator.cs" />
     <Compile Include="Migrations\SeedData\InitialHostDbBuilder.cs" />
-    <Compile Include="Migrations\SeedData\TeamsCreator.cs" />
-    <Compile Include="Migrations\SeedData\SeasonsCreator.cs" />
+    <Compile Include="Migrations\SeedData\MlbSeasonsCreator.cs" />
+    <Compile Include="Migrations\SeedData\MlbTeamsCreator.cs" />
+    <Compile Include="Migrations\SeedData\NbaTeamsCreator.cs" />
+    <Compile Include="Migrations\SeedData\NbaSeasonsCreator.cs" />
     <Compile Include="Migrations\SeedData\TenantRoleAndUserBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -179,26 +169,25 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MachineLearningBP.CollectiveIntelligence\MachineLearningBP.CollectiveIntelligence.csproj">
+      <Project>{7d1d8906-9c35-4a99-b46f-513377177665}</Project>
+      <Name>MachineLearningBP.CollectiveIntelligence</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MachineLearningBP.Core\MachineLearningBP.Core.csproj">
       <Project>{17298ea0-af73-4f30-b6f1-2066100d7d74}</Project>
       <Name>MachineLearningBP.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MachineLearningBP.Shared\MachineLearningBP.Shared.csproj">
+      <Project>{0B322986-37F2-4213-9785-A74775746D57}</Project>
+      <Name>MachineLearningBP.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201701271145151_AbpZero_Initial.resx">
       <DependentUpon>201701271145151_AbpZero_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703291726532_AddNbaSeasonAndGame.resx">
-      <DependentUpon>201703291726532_AddNbaSeasonAndGame.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703291832305_AddNbaTeams.resx">
-      <DependentUpon>201703291832305_AddNbaTeams.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703302300053_AddNbaStatLines.resx">
-      <DependentUpon>201703302300053_AddNbaStatLines.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703311536059_AddMoreNbaStats.resx">
-      <DependentUpon>201703311536059_AddMoreNbaStats.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704061737474_Initial.resx">
+      <DependentUpon>201704061737474_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

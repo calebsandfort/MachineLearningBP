@@ -13,7 +13,7 @@ using MachineLearningBP.Shared;
 
 namespace MachineLearningBP
 {
-    [DependsOn(typeof(AbpZeroCoreModule), typeof(MachineLearningBPSharedModule))]
+    [DependsOn(typeof(AbpZeroCoreModule), typeof(MachineLearningBPSharedModule), typeof(MachineLearningBPCollectiveIntelligenceModule))]
     public class MachineLearningBPCoreModule : AbpModule
     {
         public override void PreInitialize()

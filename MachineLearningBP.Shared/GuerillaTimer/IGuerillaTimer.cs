@@ -9,7 +9,5 @@ namespace MachineLearningBP.Shared.GuerillaTimer
 {
     public interface IGuerillaTimer : ITransientDependency
     {
-        void Start(String prefix);
-        void Complete();
     }
 }

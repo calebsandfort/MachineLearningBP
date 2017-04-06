@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Abp.Configuration;
+using MachineLearningBP.Shared;
+using MachineLearningBP.Shared.SqlExecuter;
+using Abp.Domain.Repositories;
+using MachineLearningBP.CollectiveIntelligence.Entities;
+
+namespace MachineLearningBP.CollectiveIntelligence.DomainServices
+{
+    public class MediumSampleDomainService<TSample, TStatLine, TTimeGrouping> : MinimumSampleDomainService<TSample, TStatLine>
+        where TSample : Sample
+        where TStatLine : StatLine
+        where TTimeGrouping : TimeGrouping
+    {
+        #region Properties
+        public readonly IRepository<TTimeGrouping> _timeGroupingRepository;
+        #endregion
+
+        #region Constructor
+        public MediumSampleDomainService(IRepository<TTimeGrouping> timeGroupingRepository,
+            IRepository<TSample> sampleRepository, IRepository<TStatLine> statLineRepository,
+            ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager)
+            : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager)
+        {
+            this._timeGroupingRepository = timeGroupingRepository;
+        }
+        #endregion
+
+
+    }
+}
