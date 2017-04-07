@@ -10,18 +10,24 @@ using MachineLearningBP.Shared;
 using MachineLearningBP.Shared.SqlExecuter;
 using MachineLearningBP.Shared.Dtos;
 using MachineLearningBP.Shared.GuerillaTimer;
+using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms;
 
 namespace MachineLearningBP.Services.Sports.Nba
 {
     public class NbaPointsExampleDomainService : MaximumExampleDomainService<NbaGame, NbaStatLine, NbaPointsExample, Double, NbaExampleGenerationInfo, NbaSeason, NbaTeam>, INbaPointsExampleDomainService
     {
+        #region Properties
+        public readonly IKNearestNeighborsDomainService<Double> _kNearestNeighborsDomainService;
+        #endregion
+
         #region Constructor
         public NbaPointsExampleDomainService(IRepository<NbaGame> sampleRepository, IRepository<NbaStatLine> statLineRepository,
             ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager,
             IRepository<NbaPointsExample> exampleRepository, IRepository<NbaSeason> timeGroupingRepository,
-            IRepository<NbaTeam> participantRepository) : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy,
+            IRepository<NbaTeam> participantRepository, IKNearestNeighborsDomainService<Double> kNearestNeighborsDomainService) : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy,
                 settingManager, exampleRepository, timeGroupingRepository, participantRepository)
         {
+            this._kNearestNeighborsDomainService = kNearestNeighborsDomainService;
         }
         #endregion
 
@@ -122,6 +128,21 @@ namespace MachineLearningBP.Services.Sports.Nba
 
             this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Deleting NbaPointsExamples finished."));
         }
+        #endregion
+
+        #region KNearestNeighborsDoStuff
+        public async Task KNearestNeighborsDoStuff()
+        {
+            List<NbaPointsExample> data, trainSet, testSet;
+
+            using (var unitOfWork = this.UnitOfWorkManager.Begin())
+            {
+                data = await this._exampleRepository.GetAllListAsync();
+                unitOfWork.Complete();
+            }
+
+            //this._kNearestNeighborsDomainService.DivideData(data, out trainSet, out testSet);
+        } 
         #endregion
     }
 }

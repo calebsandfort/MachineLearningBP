@@ -89,6 +89,8 @@
     <Compile Include="ApplicationServices\BaseApplicationService.cs" />
     <Compile Include="ApplicationServices\IExampleApplicationService.cs" />
     <Compile Include="ApplicationServices\ISampleApplicationService.cs" />
+    <Compile Include="DomainServices\Algorithms\IKNearestNeighborsDomainService.cs" />
+    <Compile Include="DomainServices\Algorithms\KNearestNeighborsDomainService.cs" />
     <Compile Include="DomainServices\BaseDomainService.cs" />
     <Compile Include="DomainServices\Examples\IExampleDomainService.cs" />
     <Compile Include="DomainServices\Samples\ISampleDomainService.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="DomainServices\Samples\MediumSampleDomainService.cs" />
     <Compile Include="DomainServices\Examples\MinimumExampleDomainService.cs" />
     <Compile Include="DomainServices\Samples\MinimumSampleDomainService.cs" />
+    <Compile Include="Entities\IExample.cs" />
     <Compile Include="Entities\Example.cs" />
     <Compile Include="Entities\ExampleMinimum.cs" />
     <Compile Include="Entities\ExampleGenerationInfo.cs" />

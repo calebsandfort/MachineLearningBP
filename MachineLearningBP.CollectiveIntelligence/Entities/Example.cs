@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.CollectiveIntelligence.Entities
 {
-    public class Example<TResult> : Entity<int>
+    public class Example<TResult> : Entity<int>, IExample<TResult>
     {
         public TResult Result { get; set; }
         public String DelimitedNumericalData { get; set; }

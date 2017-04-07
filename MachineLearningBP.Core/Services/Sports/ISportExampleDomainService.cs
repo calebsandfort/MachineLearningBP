@@ -10,5 +10,6 @@ namespace MachineLearningBP.Services.Sports
         where TParticipant : Participant
     {
         Task PopulateExample(TSample game, List<TSample> games, List<TParticipant> teams, int rollingWindowPeriod, double scaleFactor);
+        Task KNearestNeighborsDoStuff();
     }
 }
