@@ -8,9 +8,7 @@ using MachineLearningBP.CollectiveIntelligence.Entities;
 
 namespace MachineLearningBP.Entities.Sports
 {
-    public abstract class Team<TStatLine, TTimeGrouping> : ParticipantMinimum<SportStatLine<TStatLine, TTimeGrouping>>
-        where TStatLine : StatLine
-        where TTimeGrouping : TimeGrouping
+    public interface Team
     {
     }
 }

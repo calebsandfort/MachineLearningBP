@@ -11,34 +11,25 @@ namespace MachineLearningBP.CollectiveIntelligence.Entities
         where TExampleGenerationInfo : ExampleGenerationInfo
     {
         public Double Result { get; set; }
-        public String DelimitedDataPoints { get; set; }
+        public String DelimitedPoints { get; set; }
 
         [NotMapped]
-        public List<Double> DataPoints
+        public List<Double> Data
         {
             get
             {
-                if (String.IsNullOrEmpty(this.DelimitedDataPoints))
+                if (String.IsNullOrEmpty(this.DelimitedPoints))
                     return new List<double>();
                 else
-                    return this.DelimitedDataPoints.Split(":".ToCharArray()).Select(x => Double.Parse(x)).ToList();
+                    return this.DelimitedPoints.Split(":".ToCharArray()).Select(x => Double.Parse(x)).ToList();
             }
             set
             {
                 if (value.Count == 0)
-                    this.DelimitedDataPoints = String.Empty;
+                    this.DelimitedPoints = String.Empty;
                 else
-                    this.DelimitedDataPoints = String.Join(":", value);
+                    this.DelimitedPoints = String.Join(":", value);
             }
         }
-
-        public override void SetFields(TExampleGenerationInfo info)
-        {
-            this.SetDataPoints(info);
-            this.SetResult(info);
-        }
-
-        public abstract void SetDataPoints(TExampleGenerationInfo info);
-        public abstract void SetResult(TExampleGenerationInfo info);
     }
 }

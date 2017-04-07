@@ -7,10 +7,9 @@ using MachineLearningBP.DataPointMethods;
 
 namespace MachineLearningBP.Entities.Sports.Nba
 {
-    public abstract class NbaFourFactorsExample<TExampleGenerationInfo>: SportNumbersOnlyExample<SportExampleGenerationInfo<NbaGame, NbaStatLine, NbaSeason, NbaTeam>, NbaGame, NbaStatLine, NbaSeason, NbaTeam>
-        where TExampleGenerationInfo : SportExampleGenerationInfo<NbaGame, NbaStatLine, NbaSeason, NbaTeam>
+    public abstract class NbaFourFactorsNumbersOnlyExample : SportNumbersOnlyExample<NbaExampleGenerationInfo>
     {
-        public override void SetDataPoints(SportExampleGenerationInfo<NbaGame, NbaStatLine, NbaSeason, NbaTeam>  info)
+        public override void SetData(NbaExampleGenerationInfo info)
         {
             List<Double> dataPoints = new List<double>();
 
@@ -70,9 +69,7 @@ namespace MachineLearningBP.Entities.Sports.Nba
             dataPoints.Add(NbaMethods.CalculateFreeThrows(info.Team2LastNOpponentStatLines));
             #endregion
 
-            this.DataPoints = dataPoints.Select(x => x * info.ScaleFactor).ToList();
+            this.Data = dataPoints.Select(x => x * info.ScaleFactor).ToList();
         }
-
-        
     }
 }

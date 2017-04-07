@@ -13,7 +13,7 @@ namespace MachineLearningBP.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201704061737474_Initial"; }
+            get { return "201704061812148_Initial"; }
         }
         
         string IMigrationMetadata.Source

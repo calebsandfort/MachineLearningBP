@@ -12,11 +12,11 @@ using Abp.Configuration;
 namespace MachineLearningBP.Services.Sports
 {
     public class SportNumbersOnlyExampleAppService<TSample, TStatLine, TExample, TExampleGenerationInfo, TTimeGrouping, TParticipant> : BaseApplicationService
-        where TSample : Game<TStatLine, TTimeGrouping>
-        where TStatLine : SportStatLine<TStatLine, TTimeGrouping>
-        where TExample : SportNumbersOnlyExample<TExampleGenerationInfo, TSample, TStatLine, TTimeGrouping, TParticipant>
-        where TExampleGenerationInfo : SportExampleGenerationInfo<TSample, TStatLine, TTimeGrouping, TParticipant>
-        where TTimeGrouping : Season<TStatLine, TTimeGrouping>
+        where TSample : Sample
+        where TStatLine : StatLine
+        where TTimeGrouping : TimeGrouping
+        where TExampleGenerationInfo : ExampleGenerationInfo
+        where TExample : Example<TExampleGenerationInfo>
         where TParticipant : Participant
     {
         public readonly SportNumbersOnlyExampleDomainService<TSample, TStatLine, TExample, TExampleGenerationInfo, TTimeGrouping, TParticipant> _domainService;

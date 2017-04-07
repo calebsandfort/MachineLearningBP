@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.CollectiveIntelligence.Entities
 {
-    public abstract class SampleMinimum<TStatLine> : Sample
+    public interface SampleMinimum<TStatLine>
         where TStatLine : StatLine
     {
-        [ForeignKey("SampleId")]
-        public virtual ICollection<TStatLine> StatLines { get; set; }
+        //[ForeignKey("SampleId")]
+        ICollection<TStatLine> StatLines { get; set; }
     }
 }

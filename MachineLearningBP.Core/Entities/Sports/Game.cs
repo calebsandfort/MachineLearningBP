@@ -8,13 +8,13 @@ using MachineLearningBP.CollectiveIntelligence.Entities;
 
 namespace MachineLearningBP.Entities.Sports
 {
-    public abstract class Game<TStatLine, TTimeGrouping> : SampleMedium<TStatLine, TTimeGrouping>
+    public interface Game<TTimeGrouping, TStatLine> : SampleMedium<TTimeGrouping, TStatLine>
+        where TTimeGrouping : TimeGrouping
         where TStatLine : StatLine
-        where TTimeGrouping: TimeGrouping
     {
-        public DateTime Date { get; set; }
-        public int EspnIdentifier { get; set; }
-        public bool Completed { get; set; }
-        public Double Total { get; set; }
+        DateTime Date { get; set; }
+        int EspnIdentifier { get; set; }
+        bool Completed { get; set; }
+        Double Total { get; set; }
     }
 }

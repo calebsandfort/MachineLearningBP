@@ -3,10 +3,9 @@ using MachineLearningBP.CollectiveIntelligence.Entities;
 
 namespace MachineLearningBP.Entities.Sports
 {
-    public abstract class Season<TStatLine, TTimeGrouping> : TimeGroupingMinimum<Game<TStatLine, TTimeGrouping>>
-        where TStatLine : StatLine
-        where TTimeGrouping : TimeGrouping
+    public interface Season<TSample> : TimeGroupingMinimum<TSample>
+        where TSample : Sample
     {
-        public DateTime? RollingWindowStart { get; set; }
+        DateTime? RollingWindowStart { get; set; }
     }
 }

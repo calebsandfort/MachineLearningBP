@@ -1,12 +1,24 @@
 ﻿
+using MachineLearningBP.CollectiveIntelligence.Entities;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MachineLearningBP.Entities.Sports.Nba
 {
     [Table("NbaStatLines")]
-    public class NbaStatLine : SportStatLine<NbaStatLine, NbaSeason>
+    public class NbaStatLine : StatLine, SportStatLine<NbaTeam, NbaGame>
     {
+        [ForeignKey("SampleId")]
+        public virtual NbaGame Sample { get; set; }
+        public virtual int SampleId { get; set; }
+
+        [ForeignKey("ParticipantId")]
+        public virtual NbaTeam Participant { get; set; }
+        public virtual int ParticipantId { get; set; }
+
+        public double Points { get; set; }
+        public bool Home { get; set; }
+
         public bool TwoInTwoDays { get; set; }
         public bool ThreeInFourDays { get; set; }
         public bool FourInFiveDays { get; set; }

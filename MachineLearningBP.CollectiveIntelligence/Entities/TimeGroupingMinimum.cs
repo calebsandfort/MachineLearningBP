@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.CollectiveIntelligence.Entities
 {
-    public abstract class TimeGroupingMinimum<Sample> : TimeGrouping
+    public interface TimeGroupingMinimum<TSample>
+        where TSample : Sample
     {
-        [ForeignKey("TimeGroupingId")]
-        public virtual ICollection<Sample> Samples { get; set; }
+        //[ForeignKey("TimeGroupingId")]
+        ICollection<TSample> Samples { get; set; }
     }
 }

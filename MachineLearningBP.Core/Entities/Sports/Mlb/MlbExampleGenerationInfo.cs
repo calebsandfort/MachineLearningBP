@@ -1,41 +1,32 @@
-﻿using MachineLearningBP.CollectiveIntelligence.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MachineLearningBP.Entities.Sports
+namespace MachineLearningBP.Entities.Sports.Mlb
 {
-    public class SportExampleGenerationInfo<TSample, TStatLine, TTimeGrouping, TParticipant> : ExampleGenerationInfo
-        where TSample : Game<TStatLine, TTimeGrouping>
-        where TStatLine : SportStatLine<TStatLine, TTimeGrouping>
-        where TTimeGrouping : Season<TStatLine, TTimeGrouping>
-        where TParticipant : Participant
+    public class MlbExampleGenerationInfo : SportExampleGenerationInfo<MlbGame, MlbStatLine, MlbSeason, MlbTeam>
     {
         #region Properties
-        public int RollingWindowPeriod { get; set; }
-        public Double ScaleFactor { get; set; }
-
-        public TSample Game { get; set; }
-        public List<TSample> Games { get; set; }
-        public List<TParticipant> Teams { get; set; }
-        public bool Home { get; set; }
-
-        public TStatLine TeamStatLine1 { get; set; }
-        public TStatLine TeamStatLine2 { get; set; }
-        public TParticipant Team1 { get; set; }
-        public TParticipant Team2 { get; set; }
-        public List<TSample> Team1LastNGames { get; set; }
-        public List<TStatLine> Team1LastNStatLines { get; set; }
-        public List<TStatLine> Team1LastNOpponentStatLines { get; set; }
-        public List<TSample> Team2LastNGames { get; set; }
-        public List<TStatLine> Team2LastNStatLines { get; set; }
-        public List<TStatLine> Team2LastNOpponentStatLines { get; set; }
+        sealed public override MlbGame Game { get; set; }
+        sealed public override List<MlbGame> Games { get; set; }
+        sealed public override List<MlbTeam> Teams { get; set; }
+        sealed public override MlbStatLine TeamStatLine1 { get; set; }
+        sealed public override MlbStatLine TeamStatLine2 { get; set; }
+        sealed public override MlbTeam Team1 { get; set; }
+        sealed public override MlbTeam Team2 { get; set; }
+        sealed public override List<MlbGame> Team1LastNGames { get; set; }
+        sealed public override List<MlbStatLine> Team1LastNStatLines { get; set; }
+        sealed public override List<MlbStatLine> Team1LastNOpponentStatLines { get; set; }
+        sealed public override List<MlbGame> Team2LastNGames { get; set; }
+        sealed public override List<MlbStatLine> Team2LastNStatLines { get; set; }
+        sealed public override List<MlbStatLine> Team2LastNOpponentStatLines { get; set; } 
         #endregion
-
-        #region Constructors
-        public SportExampleGenerationInfo(TSample game, List<TSample> games, List<TParticipant> teams, bool home, int rollingWindowPeriod, Double scaleFactor)
+    
+        #region Constructor
+        public MlbExampleGenerationInfo(MlbGame game, List<MlbGame> games, List<MlbTeam> teams, bool home, int rollingWindowPeriod, double scaleFactor)
+            : base(game, games, teams, home, rollingWindowPeriod, scaleFactor)
         {
             this.RollingWindowPeriod = rollingWindowPeriod;
             this.ScaleFactor = scaleFactor;

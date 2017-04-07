@@ -8,11 +8,11 @@ using MachineLearningBP.CollectiveIntelligence.Entities;
 
 namespace MachineLearningBP.Entities.Sports
 {
-    public abstract class SportStatLine<TStatLine, TTimeGrouping> : StatLineMedium<Game<TStatLine, TTimeGrouping>, Team<TStatLine, TTimeGrouping>>
-        where TStatLine : StatLine
-        where TTimeGrouping : TimeGrouping
+    public interface SportStatLine<TParticipant, TSample> : StatLineMedium<TParticipant, TSample>
+        where TParticipant : Participant
+        where TSample : Sample
     {
-        public Double Points { get; set; }
-        public bool Home { get; set; }
+        Double Points { get; set; }
+        bool Home { get; set; }
     }
 }

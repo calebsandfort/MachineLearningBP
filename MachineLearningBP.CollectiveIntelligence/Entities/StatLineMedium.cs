@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.CollectiveIntelligence.Entities
 {
-    public abstract class StatLineMedium<TSample, TParticipant> : StatLineMinimum<TSample>
-        where TSample : Sample
+    public interface StatLineMedium<TParticipant, TSample> : StatLineMinimum<TSample>
         where TParticipant : Participant
+        where TSample : Sample
     {
-        [ForeignKey("ParticipantId")]
-        public virtual TParticipant Participant { get; set; }
-        public virtual int ParticipantId { get; set; }
+        //[ForeignKey("ParticipantId")]
+        TParticipant Participant { get; set; }
+        int ParticipantId { get; set; }
     }
 }

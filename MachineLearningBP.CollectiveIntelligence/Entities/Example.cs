@@ -10,6 +10,13 @@ namespace MachineLearningBP.CollectiveIntelligence.Entities
     public abstract class Example<TExampleGenerationInfo> : Entity<int>
         where TExampleGenerationInfo : ExampleGenerationInfo
     {
-        public abstract void SetFields(TExampleGenerationInfo info);
+        public void SetFields(TExampleGenerationInfo info)
+        {
+            this.SetData(info);
+            this.SetResult(info);
+        }
+
+        public abstract void SetData(TExampleGenerationInfo info);
+        public abstract void SetResult(TExampleGenerationInfo info);
     }
 }

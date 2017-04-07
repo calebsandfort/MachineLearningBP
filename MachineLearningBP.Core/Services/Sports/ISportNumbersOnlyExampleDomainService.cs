@@ -1,4 +1,5 @@
-﻿using MachineLearningBP.CollectiveIntelligence.Entities;
+﻿using MachineLearningBP.CollectiveIntelligence.DomainServices;
+using MachineLearningBP.CollectiveIntelligence.Entities;
 using MachineLearningBP.Entities.Sports;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.Services.Sports
 {
-    public interface ISportNumbersOnlyExampleDomainService<TSample, TStatLine, TTimeGrouping, TParticipant>
-        where TSample : Game<TStatLine, TTimeGrouping>
-        where TStatLine : SportStatLine<TStatLine, TTimeGrouping>
-        where TTimeGrouping : Season<TStatLine, TTimeGrouping>
+    public interface ISportNumbersOnlyExampleDomainService<TSample, TParticipant> : IExampleDomainService
+        where TSample : Sample
         where TParticipant : Participant
     {
         Task PopulateExample(TSample game, List<TSample> games, List<TParticipant> teams, int rollingWindowPeriod, double scaleFactor);

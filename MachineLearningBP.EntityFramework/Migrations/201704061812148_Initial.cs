@@ -35,14 +35,25 @@ namespace MachineLearningBP.Migrations
                         Hits = c.Double(nullable: false),
                         HitByPitch = c.Double(nullable: false),
                         SacrificeFlies = c.Double(nullable: false),
+                        ParticipantId = c.Int(nullable: false),
                         Points = c.Double(nullable: false),
                         Home = c.Boolean(nullable: false),
-                        ParticipantId = c.Int(nullable: false),
                         SampleId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.MlbTeams", t => t.ParticipantId, cascadeDelete: true)
                 .ForeignKey("dbo.MlbGames", t => t.SampleId, cascadeDelete: true)
+                .Index(t => t.ParticipantId)
                 .Index(t => t.SampleId);
+            
+            CreateTable(
+                "dbo.MlbTeams",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.MlbSeasons",
@@ -52,15 +63,6 @@ namespace MachineLearningBP.Migrations
                         RollingWindowStart = c.DateTime(),
                         Start = c.DateTime(nullable: false),
                         End = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.MlbTeams",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -99,14 +101,25 @@ namespace MachineLearningBP.Migrations
                         Turnovers = c.Double(nullable: false),
                         OffensiveRebounds = c.Double(nullable: false),
                         DefensiveRebounds = c.Double(nullable: false),
+                        ParticipantId = c.Int(nullable: false),
                         Points = c.Double(nullable: false),
                         Home = c.Boolean(nullable: false),
-                        ParticipantId = c.Int(nullable: false),
                         SampleId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.NbaTeams", t => t.ParticipantId, cascadeDelete: true)
                 .ForeignKey("dbo.NbaGames", t => t.SampleId, cascadeDelete: true)
+                .Index(t => t.ParticipantId)
                 .Index(t => t.SampleId);
+            
+            CreateTable(
+                "dbo.NbaTeams",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.NbaSeasons",
@@ -129,34 +142,29 @@ namespace MachineLearningBP.Migrations
                     })
                 .PrimaryKey(t => t.Id);
             
-            CreateTable(
-                "dbo.NbaTeams",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
-            
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.NbaGames", "TimeGroupingId", "dbo.NbaSeasons");
             DropForeignKey("dbo.NbaStatLines", "SampleId", "dbo.NbaGames");
+            DropForeignKey("dbo.NbaStatLines", "ParticipantId", "dbo.NbaTeams");
             DropForeignKey("dbo.MlbGames", "TimeGroupingId", "dbo.MlbSeasons");
             DropForeignKey("dbo.MlbStatLines", "SampleId", "dbo.MlbGames");
+            DropForeignKey("dbo.MlbStatLines", "ParticipantId", "dbo.MlbTeams");
             DropIndex("dbo.NbaStatLines", new[] { "SampleId" });
+            DropIndex("dbo.NbaStatLines", new[] { "ParticipantId" });
             DropIndex("dbo.NbaGames", new[] { "TimeGroupingId" });
             DropIndex("dbo.MlbStatLines", new[] { "SampleId" });
+            DropIndex("dbo.MlbStatLines", new[] { "ParticipantId" });
             DropIndex("dbo.MlbGames", new[] { "TimeGroupingId" });
-            DropTable("dbo.NbaTeams");
             DropTable("dbo.NbaPointsExamples");
             DropTable("dbo.NbaSeasons");
+            DropTable("dbo.NbaTeams");
             DropTable("dbo.NbaStatLines");
             DropTable("dbo.NbaGames");
-            DropTable("dbo.MlbTeams");
             DropTable("dbo.MlbSeasons");
+            DropTable("dbo.MlbTeams");
             DropTable("dbo.MlbStatLines");
             DropTable("dbo.MlbGames");
         }

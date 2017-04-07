@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.Services.Sports.Nba
 {
-    public class NbaPointsExampleAppService : SportNumbersOnlyExampleAppService<NbaGame, NbaStatLine, NbaPointsExample,
-        SportExampleGenerationInfo<NbaGame, NbaStatLine, NbaSeason, NbaTeam>, NbaSeason, NbaTeam>, INbaPointsExampleAppService
+    public class NbaPointsExampleAppService : SportNumbersOnlyExampleAppService<NbaGame, NbaStatLine, NbaPointsExample, NbaExampleGenerationInfo, NbaSeason, NbaTeam>, INbaPointsExampleAppService
     {
-        public NbaPointsExampleAppService(ISettingManager settingManager, SportNumbersOnlyExampleDomainService<NbaGame, NbaStatLine, NbaPointsExample,
-            SportExampleGenerationInfo<NbaGame, NbaStatLine, NbaSeason, NbaTeam>, NbaSeason, NbaTeam> domainService) : base(settingManager, domainService)
+        public NbaPointsExampleAppService(ISettingManager settingManager, SportNumbersOnlyExampleDomainService<NbaGame, NbaStatLine, NbaPointsExample, NbaExampleGenerationInfo, NbaSeason, NbaTeam> domainService) : base(settingManager, domainService)
         {
         }
 

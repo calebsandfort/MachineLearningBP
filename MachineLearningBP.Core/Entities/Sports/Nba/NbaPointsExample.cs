@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace MachineLearningBP.Entities.Sports.Nba
 {
     [Table("NbaPointsExamples")]
-    public class NbaPointsExample : NbaFourFactorsExample<SportExampleGenerationInfo<NbaGame, NbaStatLine, NbaSeason, NbaTeam>>
+    public class NbaPointsExample : NbaFourFactorsNumbersOnlyExample
     {
-        public override void SetResult(SportExampleGenerationInfo<NbaGame, NbaStatLine, NbaSeason, NbaTeam> info)
+        public override void SetResult(NbaExampleGenerationInfo info)
         {
             this.Result = info.TeamStatLine1.Points;
         }
