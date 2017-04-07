@@ -76,6 +76,14 @@ MachineLearningBP.Nba.setSeasonsRollingWindowStart = function () {
     });
 }
 
+MachineLearningBP.Nba.populatePointsExamples = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.nbaPointsExample.populateExamples().done(function (result) {
+
+    });
+}
+
 MachineLearningBP.Mlb.populateGames = function () {
     MachineLearningBP.Console.clear();
 

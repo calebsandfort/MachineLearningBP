@@ -19,9 +19,9 @@ namespace MachineLearningBP.Services.Sports
         where TExample : Example<TResult, TExampleGenerationInfo>
         where TParticipant : Participant
     {
-        public readonly SportExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo, TTimeGrouping, TParticipant> _domainService;
+        public readonly ISportExampleDomainService<TSample, TParticipant> _domainService;
 
-        public SportExampleAppService(ISettingManager settingManager, SportExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo, TTimeGrouping, TParticipant> domainService) : base(settingManager)
+        public SportExampleAppService(ISettingManager settingManager, ISportExampleDomainService<TSample, TParticipant> domainService) : base(settingManager)
         {
             this._domainService = domainService;
         }

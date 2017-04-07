@@ -71,6 +71,7 @@ namespace MachineLearningBP.Entities.Sports.Nba
             #endregion
 
             this.NumericalData = dataPoints.Select(x => x * info.ScaleFactor).ToList();
+            this.DelimitedCategoricalData = String.Empty;
         }
     }
 }

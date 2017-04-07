@@ -15,7 +15,7 @@ using MachineLearningBP.Entities.Sports;
 
 namespace MachineLearningBP.Services.Sports.Nba
 {
-    public class NbaPointsExampleDomainService : SportExampleDomainService<NbaGame, NbaStatLine, NbaPointsExample, Double, NbaExampleGenerationInfo, NbaSeason, NbaTeam>, INbaPointsExampleDomainService
+    public class NbaPointsExampleDomainService : MaximumExampleDomainService<NbaGame, NbaStatLine, NbaPointsExample, Double, NbaExampleGenerationInfo, NbaSeason, NbaTeam>, INbaPointsExampleDomainService
     {
         #region Constructor
         public NbaPointsExampleDomainService(IRepository<NbaGame> sampleRepository, IRepository<NbaStatLine> statLineRepository,
@@ -28,38 +28,52 @@ namespace MachineLearningBP.Services.Sports.Nba
         #endregion
 
         #region PopulateExamples
-        public override async Task PopulateExamples(int rollingWindowPeriod, double scaleFactor)
+        public async Task PopulateExamples(int rollingWindowPeriod, double scaleFactor)
         {
             using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
             {
                 this.DeleteExamples();
 
-                DateTime currentDate = this._sampleRepository.GetAll().Where(x => x.Completed).OrderBy(x => x.Date).First().Date;
+                DateTime now = DateTime.Now.Date;
+                DateTime currentDate;
                 List<NbaSeason> seasons;
                 List<NbaTeam> teams;
                 List<NbaGame> games, todaysGames;
 
-                seasons = this._timeGroupingRepository.GetAll().OrderBy(x => x.Start).ToList();
-                teams = await this._participantRepository.GetAllListAsync();
-
+                using (var unitOfWork = this.UnitOfWorkManager.Begin())
+                {
+                    currentDate = this._sampleRepository.GetAll().Where(x => x.Completed).OrderBy(x => x.Date).First().Date.AddDays(-1);
+                    seasons = this._timeGroupingRepository.GetAll().OrderBy(x => x.Start).ToList();
+                    teams = await this._participantRepository.GetAllListAsync();
+                    await unitOfWork.CompleteAsync();
+                }
 
                 foreach (NbaSeason season in seasons.OrderBy(x => x.Start))
                 {
                     this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Starting {season.Start.ToShortDateString()} - {season.End.ToShortDateString()} season..."));
 
-                    games = this._sampleRepository.GetAllIncluding(x => x.StatLines)
+                    using (var unitOfWork = this.UnitOfWorkManager.Begin())
+                    {
+                        games = this._sampleRepository.GetAllIncluding(x => x.StatLines)
                             .Where(x => x.TimeGroupingId == season.Id).ToList();
+                        await unitOfWork.CompleteAsync();
+                    }
 
                     if (currentDate < season.Start.Date) currentDate = season.RollingWindowStart.Value.Date;
 
                     while (season.Within(currentDate))
                     {
+                        if (currentDate == now) break;
+
                         this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Populating {currentDate.ToShortDateString()} ..."));
 
-                        todaysGames = this._sampleRepository.GetAll().Where(x => x.Date.Year == currentDate.Year && x.Date.Month == currentDate.Month && x.Date.Day == currentDate.Day).ToList();
+                        using (var unitOfWork = this.UnitOfWorkManager.Begin())
+                        {
+                            todaysGames = this._sampleRepository.GetAllIncluding(x => x.StatLines).Where(x => x.Date.Year == currentDate.Year && x.Date.Month == currentDate.Month && x.Date.Day == currentDate.Day).ToList();
+                            await unitOfWork.CompleteAsync();
+                        }
 
                         await Task.WhenAll(todaysGames.Select(x => PopulateExample(x, games, teams, rollingWindowPeriod, scaleFactor)).ToArray());
-
                         currentDate = currentDate.AddDays(1);
                     }
 
@@ -70,27 +84,35 @@ namespace MachineLearningBP.Services.Sports.Nba
         #endregion
 
         #region PopulateExample
-        public override async Task PopulateExample(NbaGame game, List<NbaGame> games, List<NbaTeam> teams, int rollingWindowPeriod, double scaleFactor)
+        public async Task PopulateExample(NbaGame game, List<NbaGame> games, List<NbaTeam> teams, int rollingWindowPeriod, double scaleFactor)
         {
-            using (var unitOfWork = this.UnitOfWorkManager.Begin())
+            try
             {
-                NbaExampleGenerationInfo awayInfo = new NbaExampleGenerationInfo(game, games, teams, false, rollingWindowPeriod, scaleFactor);
-                NbaPointsExample awayExample = new NbaPointsExample();
-                awayExample.SetFields(awayInfo);
-                this._exampleRepository.Insert(awayExample);
+                using (var unitOfWork = this.UnitOfWorkManager.Begin())
+                {
+                    NbaExampleGenerationInfo awayInfo = new NbaExampleGenerationInfo(game, games, teams, false, rollingWindowPeriod, scaleFactor);
+                    NbaPointsExample awayExample = new NbaPointsExample();
+                    awayExample.SetFields(awayInfo);
+                    await this._exampleRepository.InsertAsync(awayExample);
 
-                NbaExampleGenerationInfo homeInfo = new NbaExampleGenerationInfo(game, games, teams, true, rollingWindowPeriod, scaleFactor);
-                NbaPointsExample homeExample = new NbaPointsExample();
-                homeExample.SetFields(homeInfo);
-                this._exampleRepository.Insert(homeExample);
+                    NbaExampleGenerationInfo homeInfo = new NbaExampleGenerationInfo(game, games, teams, true, rollingWindowPeriod, scaleFactor);
+                    NbaPointsExample homeExample = new NbaPointsExample();
+                    homeExample.SetFields(homeInfo);
+                    await this._exampleRepository.InsertAsync(homeExample);
 
-                await unitOfWork.CompleteAsync();
+                    await unitOfWork.CompleteAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Exception: {ex.Message} {Environment.NewLine} Stacktrace: {ex.StackTrace}"));
+                throw ex;
             }
         }
         #endregion
 
         #region DeleteExamples
-        public override void DeleteExamples()
+        public void DeleteExamples()
         {
             this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create("Deleting NbaPointsExamples..."));
 

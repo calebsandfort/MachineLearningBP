@@ -171,7 +171,6 @@
     <Compile Include="Entities\Sports\SportStatLine.cs" />
     <Compile Include="Entities\Sports\Nba\NbaTeam.cs" />
     <Compile Include="Entities\Sports\Team.cs" />
-    <Compile Include="Services\Sports\SportExampleDomainService.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserStore.cs" />

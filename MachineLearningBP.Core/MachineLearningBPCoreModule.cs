@@ -10,6 +10,8 @@ using MachineLearningBP.MultiTenancy;
 using MachineLearningBP.Users;
 using MachineLearningBP.Framework;
 using MachineLearningBP.Shared;
+using MachineLearningBP.Services.Sports;
+using Abp.Dependency;
 
 namespace MachineLearningBP
 {
