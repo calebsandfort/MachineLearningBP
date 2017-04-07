@@ -132,13 +132,12 @@
     <Compile Include="Entities\Sports\Nba\NbaExampleGenerationInfo.cs" />
     <Compile Include="Entities\Sports\Nba\NbaPointsExample.cs" />
     <Compile Include="Entities\Sports\SportExampleGenerationInfo.cs" />
-    <Compile Include="Entities\Sports\SportNumbersOnlyExample.cs" />
     <Compile Include="Enums\Targets.cs" />
     <Compile Include="Framework\Extensions.cs" />
     <Compile Include="Framework\MySettingProvider.cs" />
     <Compile Include="Entities\Sports\Game.cs" />
     <Compile Include="Services\Sports\IGameDomainService.cs" />
-    <Compile Include="Services\Sports\ISportNumbersOnlyExampleDomainService.cs" />
+    <Compile Include="Services\Sports\ISportExampleDomainService.cs" />
     <Compile Include="Services\Sports\Mlb\IMlbGameDomainService.cs" />
     <Compile Include="Services\Sports\Mlb\IMlbSeasonDomainService.cs" />
     <Compile Include="Services\Sports\Mlb\MlbGameDomainService.cs" />
@@ -172,7 +171,7 @@
     <Compile Include="Entities\Sports\SportStatLine.cs" />
     <Compile Include="Entities\Sports\Nba\NbaTeam.cs" />
     <Compile Include="Entities\Sports\Team.cs" />
-    <Compile Include="Services\Sports\SportNumbersOnlyExampleDomainService.cs" />
+    <Compile Include="Services\Sports\SportExampleDomainService.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserStore.cs" />

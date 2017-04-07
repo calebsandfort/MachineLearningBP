@@ -142,7 +142,7 @@
     <Compile Include="Services\Sports\Nba\INbaSeasonAppService.cs" />
     <Compile Include="Services\Sports\Nba\NbaPointsExampleAppService.cs" />
     <Compile Include="Services\Sports\Nba\NbaSeasonAppService.cs" />
-    <Compile Include="Services\Sports\SportNumbersOnlyExampleAppService.cs" />
+    <Compile Include="Services\Sports\SportExampleAppService.cs" />
     <Compile Include="Users\Dto\CreateUserInput.cs" />
     <Compile Include="Users\IUserAppService.cs" />
     <Compile Include="Roles\RoleAppService.cs" />

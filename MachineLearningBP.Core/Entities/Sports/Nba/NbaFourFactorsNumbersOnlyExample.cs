@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MachineLearningBP.DataPointMethods;
+using MachineLearningBP.CollectiveIntelligence.Entities;
 
 namespace MachineLearningBP.Entities.Sports.Nba
 {
-    public abstract class NbaFourFactorsNumbersOnlyExample : SportNumbersOnlyExample<NbaExampleGenerationInfo>
+    public abstract class NbaFourFactorsNumbersOnlyExample : Example<Double, NbaExampleGenerationInfo>
     {
         public override void SetData(NbaExampleGenerationInfo info)
         {
@@ -69,7 +70,7 @@ namespace MachineLearningBP.Entities.Sports.Nba
             dataPoints.Add(NbaMethods.CalculateFreeThrows(info.Team2LastNOpponentStatLines));
             #endregion
 
-            this.Data = dataPoints.Select(x => x * info.ScaleFactor).ToList();
+            this.NumericalData = dataPoints.Select(x => x * info.ScaleFactor).ToList();
         }
     }
 }

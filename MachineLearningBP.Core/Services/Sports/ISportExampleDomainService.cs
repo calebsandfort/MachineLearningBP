@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.Services.Sports
 {
-    public interface ISportNumbersOnlyExampleDomainService<TSample, TParticipant> : IExampleDomainService
+    public interface ISportExampleDomainService<TSample, TParticipant> : IExampleDomainService
         where TSample : Sample
         where TParticipant : Participant
     {

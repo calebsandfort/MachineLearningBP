@@ -11,10 +11,10 @@ using MachineLearningBP.CollectiveIntelligence.Entities;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices
 {
-    public class MediumExampleDomainService<TSample, TStatLine, TExample, TExampleGenerationInfo, TTimeGrouping> : MinimumExampleDomainService<TSample, TStatLine, TExample, TExampleGenerationInfo>
+    public class MediumExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo, TTimeGrouping> : MinimumExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo>
         where TSample : Sample
         where TStatLine : StatLine
-        where TExample : Example<TExampleGenerationInfo>
+        where TExample : Example<TResult, TExampleGenerationInfo>
         where TExampleGenerationInfo : ExampleGenerationInfo
         where TTimeGrouping : TimeGrouping
     {

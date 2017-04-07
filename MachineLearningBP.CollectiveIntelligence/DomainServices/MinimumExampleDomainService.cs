@@ -11,10 +11,10 @@ using MachineLearningBP.CollectiveIntelligence.Entities;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices
 {
-    public class MinimumExampleDomainService<TSample, TStatLine, TExample, TExampleGenerationInfo> : MinimumSampleDomainService<TSample, TStatLine>
+    public class MinimumExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo> : MinimumSampleDomainService<TSample, TStatLine>
         where TSample : Sample
         where TStatLine : StatLine
-        where TExample : Example<TExampleGenerationInfo>
+        where TExample : Example<TResult, TExampleGenerationInfo>
         where TExampleGenerationInfo : ExampleGenerationInfo
     {
         #region Properties

@@ -11,17 +11,17 @@ using Abp.Configuration;
 
 namespace MachineLearningBP.Services.Sports
 {
-    public class SportNumbersOnlyExampleAppService<TSample, TStatLine, TExample, TExampleGenerationInfo, TTimeGrouping, TParticipant> : BaseApplicationService
+    public class SportExampleAppService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo, TTimeGrouping, TParticipant> : BaseApplicationService
         where TSample : Sample
         where TStatLine : StatLine
         where TTimeGrouping : TimeGrouping
         where TExampleGenerationInfo : ExampleGenerationInfo
-        where TExample : Example<TExampleGenerationInfo>
+        where TExample : Example<TResult, TExampleGenerationInfo>
         where TParticipant : Participant
     {
-        public readonly SportNumbersOnlyExampleDomainService<TSample, TStatLine, TExample, TExampleGenerationInfo, TTimeGrouping, TParticipant> _domainService;
+        public readonly SportExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo, TTimeGrouping, TParticipant> _domainService;
 
-        public SportNumbersOnlyExampleAppService(ISettingManager settingManager, SportNumbersOnlyExampleDomainService<TSample, TStatLine, TExample, TExampleGenerationInfo, TTimeGrouping, TParticipant> domainService) : base(settingManager)
+        public SportExampleAppService(ISettingManager settingManager, SportExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo, TTimeGrouping, TParticipant> domainService) : base(settingManager)
         {
             this._domainService = domainService;
         }

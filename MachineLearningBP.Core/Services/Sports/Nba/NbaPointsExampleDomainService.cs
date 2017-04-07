@@ -15,7 +15,7 @@ using MachineLearningBP.Entities.Sports;
 
 namespace MachineLearningBP.Services.Sports.Nba
 {
-    public class NbaPointsExampleDomainService : SportNumbersOnlyExampleDomainService<NbaGame, NbaStatLine, NbaPointsExample, NbaExampleGenerationInfo, NbaSeason, NbaTeam>, INbaPointsExampleDomainService
+    public class NbaPointsExampleDomainService : SportExampleDomainService<NbaGame, NbaStatLine, NbaPointsExample, Double, NbaExampleGenerationInfo, NbaSeason, NbaTeam>, INbaPointsExampleDomainService
     {
         #region Constructor
         public NbaPointsExampleDomainService(IRepository<NbaGame> sampleRepository, IRepository<NbaStatLine> statLineRepository,

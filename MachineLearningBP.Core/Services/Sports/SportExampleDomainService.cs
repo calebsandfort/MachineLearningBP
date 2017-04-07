@@ -15,17 +15,17 @@ using MachineLearningBP.Shared.Dtos;
 
 namespace MachineLearningBP.Services.Sports
 {
-    public abstract class SportNumbersOnlyExampleDomainService<TSample, TStatLine, TExample, TExampleGenerationInfo, TTimeGrouping, TParticipant>
-        : MaximumExampleDomainService<TSample, TStatLine, TExample, TExampleGenerationInfo, TTimeGrouping, TParticipant>,
-        ISportNumbersOnlyExampleDomainService<TSample, TParticipant>
+    public abstract class SportExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo, TTimeGrouping, TParticipant>
+        : MaximumExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo, TTimeGrouping, TParticipant>,
+        ISportExampleDomainService<TSample, TParticipant>
         where TSample : Sample
         where TStatLine : StatLine
         where TTimeGrouping : TimeGrouping
         where TExampleGenerationInfo : ExampleGenerationInfo
-        where TExample : Example<TExampleGenerationInfo>
+        where TExample : Example<TResult, TExampleGenerationInfo>
         where TParticipant : Participant
     {
-        public SportNumbersOnlyExampleDomainService(IRepository<TSample> sampleRepository, IRepository<TStatLine> statLineRepository,
+        public SportExampleDomainService(IRepository<TSample> sampleRepository, IRepository<TStatLine> statLineRepository,
             ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager,
             IRepository<TExample> exampleRepository, IRepository<TTimeGrouping> timeGroupingRepository,
             IRepository<TParticipant> participantRepository)
