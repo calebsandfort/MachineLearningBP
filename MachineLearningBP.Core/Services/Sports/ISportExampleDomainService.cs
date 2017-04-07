@@ -1,10 +1,6 @@
-﻿using MachineLearningBP.CollectiveIntelligence.DomainServices;
+﻿using MachineLearningBP.CollectiveIntelligence.DomainServices.Examples;
 using MachineLearningBP.CollectiveIntelligence.Entities;
-using MachineLearningBP.Entities.Sports;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MachineLearningBP.Services.Sports

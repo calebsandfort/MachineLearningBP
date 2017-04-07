@@ -8,13 +8,14 @@ using MachineLearningBP.Shared;
 using MachineLearningBP.Shared.SqlExecuter;
 using Abp.Domain.Repositories;
 using MachineLearningBP.CollectiveIntelligence.Entities;
+using MachineLearningBP.CollectiveIntelligence.DomainServices.Samples;
 
-namespace MachineLearningBP.CollectiveIntelligence.DomainServices
+namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Examples
 {
     public class MinimumExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo> : MinimumSampleDomainService<TSample, TStatLine>
         where TSample : Sample
         where TStatLine : StatLine
-        where TExample : Example<TResult, TExampleGenerationInfo>
+        where TExample : ExampleMinimum<TResult, TExampleGenerationInfo>
         where TExampleGenerationInfo : ExampleGenerationInfo
     {
         #region Properties

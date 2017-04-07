@@ -12,7 +12,7 @@ using MachineLearningBP.Shared.GuerillaTimer;
 using Abp.Configuration;
 using MachineLearningBP.Entities.Sports.Nba;
 using MachineLearningBP.Shared.SqlExecuter;
-using MachineLearningBP.CollectiveIntelligence.DomainServices;
+using MachineLearningBP.CollectiveIntelligence.DomainServices.Samples;
 
 namespace MachineLearningBP.Core.Services.Sports.Nba
 {

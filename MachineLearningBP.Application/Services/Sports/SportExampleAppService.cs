@@ -16,7 +16,7 @@ namespace MachineLearningBP.Services.Sports
         where TStatLine : StatLine
         where TTimeGrouping : TimeGrouping
         where TExampleGenerationInfo : ExampleGenerationInfo
-        where TExample : Example<TResult, TExampleGenerationInfo>
+        where TExample : ExampleMinimum<TResult, TExampleGenerationInfo>
         where TParticipant : Participant
     {
         public readonly ISportExampleDomainService<TSample, TParticipant> _domainService;

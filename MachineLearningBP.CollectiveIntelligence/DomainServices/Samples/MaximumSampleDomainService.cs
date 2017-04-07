@@ -9,7 +9,7 @@ using MachineLearningBP.Shared.SqlExecuter;
 using Abp.Domain.Repositories;
 using MachineLearningBP.CollectiveIntelligence.Entities;
 
-namespace MachineLearningBP.CollectiveIntelligence.DomainServices
+namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Samples
 {
     public class MaximumSampleDomainService<TSample, TStatLine, TTimeGrouping, TParticipant> : MediumSampleDomainService<TSample, TStatLine, TTimeGrouping>
         where TSample : Sample

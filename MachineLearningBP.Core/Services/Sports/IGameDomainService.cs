@@ -1,6 +1,5 @@
-﻿using Abp.Domain.Services;
-using HtmlAgilityPack;
-using MachineLearningBP.CollectiveIntelligence.DomainServices;
+﻿using HtmlAgilityPack;
+using MachineLearningBP.CollectiveIntelligence.DomainServices.Samples;
 using MachineLearningBP.CollectiveIntelligence.Entities;
 using System;
 using System.Threading.Tasks;

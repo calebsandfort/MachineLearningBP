@@ -1,9 +1,8 @@
-﻿using MachineLearningBP.CollectiveIntelligence.DomainServices;
+﻿using MachineLearningBP.CollectiveIntelligence.DomainServices.Examples;
 using MachineLearningBP.Entities.Sports.Nba;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
@@ -11,7 +10,6 @@ using MachineLearningBP.Shared;
 using MachineLearningBP.Shared.SqlExecuter;
 using MachineLearningBP.Shared.Dtos;
 using MachineLearningBP.Shared.GuerillaTimer;
-using MachineLearningBP.Entities.Sports;
 
 namespace MachineLearningBP.Services.Sports.Nba
 {

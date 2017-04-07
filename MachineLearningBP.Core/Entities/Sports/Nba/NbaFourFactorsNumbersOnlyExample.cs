@@ -8,7 +8,7 @@ using MachineLearningBP.CollectiveIntelligence.Entities;
 
 namespace MachineLearningBP.Entities.Sports.Nba
 {
-    public abstract class NbaFourFactorsNumbersOnlyExample : Example<Double, NbaExampleGenerationInfo>
+    public abstract class NbaFourFactorsNumbersOnlyExample : ExampleMinimum<Double, NbaExampleGenerationInfo>
     {
         public override void SetData(NbaExampleGenerationInfo info)
         {

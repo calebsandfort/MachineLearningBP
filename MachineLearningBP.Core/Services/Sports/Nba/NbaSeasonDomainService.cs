@@ -9,7 +9,7 @@ using Abp.Configuration;
 using MachineLearningBP.Shared.Dtos;
 using MachineLearningBP.Entities.Sports.Nba;
 using MachineLearningBP.Shared.SqlExecuter;
-using MachineLearningBP.CollectiveIntelligence.DomainServices;
+using MachineLearningBP.CollectiveIntelligence.DomainServices.Samples;
 
 namespace MachineLearningBP.Core.Services.Sports.Nba
 {

@@ -1,7 +1,6 @@
 ﻿using Abp.Domain.Repositories;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
-using MachineLearningBP.Framework;
 using MachineLearningBP.Shared;
 using MachineLearningBP.Shared.Dtos;
 using System;
@@ -12,7 +11,7 @@ using MachineLearningBP.Shared.GuerillaTimer;
 using Abp.Configuration;
 using MachineLearningBP.Entities.Sports.Mlb;
 using MachineLearningBP.Shared.SqlExecuter;
-using MachineLearningBP.CollectiveIntelligence.DomainServices;
+using MachineLearningBP.CollectiveIntelligence.DomainServices.Samples;
 using System.Text.RegularExpressions;
 
 namespace MachineLearningBP.Core.Services.Sports.Mlb

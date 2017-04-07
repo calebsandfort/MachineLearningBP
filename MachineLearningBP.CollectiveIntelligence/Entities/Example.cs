@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.CollectiveIntelligence.Entities
 {
-    public abstract class Example<TResult, TExampleGenerationInfo> : Entity<int>
-        where TExampleGenerationInfo : ExampleGenerationInfo
+    public class Example<TResult> : Entity<int>
     {
         public TResult Result { get; set; }
         public String DelimitedNumericalData { get; set; }
@@ -53,14 +52,5 @@ namespace MachineLearningBP.CollectiveIntelligence.Entities
                     this.DelimitedCategoricalData = String.Join(":", value);
             }
         }
-
-        public void SetFields(TExampleGenerationInfo info)
-        {
-            this.SetData(info);
-            this.SetResult(info);
-        }
-
-        public abstract void SetData(TExampleGenerationInfo info);
-        public abstract void SetResult(TExampleGenerationInfo info);
     }
 }
