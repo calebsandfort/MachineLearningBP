@@ -9,5 +9,6 @@ namespace MachineLearningBP.Services.Sports.Nba
 {
     public interface INbaPointsExampleAppService : IExampleAppService
     {
+        Task KNearestNeighborsDoStuff();
     }
 }

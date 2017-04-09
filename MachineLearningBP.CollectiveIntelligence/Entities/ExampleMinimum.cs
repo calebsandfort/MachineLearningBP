@@ -8,15 +8,17 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.CollectiveIntelligence.Entities
 {
-    public abstract class ExampleMinimum<TResult, TExampleGenerationInfo> : Example<TResult>
+    public abstract class ExampleMinimum<TStatLine, TResult, TExampleGenerationInfo> : Example<TStatLine, TResult>
+        where TStatLine : StatLine
         where TExampleGenerationInfo : ExampleGenerationInfo
     {
-        public void SetFields(TExampleGenerationInfo info)
+        public void SetFields(TStatLine statLine, TExampleGenerationInfo info)
         {
+            this.StatLineId = statLine.Id;
             this.SetData(info);
             this.SetResult(info);
         }
-
+        
         public abstract void SetData(TExampleGenerationInfo info);
         public abstract void SetResult(TExampleGenerationInfo info);
     }

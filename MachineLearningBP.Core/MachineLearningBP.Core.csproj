@@ -128,7 +128,7 @@
     <Compile Include="Entities\Sports\Mlb\MlbSeason.cs" />
     <Compile Include="Entities\Sports\Mlb\MlbStatLine.cs" />
     <Compile Include="Entities\Sports\Mlb\MlbExampleGenerationInfo.cs" />
-    <Compile Include="Entities\Sports\Nba\NbaFourFactorsNumbersOnlyExample.cs" />
+    <Compile Include="Entities\Sports\Nba\NbaFourFactorsExample.cs" />
     <Compile Include="Entities\Sports\Nba\NbaExampleGenerationInfo.cs" />
     <Compile Include="Entities\Sports\Nba\NbaPointsExample.cs" />
     <Compile Include="Entities\Sports\SportExampleGenerationInfo.cs" />

@@ -100,7 +100,6 @@
     <Compile Include="DomainServices\Samples\MediumSampleDomainService.cs" />
     <Compile Include="DomainServices\Examples\MinimumExampleDomainService.cs" />
     <Compile Include="DomainServices\Samples\MinimumSampleDomainService.cs" />
-    <Compile Include="Entities\IExample.cs" />
     <Compile Include="Entities\Example.cs" />
     <Compile Include="Entities\ExampleMinimum.cs" />
     <Compile Include="Entities\ExampleGenerationInfo.cs" />

@@ -152,6 +152,10 @@
     <Compile Include="Migrations\201704071644181_MoreGenericExamples.Designer.cs">
       <DependentUpon>201704071644181_MoreGenericExamples.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704090305295_AddStatLineToExample.cs" />
+    <Compile Include="Migrations\201704090305295_AddStatLineToExample.Designer.cs">
+      <DependentUpon>201704090305295_AddStatLineToExample.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AbpZeroDbMigrator.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MachineLearningBPDataModule.cs" />
@@ -195,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704071644181_MoreGenericExamples.resx">
       <DependentUpon>201704071644181_MoreGenericExamples.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704090305295_AddStatLineToExample.resx">
+      <DependentUpon>201704090305295_AddStatLineToExample.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

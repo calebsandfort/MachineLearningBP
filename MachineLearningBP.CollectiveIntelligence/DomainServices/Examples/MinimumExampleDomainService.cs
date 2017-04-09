@@ -15,7 +15,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Examples
     public class MinimumExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo> : MinimumSampleDomainService<TSample, TStatLine>
         where TSample : Sample
         where TStatLine : StatLine
-        where TExample : ExampleMinimum<TResult, TExampleGenerationInfo>
+        where TExample : ExampleMinimum<TStatLine, TResult, TExampleGenerationInfo>
         where TExampleGenerationInfo : ExampleGenerationInfo
     {
         #region Properties

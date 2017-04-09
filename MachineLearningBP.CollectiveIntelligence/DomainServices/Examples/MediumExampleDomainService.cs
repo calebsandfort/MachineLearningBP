@@ -14,7 +14,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Examples
     public class MediumExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo, TTimeGrouping> : MinimumExampleDomainService<TSample, TStatLine, TExample, TResult, TExampleGenerationInfo>
         where TSample : Sample
         where TStatLine : StatLine
-        where TExample : ExampleMinimum<TResult, TExampleGenerationInfo>
+        where TExample : ExampleMinimum<TStatLine, TResult, TExampleGenerationInfo>
         where TExampleGenerationInfo : ExampleGenerationInfo
         where TTimeGrouping : TimeGrouping
     {

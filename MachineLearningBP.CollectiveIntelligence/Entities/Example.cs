@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.CollectiveIntelligence.Entities
 {
-    public class Example<TResult> : Entity<int>, IExample<TResult>
+    public abstract class Example<TStatLine, TResult> : Entity<int>
+        where TStatLine : StatLine
     {
+        //[ForeignKey("StatLineId")]
+        public abstract TStatLine StatLine { get; set; }
+        public abstract int StatLineId { get; set; }
+
         public TResult Result { get; set; }
         public String DelimitedNumericalData { get; set; }
 
@@ -28,7 +33,7 @@ namespace MachineLearningBP.CollectiveIntelligence.Entities
                 if (value.Count == 0)
                     this.DelimitedNumericalData = String.Empty;
                 else
-                    this.DelimitedNumericalData = String.Join(":", value);
+                    this.DelimitedNumericalData = String.Join(":", value.Select(x => String.Format("{0:N4}", x)));
             }
         }
 

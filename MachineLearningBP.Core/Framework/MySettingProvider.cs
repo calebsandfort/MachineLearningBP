@@ -15,7 +15,7 @@ namespace MachineLearningBP.Framework
                 {
                     new SettingDefinition(
                         "Path",
-                        "http://dev-csandfort.gwi.com/MachineLearningBP.Web/",
+                        "http://localhost/MachineLearningBP.Web/",
                         scopes: SettingScopes.Application
                         ),
                     new SettingDefinition(

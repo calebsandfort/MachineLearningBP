@@ -10,7 +10,9 @@ using MachineLearningBP.Shared.SqlExecuter;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 {
-    public class KNearestNeighborsDomainService<TResult> : BaseDomainService, IKNearestNeighborsDomainService<TResult>
+    public class KNearestNeighborsDomainService<TExample, TStatLine, TResult> : BaseDomainService, IKNearestNeighborsDomainService<TExample, TStatLine, TResult>
+        where TExample : Example<TStatLine, TResult>
+        where TStatLine : StatLine
     {
         #region Constructor
         public KNearestNeighborsDomainService(ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager) : base(sqlExecuter, consoleHubProxy, settingManager)
@@ -19,14 +21,14 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         #endregion
 
         #region DivideData
-        public void DivideData(List<Example<TResult>> data, out List<Example<TResult>> trainSet, out List<Example<TResult>> testSet, double test = .05)
+        public void DivideData(List<TExample> data, out List<TExample> trainSet, out List<TExample> testSet, double test = .05)
         {
-            List<Example<TResult>> trainSetTemp = new List<Example<TResult>>();
-            List<Example<TResult>> testSetTemp = new List<Example<TResult>>();
+            List<TExample> trainSetTemp = new List<TExample>();
+            List<TExample> testSetTemp = new List<TExample>();
 
             Random random = new Random(DateTime.Now.Millisecond);
 
-            foreach (Example<TResult> example in data)
+            foreach (TExample example in data)
             {
                 if (random.NextDouble() < test)
                     testSetTemp.Add(example);

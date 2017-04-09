@@ -17,14 +17,14 @@ namespace MachineLearningBP.Services.Sports.Nba
     public class NbaPointsExampleDomainService : MaximumExampleDomainService<NbaGame, NbaStatLine, NbaPointsExample, Double, NbaExampleGenerationInfo, NbaSeason, NbaTeam>, INbaPointsExampleDomainService
     {
         #region Properties
-        public readonly IKNearestNeighborsDomainService<Double> _kNearestNeighborsDomainService;
+        public readonly IKNearestNeighborsDomainService<NbaPointsExample, NbaStatLine, Double> _kNearestNeighborsDomainService;
         #endregion
 
         #region Constructor
         public NbaPointsExampleDomainService(IRepository<NbaGame> sampleRepository, IRepository<NbaStatLine> statLineRepository,
             ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager,
             IRepository<NbaPointsExample> exampleRepository, IRepository<NbaSeason> timeGroupingRepository,
-            IRepository<NbaTeam> participantRepository, IKNearestNeighborsDomainService<Double> kNearestNeighborsDomainService) : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy,
+            IRepository<NbaTeam> participantRepository, IKNearestNeighborsDomainService<NbaPointsExample, NbaStatLine, Double> kNearestNeighborsDomainService) : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy,
                 settingManager, exampleRepository, timeGroupingRepository, participantRepository)
         {
             this._kNearestNeighborsDomainService = kNearestNeighborsDomainService;
@@ -96,12 +96,12 @@ namespace MachineLearningBP.Services.Sports.Nba
                 {
                     NbaExampleGenerationInfo awayInfo = new NbaExampleGenerationInfo(game, games, teams, false, rollingWindowPeriod, scaleFactor);
                     NbaPointsExample awayExample = new NbaPointsExample();
-                    awayExample.SetFields(awayInfo);
+                    awayExample.SetFields(awayInfo.TeamStatLine1, awayInfo);
                     await this._exampleRepository.InsertAsync(awayExample);
 
                     NbaExampleGenerationInfo homeInfo = new NbaExampleGenerationInfo(game, games, teams, true, rollingWindowPeriod, scaleFactor);
                     NbaPointsExample homeExample = new NbaPointsExample();
-                    homeExample.SetFields(homeInfo);
+                    homeExample.SetFields(awayInfo.TeamStatLine1, homeInfo);
                     await this._exampleRepository.InsertAsync(homeExample);
 
                     await unitOfWork.CompleteAsync();
@@ -141,7 +141,7 @@ namespace MachineLearningBP.Services.Sports.Nba
                 unitOfWork.Complete();
             }
 
-            //this._kNearestNeighborsDomainService.DivideData(data, out trainSet, out testSet);
+            this._kNearestNeighborsDomainService.DivideData(data, out trainSet, out testSet);
         } 
         #endregion
     }

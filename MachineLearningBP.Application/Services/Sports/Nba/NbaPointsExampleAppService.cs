@@ -25,5 +25,11 @@ namespace MachineLearningBP.Services.Sports.Nba
         {
             await this._nbaPointsExampleDomainService.PopulateExamples(this._settingManager.GetSettingValue<int>("NbaRollingWindowPeriod"), this._settingManager.GetSettingValue<int>("NbaScaleFactor"));
         }
+
+        [UnitOfWork(IsDisabled = true)]
+        public async Task KNearestNeighborsDoStuff()
+        {
+            await this._nbaPointsExampleDomainService.KNearestNeighborsDoStuff();
+        }
     }
 }
