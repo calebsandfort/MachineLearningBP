@@ -13,6 +13,7 @@ using Abp.Configuration;
 using MachineLearningBP.Entities.Sports.Nba;
 using MachineLearningBP.Shared.SqlExecuter;
 using MachineLearningBP.CollectiveIntelligence.DomainServices.Samples;
+using Abp.BackgroundJobs;
 
 namespace MachineLearningBP.Core.Services.Sports.Nba
 {
@@ -25,8 +26,8 @@ namespace MachineLearningBP.Core.Services.Sports.Nba
         #region Contstructor
         public NbaGameDomainService(IRepository<NbaTeam> participantRepository, IRepository<NbaSeason> timeGroupingRepository,
             IRepository<NbaGame> sampleRepository, IRepository<NbaStatLine> statLineRepository,
-            ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager)
-            : base(participantRepository, timeGroupingRepository, sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager)
+            ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager, IBackgroundJobManager backgroundJobManager)
+            : base(participantRepository, timeGroupingRepository, sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager, backgroundJobManager)
         {
         }
         #endregion

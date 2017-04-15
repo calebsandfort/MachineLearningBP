@@ -1,0 +1,74 @@
+﻿@model GeneticOptimizeTargets
+
+@switch (Model)
+{
+    case GeneticOptimizeTargets.NbaPoints:
+        @Html.Partial("Modals/_KnnGeneticOptimizeFields")
+    break;
+}
+
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="popsize">popsize</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().NumericTextBox<int>()
+            .Name("popsize")
+            .Value(50)
+            .Decimals(0)
+            .Placeholder("Enter popsize")
+            .HtmlAttributes(new { style = "width: 100%", id="popsize", required="", @class="includeHidden" })
+        )
+        @*<input type="text" id="popsize" name="popsize" class="form-control" placeholder="popsize" required value="50">*@
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="step">step</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().NumericTextBox<int>()
+            .Name("step")
+            .Value(1)
+            .Decimals(0)
+            .Placeholder("Enter step")
+            .HtmlAttributes(new { style = "width: 100%", id = "step", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="mutprob">mutprob</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().NumericTextBox<Double>()
+            .Name("mutprob")
+            .Value(.2)
+            .Min(0)
+            .Max(1)
+            .Placeholder("Enter mutprob")
+            .HtmlAttributes(new { style = "width: 100%", id = "mutprob", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="elite">elite</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().NumericTextBox<Double>()
+            .Name("elite")
+            .Value(.2)
+            .Min(0)
+            .Max(1)
+            .Placeholder("Enter elite")
+            .HtmlAttributes(new { style = "width: 100%", id = "elite", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="step">maxiter</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().NumericTextBox<int>()
+            .Name("maxiter")
+            .Value(100)
+            .Decimals(0)
+            .Placeholder("Enter maxiter")
+            .HtmlAttributes(new { style = "width: 100%", id = "maxiter", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>
+
+<input type="hidden" id="target" name="target" value="@((int)Model)" />

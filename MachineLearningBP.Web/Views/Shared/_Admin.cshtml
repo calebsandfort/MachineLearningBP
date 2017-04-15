@@ -1,0 +1,37 @@
+﻿<div class="row" style="padding-top: 30px;">
+    <div class="col-xs-12 block-header block-header-info block-header-white">
+        <h2 class="layout-margin-tb-20">
+            <span class="title">Admin</span><span class="decoration"></span><span class="decoration"></span><span class="decoration"></span>
+        </h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-4">
+        <button type="button" class="btn btn-warning btn-block" onclick="MachineLearningBP.Admin.getAccessTokenUrl();">Access Token</button>
+    </div>
+</div>
+
+<div class="modal fade" id="accessTokenModal" tabindex="-1" role="dialog" aria-labelledby="accessTokenModal-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="accessTokenForm" class="form-horizontal">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="accessTokenModal-label">Access Token</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="AccessCode">Access Code</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="AccessCode" name="AccessCode" class="form-control" placeholder="Access Code" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Go</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

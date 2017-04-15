@@ -1,0 +1,66 @@
+﻿<div class="form-group">
+    <label class="col-sm-3 control-label" for="GuessMethod">Guess Method</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().ComboBox()
+          .Name("GuessMethod")
+          .DataTextField("Display")
+          .DataValueField("Value")
+          .SelectedIndex(0)
+          .Filter("contains")
+          .DataSource(source =>
+          {
+              source.Read(read =>
+              {
+                  read.Action("GetKNearestNeighborsGuessMethods", "ViewRenderer");
+              })
+              .ServerFiltering(false);
+          })
+          .HtmlAttributes(new { style = "width:100%;", id = "GuessMethod", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="WeightMethod">Weight Method</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().ComboBox()
+          .Name("WeightMethod")
+          .DataTextField("Display")
+          .DataValueField("Value")
+          .SelectedIndex(0)
+          .Filter("contains")
+          .DataSource(source =>
+          {
+              source.Read(read =>
+              {
+                  read.Action("GetKNearestNeighborsWeightMethods", "ViewRenderer");
+              })
+              .ServerFiltering(false);
+          })
+          .HtmlAttributes(new { style = "width:100%;", id = "WeightMethod", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="Trials">Trials</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().NumericTextBox<int>()
+            .Name("Trials")
+            .Value(100)
+            .Decimals(0)
+            .Placeholder("Enter Trials")
+            .HtmlAttributes(new { style = "width: 100%", id = "Trials", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="K">K</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().NumericTextBox<int>()
+            .Name("K")
+            .Value(5)
+            .Decimals(0)
+            .Placeholder("Enter K")
+            .HtmlAttributes(new { style = "width: 100%", id = "K", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>

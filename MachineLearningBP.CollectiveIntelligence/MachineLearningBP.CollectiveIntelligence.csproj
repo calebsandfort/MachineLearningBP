@@ -89,20 +89,56 @@
     <Compile Include="ApplicationServices\BaseApplicationService.cs" />
     <Compile Include="ApplicationServices\IExampleApplicationService.cs" />
     <Compile Include="ApplicationServices\ISampleApplicationService.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\Enums\GeneticOptimizeTargets.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\AnnealingOptimizeInput.cs">
+      <DependentUpon>IAnnealingOptimizeInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DomainServices\Algorithms\Dtos\GeneticOptimizeInput.cs">
+      <DependentUpon>IGeneticOptimizeInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DomainServices\Algorithms\Dtos\IAnnealingOptimizeInput.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\IGeneticOptimizeInput.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\IRecordContainer.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\KnnOptimizeInput.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\OptimizationScore.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\OptimizationRange.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\OptimizeInput.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\OptimizeResult.cs" />
     <Compile Include="DomainServices\Algorithms\IKNearestNeighborsDomainService.cs" />
-    <Compile Include="DomainServices\Algorithms\KNearestNeighborsDomainService.cs" />
+    <Compile Include="DomainServices\Algorithms\IOptimizationDomainService.cs" />
+    <Compile Include="DomainServices\Algorithms\IOptimizeInput.cs" />
+    <Compile Include="DomainServices\Algorithms\KNearestNeighborsDomainService.cs">
+      <DependentUpon>IKNearestNeighborsDomainService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DomainServices\Algorithms\OptimizationDomainService.cs">
+      <DependentUpon>IOptimizationDomainService.cs</DependentUpon>
+    </Compile>
     <Compile Include="DomainServices\BaseDomainService.cs" />
     <Compile Include="DomainServices\Examples\IExampleDomainService.cs" />
     <Compile Include="DomainServices\Samples\ISampleDomainService.cs" />
-    <Compile Include="DomainServices\Examples\MaximumExampleDomainService.cs" />
-    <Compile Include="DomainServices\Samples\MaximumSampleDomainService.cs" />
-    <Compile Include="DomainServices\Examples\MediumExampleDomainService.cs" />
-    <Compile Include="DomainServices\Samples\MediumSampleDomainService.cs" />
-    <Compile Include="DomainServices\Examples\MinimumExampleDomainService.cs" />
-    <Compile Include="DomainServices\Samples\MinimumSampleDomainService.cs" />
+    <Compile Include="DomainServices\Examples\MaximumExampleDomainService.cs">
+      <DependentUpon>IExampleDomainService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DomainServices\Samples\MaximumSampleDomainService.cs">
+      <DependentUpon>ISampleDomainService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DomainServices\Examples\MediumExampleDomainService.cs">
+      <DependentUpon>IExampleDomainService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DomainServices\Samples\MediumSampleDomainService.cs">
+      <DependentUpon>ISampleDomainService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DomainServices\Examples\MinimumExampleDomainService.cs">
+      <DependentUpon>IExampleDomainService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DomainServices\Samples\MinimumSampleDomainService.cs">
+      <DependentUpon>ISampleDomainService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Entities\Example.cs" />
     <Compile Include="Entities\ExampleMinimum.cs" />
     <Compile Include="Entities\ExampleGenerationInfo.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\KNearestNeighborsCrossValidateInput.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\KNearestNeighborsCrossValidateResult.cs" />
     <Compile Include="Entities\ParticipantMinimum.cs" />
     <Compile Include="Entities\Participant.cs" />
     <Compile Include="Entities\SampleMedium.cs" />
@@ -113,6 +149,7 @@
     <Compile Include="Entities\TimeGroupingMinimum.cs" />
     <Compile Include="Entities\TimeGrouping.cs" />
     <Compile Include="Entities\Sample.cs" />
+    <Compile Include="Entities\ValueIndexPair.cs" />
     <Compile Include="MachineLearningBPCollectiveIntelligenceModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -63,6 +63,18 @@
       <HintPath>..\packages\Castle.Windsor.3.4.0\lib\net45\Castle.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Google.GData.Client, Version=2.2.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Files\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Files\Google.GData.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Spreadsheets, Version=2.2.0.0, Culture=neutral, PublicKeyToken=3f77feb76ff0d9a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Files\Google.GData.Spreadsheets.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.10.4.0\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
@@ -114,20 +126,35 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\ISheetUtilityAppService.cs" />
+    <Compile Include="Services\SheetUtilityAppService.cs">
+      <DependentUpon>ISheetUtilityAppService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\Sports\IGameAppService.cs" />
+    <Compile Include="Services\Sports\ISportExampleAppService.cs" />
     <Compile Include="Services\Sports\Mlb\IMlbGameAppService.cs" />
     <Compile Include="Services\Sports\Mlb\IMlbSeasonAppService.cs" />
-    <Compile Include="Services\Sports\Mlb\MlbGameAppService.cs" />
-    <Compile Include="Services\Sports\Mlb\MlbSeasonAppService.cs" />
+    <Compile Include="Services\Sports\Mlb\MlbGameAppService.cs">
+      <DependentUpon>IMlbGameAppService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Sports\Mlb\MlbSeasonAppService.cs">
+      <DependentUpon>IMlbSeasonAppService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\Sports\Nba\INbaPointsExampleAppService.cs" />
-    <Compile Include="Services\Sports\Nba\NbaGameAppService.cs" />
+    <Compile Include="Services\Sports\Nba\NbaGameAppService.cs">
+      <DependentUpon>INbaGameAppService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\Sports\Nba\INbaGameAppService.cs" />
     <Compile Include="MachineLearningBPApplicationModule.cs" />
     <Compile Include="MachineLearningBPAppServiceBase.cs" />
@@ -140,9 +167,15 @@
     <Compile Include="Roles\Dto\UpdateRolePermissionsInput.cs" />
     <Compile Include="Services\Sports\ISeasonAppService.cs" />
     <Compile Include="Services\Sports\Nba\INbaSeasonAppService.cs" />
-    <Compile Include="Services\Sports\Nba\NbaPointsExampleAppService.cs" />
-    <Compile Include="Services\Sports\Nba\NbaSeasonAppService.cs" />
-    <Compile Include="Services\Sports\SportExampleAppService.cs" />
+    <Compile Include="Services\Sports\Nba\NbaPointsExampleAppService.cs">
+      <DependentUpon>INbaPointsExampleAppService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Sports\Nba\NbaSeasonAppService.cs">
+      <DependentUpon>INbaSeasonAppService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Sports\SportExampleAppService.cs">
+      <DependentUpon>ISportExampleAppService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Users\Dto\CreateUserInput.cs" />
     <Compile Include="Users\IUserAppService.cs" />
     <Compile Include="Roles\RoleAppService.cs" />
@@ -170,8 +203,11 @@
       <Project>{17298ea0-af73-4f30-b6f1-2066100d7d74}</Project>
       <Name>MachineLearningBP.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MachineLearningBP.Shared\MachineLearningBP.Shared.csproj">
+      <Project>{0B322986-37F2-4213-9785-A74775746D57}</Project>
+      <Name>MachineLearningBP.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

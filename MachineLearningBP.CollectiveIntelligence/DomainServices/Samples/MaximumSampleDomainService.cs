@@ -8,6 +8,7 @@ using MachineLearningBP.Shared;
 using MachineLearningBP.Shared.SqlExecuter;
 using Abp.Domain.Repositories;
 using MachineLearningBP.CollectiveIntelligence.Entities;
+using Abp.BackgroundJobs;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Samples
 {
@@ -23,8 +24,8 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Samples
 
         #region Constructor
         public MaximumSampleDomainService(IRepository<TParticipant> participantRepository, IRepository<TTimeGrouping> timeGroupingRepository, IRepository<TSample> sampleRepository,
-            IRepository<TStatLine> statLineRepository, ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager)
-            : base(timeGroupingRepository, sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager)
+            IRepository<TStatLine> statLineRepository, ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager, IBackgroundJobManager backgroundJobManager)
+            : base(timeGroupingRepository, sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager, backgroundJobManager)
         {
             this._participantRepository = participantRepository;
         } 

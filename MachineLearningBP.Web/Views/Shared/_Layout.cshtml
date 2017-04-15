@@ -51,9 +51,11 @@
 <body>
     @Html.Partial("_TopBar")
 
-    <div class="container">
+    <div class="container-mid">
         @RenderBody()
     </div>
+
+    <div id="geneticOptimizeModalWrapper"></div>
 
     @Scripts.Render("~/Bundles/vendor/js/bottom")
     @Scripts.Render("~/Bundles/js")

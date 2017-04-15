@@ -8,6 +8,7 @@ using MachineLearningBP.Shared;
 using MachineLearningBP.Shared.SqlExecuter;
 using Abp.Domain.Repositories;
 using MachineLearningBP.CollectiveIntelligence.Entities;
+using Abp.BackgroundJobs;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Samples
 {
@@ -22,8 +23,8 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Samples
 
         #region MinimumDomainService
         public MinimumSampleDomainService(IRepository<TSample> sampleRepository, IRepository<TStatLine> statLineRepository,
-            ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager)
-            : base(sqlExecuter, consoleHubProxy, settingManager)
+            ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager, IBackgroundJobManager backgroundJobManager)
+            : base(sqlExecuter, consoleHubProxy, settingManager, backgroundJobManager)
         {
             this._sampleRepository = sampleRepository;
             this._statLineRepository = statLineRepository;

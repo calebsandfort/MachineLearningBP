@@ -10,6 +10,7 @@ using MachineLearningBP.Shared.Dtos;
 using MachineLearningBP.Entities.Sports.Mlb;
 using MachineLearningBP.Shared.SqlExecuter;
 using MachineLearningBP.CollectiveIntelligence.DomainServices.Samples;
+using Abp.BackgroundJobs;
 
 namespace MachineLearningBP.Core.Services.Sports.Mlb
 {
@@ -17,8 +18,8 @@ namespace MachineLearningBP.Core.Services.Sports.Mlb
     {
         public MlbSeasonDomainService(IRepository<MlbTeam> participantRepository, IRepository<MlbSeason> timeGroupingRepository,
             IRepository<MlbGame> sampleRepository, IRepository<MlbStatLine> statLineRepository, ISqlExecuter sqlExecuter,
-            IConsoleHubProxy consoleHubProxy, ISettingManager settingManager)
-            : base(participantRepository, timeGroupingRepository, sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager)
+            IConsoleHubProxy consoleHubProxy, ISettingManager settingManager, IBackgroundJobManager backgroundJobManager)
+            : base(participantRepository, timeGroupingRepository, sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager, backgroundJobManager)
         {
         }
         #region Constructor

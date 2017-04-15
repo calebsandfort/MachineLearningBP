@@ -13,6 +13,7 @@ using MachineLearningBP.Entities.Sports.Mlb;
 using MachineLearningBP.Shared.SqlExecuter;
 using MachineLearningBP.CollectiveIntelligence.DomainServices.Samples;
 using System.Text.RegularExpressions;
+using Abp.BackgroundJobs;
 
 namespace MachineLearningBP.Core.Services.Sports.Mlb
 {
@@ -28,8 +29,8 @@ namespace MachineLearningBP.Core.Services.Sports.Mlb
         #region Contstructor
         public MlbGameDomainService(IRepository<MlbTeam> participantRepository, IRepository<MlbSeason> timeGroupingRepository,
             IRepository<MlbGame> sampleRepository, IRepository<MlbStatLine> statLineRepository,
-            ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager)
-            : base(participantRepository, timeGroupingRepository, sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager)
+            ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager, IBackgroundJobManager backgroundJobManager)
+            : base(participantRepository, timeGroupingRepository, sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager, backgroundJobManager)
         {
             this.SfRegEx = new Regex(@"\((\d+)\)", RegexOptions.Compiled);
             this.InningsPitchedRegEx = new Regex(@"\d+\.(\d+)", RegexOptions.Compiled);

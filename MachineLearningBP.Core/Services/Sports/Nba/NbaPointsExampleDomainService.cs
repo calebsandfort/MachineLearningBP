@@ -11,6 +11,10 @@ using MachineLearningBP.Shared.SqlExecuter;
 using MachineLearningBP.Shared.Dtos;
 using MachineLearningBP.Shared.GuerillaTimer;
 using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms;
+using MachineLearningBP.Core.Services;
+using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dtos;
+using Abp.BackgroundJobs;
+using MachineLearningBP.BackgroundJobs.Sports;
 
 namespace MachineLearningBP.Services.Sports.Nba
 {
@@ -18,16 +22,19 @@ namespace MachineLearningBP.Services.Sports.Nba
     {
         #region Properties
         public readonly IKNearestNeighborsDomainService<NbaPointsExample, NbaStatLine, Double> _kNearestNeighborsDomainService;
+        private readonly ISheetUtilityDomainService _sheetUtilityDomainService;
         #endregion
 
         #region Constructor
         public NbaPointsExampleDomainService(IRepository<NbaGame> sampleRepository, IRepository<NbaStatLine> statLineRepository,
             ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager,
-            IRepository<NbaPointsExample> exampleRepository, IRepository<NbaSeason> timeGroupingRepository,
-            IRepository<NbaTeam> participantRepository, IKNearestNeighborsDomainService<NbaPointsExample, NbaStatLine, Double> kNearestNeighborsDomainService) : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy,
-                settingManager, exampleRepository, timeGroupingRepository, participantRepository)
+            IRepository<NbaPointsExample> exampleRepository, IRepository<NbaSeason> timeGroupingRepository, ISheetUtilityDomainService sheetUtilityDomainService,
+            IRepository<NbaTeam> participantRepository, IKNearestNeighborsDomainService<NbaPointsExample, NbaStatLine, Double> kNearestNeighborsDomainService, IBackgroundJobManager backgroundJobManager)
+            : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy,
+                settingManager, exampleRepository, timeGroupingRepository, participantRepository, backgroundJobManager)
         {
             this._kNearestNeighborsDomainService = kNearestNeighborsDomainService;
+            this._sheetUtilityDomainService = sheetUtilityDomainService;
         }
         #endregion
 
@@ -133,16 +140,86 @@ namespace MachineLearningBP.Services.Sports.Nba
         #region KNearestNeighborsDoStuff
         public async Task KNearestNeighborsDoStuff()
         {
-            List<NbaPointsExample> data, trainSet, testSet;
+            KNearestNeighborsCrossValidateInput<NbaPointsExample, NbaStatLine, Double> input = new KNearestNeighborsCrossValidateInput<NbaPointsExample, NbaStatLine, double>();
+            input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
+            input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
+            input.Trials = 5;
 
             using (var unitOfWork = this.UnitOfWorkManager.Begin())
             {
-                data = await this._exampleRepository.GetAllListAsync();
+                input.Data = this._exampleRepository.GetAll().Take(500).ToArray();
                 unitOfWork.Complete();
             }
 
-            this._kNearestNeighborsDomainService.DivideData(data, out trainSet, out testSet);
+            //KNearestNeighborsCrossValidateResult result = this._kNearestNeighborsDomainService.CrossValidate(input);
+        }
+        #endregion
+
+        #region FindOptimalParameters
+        public async Task FindOptimalParametersEnqueue(bool record)
+        {
+            await _backgroundJobManager.EnqueueAsync<NbaPointsFindOptimalParametersBackgroundJob, bool>(record);
+        }
+
+        public async Task<List<KNearestNeighborsCrossValidateResult>> FindOptimalParameters(bool record)
+        {
+            NbaPointsExample[] data = await this.GetExamples();
+
+            List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParameters(data);
+
+            if (record)
+                await this._sheetUtilityDomainService.Record(new List<IRecordContainer>(results));
+
+            return results;
+        }
+        #endregion
+
+        #region AnnealingOptimize
+        public async Task AnnealingOptimizeEnqueue(AnnealingOptimizeInput input)
+        {
+            await _backgroundJobManager.EnqueueAsync<NbaPointsAnnealingOptimizeBackgroundJob, AnnealingOptimizeInput>(input);
+        }
+
+        public async Task AnnealingOptimize(AnnealingOptimizeInput input)
+        {
+            NbaPointsExample[] data = await this.GetExamples();
+            OptimizeResult result = this._kNearestNeighborsDomainService.AnnealingOptimize(input, data);
+
+            if (input.record)
+                await this._sheetUtilityDomainService.Record(new List<IRecordContainer>() { result });
+        }
+        #endregion
+
+        #region GeneticOptimize
+        public async Task GeneticOptimizeEnqueue(GeneticOptimizeInput input)
+        {
+            await _backgroundJobManager.EnqueueAsync<NbaPointsGeneticOptimizeBackgroundJob, GeneticOptimizeInput>(input);
+        }
+
+        public async Task GeneticOptimize(GeneticOptimizeInput input)
+        {
+            NbaPointsExample[] data = await this.GetExamples();
+            OptimizeResult result = this._kNearestNeighborsDomainService.GeneticOptimize(input, data);
+
+            if (input.record)
+                await this._sheetUtilityDomainService.Record(new List<IRecordContainer>() { result });
         } 
+        #endregion
+
+        #region GetExamples
+        public async Task<NbaPointsExample[]> GetExamples()
+        {
+            NbaPointsExample[] data;
+
+            using (var unitOfWork = this.UnitOfWorkManager.Begin())
+            {
+                data = (await this._exampleRepository.GetAllListAsync()).ToArray();
+                //data = this._exampleRepository.GetAll().OrderByDescending(x => x.StatLine.Sample.Date).Take(500).ToArray();
+                unitOfWork.Complete();
+            }
+
+            return data;
+        }
         #endregion
     }
 }

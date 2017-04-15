@@ -106,6 +106,7 @@
     <Compile Include="Console\ConsoleHubProxy.cs" />
     <Compile Include="Console\Dtos\ConsoleWriteLineInput.cs" />
     <Compile Include="Console\IConsoleHubProxy.cs" />
+    <Compile Include="Framework\Extensions.cs" />
     <Compile Include="GuerillaTimer\IGuerillaTimer.cs" />
     <Compile Include="GuerillaTimer\GuerillaTimer.cs" />
     <Compile Include="MachineLearningBPSharedModule.cs" />

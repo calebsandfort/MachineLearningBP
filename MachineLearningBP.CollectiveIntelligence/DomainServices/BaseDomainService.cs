@@ -1,4 +1,5 @@
-﻿using Abp.Configuration;
+﻿using Abp.BackgroundJobs;
+using Abp.Configuration;
 using Abp.Domain.Services;
 using MachineLearningBP.Shared;
 using MachineLearningBP.Shared.SqlExecuter;
@@ -15,15 +16,17 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices
         #region Properties
         public readonly ISqlExecuter _sqlExecuter;
         public readonly IConsoleHubProxy _consoleHubProxy;
-        public readonly ISettingManager _settingManager; 
+        public readonly ISettingManager _settingManager;
+        public readonly IBackgroundJobManager _backgroundJobManager;
         #endregion
 
         #region Constructor
-        public BaseDomainService(ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager)
+        public BaseDomainService(ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager, IBackgroundJobManager backgroundJobManager)
         {
             _sqlExecuter = sqlExecuter;
             _consoleHubProxy = consoleHubProxy;
             _settingManager = settingManager;
+            _backgroundJobManager = backgroundJobManager;
         }
         #endregion
     }

@@ -1,8 +1,16 @@
 ﻿var MachineLearningBP;
 if (!MachineLearningBP) MachineLearningBP = {
+    Admin: {},
     Console: {},
+    Optimize: {},
     Nba: {},
-    Mlb: {}
+    Mlb: {},
+    Util: {},
+    Enums: {
+        GeneticOptimizeTargets: {
+            NbaPoints: 0
+        }
+    }
 };
 
 (function ($) {
@@ -33,8 +41,12 @@ if (!MachineLearningBP) MachineLearningBP = {
     if ($.blockUI) {
         $.blockUI.defaults.baseZ = 2000;
     }
-
 })(jQuery);
+
+$(document).ready(function () {
+    MachineLearningBP.Util.initForm("accessTokenForm", MachineLearningBP.Admin.submitAccessTokenForm);
+    
+});
 
 $(document).ready(function () {
     var consoleHub = $.connection.consoleHub; //get a reference to the hub
@@ -43,6 +55,89 @@ $(document).ready(function () {
         MachineLearningBP.Console.writeLine(line);
     };
 });
+
+MachineLearningBP.Util.initForm = function (id, submitFunc) {
+    var _$form = $('#' + id);
+
+    _$form.validate({
+        ignore: ":hidden:Not(.includeHidden), .ignoreValidation"
+    });
+
+    _$form.find('button[type=submit]')
+        .click(function (e) {
+            e.preventDefault();
+
+            if (!_$form.valid()) {
+                return;
+            }
+
+            var input = _$form.serializeFormToObject();
+
+            submitFunc(input);
+        });
+}
+
+MachineLearningBP.Util.showModalForm = function (id, clearForm) {
+    var _$modal = $('#' + id);
+    var _$form = _$modal.find("form");
+
+    _$modal.modal("show");
+
+    if (_$form.size() > 0) {
+        setTimeout(function () {
+            if (typeof (clearForm) == "undefined" || clearForm) {
+                _$form.find('input').val("");
+            }
+
+            _$form.find('input:first').focus();
+        }, 500);
+    }
+}
+
+MachineLearningBP.Util.hideModalForm = function (id) {
+    var _$modal = $('#' + id);
+    _$modal.modal("hide");
+}
+
+MachineLearningBP.Admin.submitAccessTokenForm = function (input) {
+    MachineLearningBP.Util.hideModalForm("accessTokenModal");
+
+    abp.services.app.sheetUtility.completeGetAccessToken(input)
+        .done(function () { });
+}
+
+MachineLearningBP.Admin.getAccessTokenUrl = function () {
+    abp.services.app.sheetUtility.getAccessTokenUrl().done(function (result) {
+        window.open(result);
+        MachineLearningBP.Util.showModalForm("accessTokenModal")
+    });
+}
+
+MachineLearningBP.Optimize.showGeneticOptimizeModal = function (target) {
+    $.ajax({
+        type: "POST",
+        url: abp.appPath + 'ViewRenderer/GeneticOptimizeModal',
+        data: JSON.stringify({
+            target: target
+        }),
+        success: function (r) {
+            $("#geneticOptimizeModalWrapper").html(r);
+            MachineLearningBP.Util.initForm("geneticOptimizeForm", MachineLearningBP.Optimize.geneticOptimize);
+            MachineLearningBP.Util.showModalForm("geneticOptimizeModal", false);
+        },
+        contentType: "application/json"
+    });
+}
+
+MachineLearningBP.Optimize.geneticOptimize = function (input) {
+    MachineLearningBP.Util.hideModalForm("geneticOptimizeModal");
+
+    switch (parseInt(input.target)) {
+        case MachineLearningBP.Enums.GeneticOptimizeTargets.NbaPoints:
+            abp.services.app.nbaPointsExample.geneticOptimize(input).done(function () { });
+            break;
+    }
+}
 
 MachineLearningBP.Console.clear = function () {
     $("#consoleWell").html("");
@@ -81,6 +176,21 @@ MachineLearningBP.Nba.populatePointsExamples = function () {
 
     abp.services.app.nbaPointsExample.populateExamples().done(function (result) {
 
+    });
+}
+
+MachineLearningBP.Nba.kNearestNeighborsDoStuff = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.nbaPointsExample.kNearestNeighborsDoStuff().done(function (result) {
+
+    });
+}
+
+MachineLearningBP.Nba.getPointsKnnBestParametersCsv = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.nbaPointsExample.findOptimalParameters().done(function () {
     });
 }
 

@@ -8,6 +8,7 @@ using MachineLearningBP.Shared;
 using MachineLearningBP.Shared.SqlExecuter;
 using Abp.Domain.Repositories;
 using MachineLearningBP.CollectiveIntelligence.Entities;
+using Abp.BackgroundJobs;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Examples
 {
@@ -24,8 +25,8 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Examples
 
         #region Constructor
         public MediumExampleDomainService(IRepository<TSample> sampleRepository, IRepository<TStatLine> statLineRepository, ISqlExecuter sqlExecuter,
-            IConsoleHubProxy consoleHubProxy, ISettingManager settingManager, IRepository<TExample> exampleRepository, IRepository<TTimeGrouping> timeGroupingRepository)
-            : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager, exampleRepository)
+            IConsoleHubProxy consoleHubProxy, ISettingManager settingManager, IRepository<TExample> exampleRepository, IRepository<TTimeGrouping> timeGroupingRepository, IBackgroundJobManager backgroundJobManager)
+            : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy, settingManager, exampleRepository, backgroundJobManager)
         {
             this._timeGroupingRepository = timeGroupingRepository;
         }
