@@ -1,0 +1,3 @@
+﻿<connectionStrings>
+  <add name="Default" providerName="System.Data.SqlClient" connectionString="Data Source=machine\dbserver;Initial Catalog=MachineLearningBP;Persist Security Info=True;User ID=sa;Password=password" />
+</connectionStrings>

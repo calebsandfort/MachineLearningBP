@@ -1,5 +1,6 @@
 ﻿using Abp;
 using Abp.Dependency;
+using MachineLearningBP.Services.Sports.Nba;
 using MachineLearningBP.Shared.Dtos;
 using RestSharp;
 using System;
@@ -18,51 +19,62 @@ namespace MachineLearningBP.ConsoleApp
 
         static void Main(string[] args)
         {
-
-            using (var sheetUtility = new SheetUtility())
+            using (var bootstrapper = AbpBootstrapper.Create<MachineLearningBPConsoleAppModule>())
             {
+                bootstrapper.Initialize();
 
-                Console.WriteLine();
-                Console.WriteLine(" 1 - Authorize");
-                Console.WriteLine(" 2 - Ping");
-
-                bool keepGoing = true;
-                Stopwatch timer = new Stopwatch();
-
-                while (keepGoing)
+                using (var sheetUtility = new SheetUtility())
                 {
-                    Console.Write(" Enter option: ");
-                    char objectOptionChar = Console.ReadKey(false).KeyChar;
+
                     Console.WriteLine();
+                    Console.WriteLine(" 1 - Authorize");
+                    Console.WriteLine(" 2 - Ping");
+                    Console.WriteLine(" 3 - NbaPoints.FindOptimalParameters");
 
-                    if (objectOptionChar == 'q')
-                    {
-                        keepGoing = false;
-                    }
-                    else
-                    {
-                        int objectOptionInt = Int32.Parse(objectOptionChar.ToString());
+                    bool keepGoing = true;
+                    Stopwatch timer = new Stopwatch();
 
-                        switch (objectOptionInt)
+                    while (keepGoing)
+                    {
+                        Console.Write(" Enter option: ");
+                        char objectOptionChar = Console.ReadKey(false).KeyChar;
+                        Console.WriteLine();
+
+                        if (objectOptionChar == 'q')
                         {
-                            case 1:
-                                sheetUtility.Authorize();
-                                break;
-                            case 2:
-                                SendPing();
+                            keepGoing = false;
+                        }
+                        else
+                        {
+                            int objectOptionInt = Int32.Parse(objectOptionChar.ToString());
 
-                                pingTimer = new System.Timers.Timer();
-                                pingTimer.Interval = 30000 * 1;
+                            switch (objectOptionInt)
+                            {
+                                case 1:
+                                    sheetUtility.Authorize();
+                                    break;
+                                case 2:
+                                    SendPing();
 
-                                // Hook up the Elapsed event for the timer. 
-                                pingTimer.Elapsed += PingTimer_Elapsed; ;
+                                    pingTimer = new System.Timers.Timer();
+                                    pingTimer.Interval = 30000 * 1;
 
-                                // Have the timer fire repeated events (true is the default)
-                                pingTimer.AutoReset = true;
+                                    // Hook up the Elapsed event for the timer. 
+                                    pingTimer.Elapsed += PingTimer_Elapsed; ;
 
-                                // Start the timer
-                                pingTimer.Enabled = true;
-                                break;
+                                    // Have the timer fire repeated events (true is the default)
+                                    pingTimer.AutoReset = true;
+
+                                    // Start the timer
+                                    pingTimer.Enabled = true;
+                                    break;
+                                case 3:
+                                    using (var _nbaPointsExampleDomainService = bootstrapper.IocManager.ResolveAsDisposable<INbaPointsExampleDomainService>())
+                                    {
+                                        _nbaPointsExampleDomainService.Object.FindOptimalParameters(true);
+                                    }
+                                    break;
+                            }
                         }
                     }
                 }

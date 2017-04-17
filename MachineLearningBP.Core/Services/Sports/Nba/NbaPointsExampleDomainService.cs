@@ -41,55 +41,63 @@ namespace MachineLearningBP.Services.Sports.Nba
         #region PopulateExamples
         public async Task PopulateExamples(int rollingWindowPeriod, double scaleFactor)
         {
-            using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
+            try
             {
-                this.DeleteExamples();
-
-                DateTime now = DateTime.Now.Date;
-                DateTime currentDate;
-                List<NbaSeason> seasons;
-                List<NbaTeam> teams;
-                List<NbaGame> games, todaysGames;
-
-                using (var unitOfWork = this.UnitOfWorkManager.Begin())
+                using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
                 {
-                    currentDate = this._sampleRepository.GetAll().Where(x => x.Completed).OrderBy(x => x.Date).First().Date.AddDays(-1);
-                    seasons = this._timeGroupingRepository.GetAll().OrderBy(x => x.Start).ToList();
-                    teams = await this._participantRepository.GetAllListAsync();
-                    await unitOfWork.CompleteAsync();
-                }
+                    this.DeleteExamples();
 
-                foreach (NbaSeason season in seasons.OrderBy(x => x.Start))
-                {
-                    this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Starting {season.Start.ToShortDateString()} - {season.End.ToShortDateString()} season..."));
+                    DateTime now = DateTime.Now.Date;
+                    DateTime currentDate;
+                    List<NbaSeason> seasons;
+                    List<NbaTeam> teams;
+                    List<NbaGame> games, todaysGames;
 
                     using (var unitOfWork = this.UnitOfWorkManager.Begin())
                     {
-                        games = this._sampleRepository.GetAllIncluding(x => x.StatLines)
-                            .Where(x => x.TimeGroupingId == season.Id).ToList();
+                        currentDate = this._sampleRepository.GetAll().Where(x => x.Completed).OrderBy(x => x.Date).First().Date.AddDays(-1);
+                        seasons = this._timeGroupingRepository.GetAll().OrderBy(x => x.Start).ToList();
+                        teams = await this._participantRepository.GetAllListAsync();
                         await unitOfWork.CompleteAsync();
                     }
 
-                    if (currentDate < season.Start.Date) currentDate = season.RollingWindowStart.Value.Date;
-
-                    while (season.Within(currentDate))
+                    foreach (NbaSeason season in seasons.OrderBy(x => x.Start))
                     {
-                        if (currentDate == now) break;
-
-                        this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Populating {currentDate.ToShortDateString()} ..."));
+                        this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Starting {season.Start.ToShortDateString()} - {season.End.ToShortDateString()} season..."));
 
                         using (var unitOfWork = this.UnitOfWorkManager.Begin())
                         {
-                            todaysGames = this._sampleRepository.GetAllIncluding(x => x.StatLines).Where(x => x.Date.Year == currentDate.Year && x.Date.Month == currentDate.Month && x.Date.Day == currentDate.Day).ToList();
+                            games = this._sampleRepository.GetAllIncluding(x => x.StatLines)
+                                .Where(x => x.TimeGroupingId == season.Id).ToList();
                             await unitOfWork.CompleteAsync();
                         }
 
-                        await Task.WhenAll(todaysGames.Select(x => PopulateExample(x, games, teams, rollingWindowPeriod, scaleFactor)).ToArray());
-                        currentDate = currentDate.AddDays(1);
-                    }
+                        if (currentDate < season.Start.Date) currentDate = season.RollingWindowStart.Value.Date;
 
-                    this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Completed {season.Start.ToShortDateString()} - {season.End.ToShortDateString()} season."));
+                        while (season.Within(currentDate))
+                        {
+                            if (currentDate == now) break;
+
+                            this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Populating {currentDate.ToShortDateString()} ..."));
+
+                            using (var unitOfWork = this.UnitOfWorkManager.Begin())
+                            {
+                                todaysGames = this._sampleRepository.GetAllIncluding(x => x.StatLines).Where(x => x.Date.Year == currentDate.Year && x.Date.Month == currentDate.Month && x.Date.Day == currentDate.Day).ToList();
+                                await unitOfWork.CompleteAsync();
+                            }
+
+                            await Task.WhenAll(todaysGames.Select(x => PopulateExample(x, games, teams, rollingWindowPeriod, scaleFactor)).ToArray());
+                            currentDate = currentDate.AddDays(1);
+                        }
+
+                        this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Completed {season.Start.ToShortDateString()} - {season.End.ToShortDateString()} season."));
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Exception: {ex.Message} {Environment.NewLine} Stacktrace: {ex.StackTrace}"));
+                throw ex;
             }
         }
         #endregion
