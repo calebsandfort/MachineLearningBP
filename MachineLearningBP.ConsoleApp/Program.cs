@@ -1,5 +1,6 @@
 ﻿using Abp;
 using Abp.Dependency;
+using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dtos;
 using MachineLearningBP.Services.Sports.Nba;
 using MachineLearningBP.Shared.Dtos;
 using RestSharp;
@@ -30,6 +31,7 @@ namespace MachineLearningBP.ConsoleApp
                     Console.WriteLine(" 1 - Authorize");
                     Console.WriteLine(" 2 - Ping");
                     Console.WriteLine(" 3 - NbaPoints.FindOptimalParameters");
+                    Console.WriteLine(" 4 - NbaPoints.GeneticOptimize");
 
                     bool keepGoing = true;
                     Stopwatch timer = new Stopwatch();
@@ -72,6 +74,23 @@ namespace MachineLearningBP.ConsoleApp
                                     using (var _nbaPointsExampleDomainService = bootstrapper.IocManager.ResolveAsDisposable<INbaPointsExampleDomainService>())
                                     {
                                         _nbaPointsExampleDomainService.Object.FindOptimalParameters(true);
+                                    }
+                                    break;
+                                case 4:
+                                    using (var _nbaPointsExampleDomainService = bootstrapper.IocManager.ResolveAsDisposable<INbaPointsExampleDomainService>())
+                                    {
+                                        GeneticOptimizeInput input = new GeneticOptimizeInput();
+                                        input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
+                                        input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
+                                        input.Trials = 25;
+                                        input.K = 25;
+                                        input.popsize = 50;
+                                        input.step = 1;
+                                        input.mutprob = .20;
+                                        input.elite = .20;
+                                        input.maxiter = 100;
+
+                                        _nbaPointsExampleDomainService.Object.GeneticOptimize(input);
                                     }
                                     break;
                             }

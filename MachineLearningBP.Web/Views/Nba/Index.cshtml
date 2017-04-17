@@ -5,12 +5,16 @@
     <div class="col-md-12">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#admin" aria-controls="admin" role="tab" data-toggle="tab">Admin</a></li>
+            <li role="presentation" class="active"><a href="#today" aria-controls="today" role="tab" data-toggle="tab">Today</a></li>
+            <li role="presentation"><a href="#admin" aria-controls="admin" role="tab" data-toggle="tab">Admin</a></li>
         </ul>
 
         <!-- Tab panes -->
         <div class="tab-content" style="padding-top: 10px;">
-            <div role="tabpanel" class="tab-pane active" id="admin">
+            <div role="tabpanel" class="tab-pane active" id="today">
+                @Html.Partial("_TodayGrid")
+            </div>
+            <div role="tabpanel" class="tab-pane" id="admin">
                 <div class="row">
                     <div class="col-xs-5">
                         <div class="row">
@@ -54,8 +58,11 @@
                                 <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Optimize.showGeneticOptimizeModal(0);">Genetic</button>
                             </div>
                             <div class="col-xs-4">
-                                <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Optimize.showGeneticOptimizeModal(0);">Genetic</button>
+                                <button type="button" class="btn btn-warning btn-block" onclick="MachineLearningBP.Nba.predictTodayKnnPoints();">Predict</button>
                             </div>
+                            @*<div class="col-xs-4">
+                                <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Optimize.showGeneticOptimizeModal(0);">Genetic</button>
+                            </div>*@
                         </div>
                         @Html.Partial("_Admin")
                     </div>

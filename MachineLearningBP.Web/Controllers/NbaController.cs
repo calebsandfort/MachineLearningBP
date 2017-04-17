@@ -1,29 +1,53 @@
 ﻿using System.Web.Mvc;
-using Abp.Web.Mvc.Authorization;
 using MachineLearningBP.Services.Sports.Nba;
-using System.Threading.Tasks;
-using MachineLearningBP.CollectiveIntelligence.Entities;
+using MachineLearningBP.Web.Framework;
+using Abp.Domain.Repositories;
+using MachineLearningBP.Entities.Sports.Nba;
+using Kendo.Mvc.UI;
+using System.Linq;
+using MachineLearningBP.Core.Entities.Sports.Nba.Dtos;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using CsvHelper;
+using Abp.ObjectMapping;
+using System;
+using Abp.Timing;
+using System.Linq.Expressions;
 
 namespace MachineLearningBP.Web.Controllers
 {
     //[AbpMvcAuthorize]
     public class NbaController : MachineLearningBPControllerBase
     {
-        private readonly INbaPointsExampleAppService _nbaPointsExampleAppService;
+        readonly INbaPointsExampleAppService _nbaPointsExampleAppService;
+        readonly IRepository<NbaGame> _gameRepository;
+        readonly IObjectMapper _objectMapper;
 
-        public NbaController(INbaPointsExampleAppService nbaPointsExampleAppService)
+        public NbaController(INbaPointsExampleAppService nbaPointsExampleAppService, IRepository<NbaGame> gameRepository, IObjectMapper objectMapper)
         {
             _nbaPointsExampleAppService = nbaPointsExampleAppService;
+            _gameRepository = gameRepository;
+            _objectMapper = objectMapper;
         }
 
         public ActionResult Index()
         {
             return View();
         }
+
+        #region Today_Read
+        public ActionResult Today_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            DataSourceResult result = new DataSourceResult();
+
+            DateTime currentDate = Clock.Now;
+
+            Expression<Func<NbaGame, bool>> todayFunc = x => x.Date.Year == currentDate.Year && x.Date.Month == currentDate.Month && x.Date.Day == currentDate.Day;
+
+            result.Data = _objectMapper.Map<List<NbaGameDto>>(_gameRepository.GetAllIncluding(x => x.StatLines.Select(y => y.Participant)).Where(request.Filters).Where(todayFunc).OrderBy(request.Sorts[0]).ToList());
+            result.Total = _gameRepository.GetAll().Where(request.Filters).Where(todayFunc).Count();
+
+            return new GuerillaLogisticsApiJsonResult(result);
+        }
+        #endregion
 
         //public async Task<FileContentResult> GetPointsKnnBestParametersCsv()
         //{

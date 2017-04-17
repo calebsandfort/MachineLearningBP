@@ -1,4 +1,5 @@
-﻿using MachineLearningBP.CollectiveIntelligence.Entities;
+﻿using Abp.Timing;
+using MachineLearningBP.CollectiveIntelligence.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,6 +12,8 @@ namespace MachineLearningBP.Entities.Sports.Nba
     [Table("NbaPointsExamples")]
     public class NbaPointsExample : NbaFourFactorsExample
     {
+        public DateTime Date { get; set; }
+
         [ForeignKey("StatLineId")]
         public override NbaStatLine StatLine { get; set; }
         public override int StatLineId { get; set; }
@@ -51,6 +54,7 @@ namespace MachineLearningBP.Entities.Sports.Nba
 
             this.NumericalData = dataPoints.Select(x => x * info.ScaleFactor).ToList();
             this.DelimitedCategoricalData = String.Empty;
+            this.Date = info.Game.Date;
         }
 
         public override void SetResult(NbaExampleGenerationInfo info)

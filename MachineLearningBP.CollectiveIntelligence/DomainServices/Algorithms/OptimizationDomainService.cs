@@ -163,7 +163,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                         }
                     }
 
-                    this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Current best score: {scores.First().Cost}"));
+                    this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Current best score: {scores.First().Cost}, {String.Join(",", scores.First().Vec)}"));
                 }
             }
 

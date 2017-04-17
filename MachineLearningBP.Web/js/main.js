@@ -194,6 +194,14 @@ MachineLearningBP.Nba.getPointsKnnBestParametersCsv = function () {
     });
 }
 
+MachineLearningBP.Nba.predictTodayKnnPoints = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.nbaPointsExample.predictToday().done(function () {
+        $("#todayGrid").data("kendoGrid").dataSource.read();
+    });
+}
+
 MachineLearningBP.Mlb.populateGames = function () {
     MachineLearningBP.Console.clear();
 

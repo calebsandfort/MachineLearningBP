@@ -50,5 +50,11 @@ namespace MachineLearningBP.Services.Sports.Nba
         {
             await this._nbaPointsExampleDomainService.GeneticOptimizeEnqueue(input);
         }
+
+        [UnitOfWork(IsDisabled = true)]
+        public async Task PredictToday()
+        {
+            await this._nbaPointsExampleDomainService.PredictToday();
+        }
     }
 }

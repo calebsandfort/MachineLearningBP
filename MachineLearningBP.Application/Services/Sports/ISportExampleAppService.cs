@@ -10,5 +10,6 @@ namespace MachineLearningBP.Application.Services.Sports
         Task FindOptimalParameters();
         Task AnnealingOptimize(AnnealingOptimizeInput input);
         Task GeneticOptimize(GeneticOptimizeInput input);
+        Task PredictToday();
     }
 }

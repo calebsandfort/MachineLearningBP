@@ -25,5 +25,7 @@ namespace MachineLearningBP.Services.Sports
 
         Task GeneticOptimizeEnqueue(TGeneticOptimizeInput input);
         Task GeneticOptimize(TGeneticOptimizeInput input);
+
+        Task PredictToday();
     }
 }

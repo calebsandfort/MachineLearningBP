@@ -17,6 +17,7 @@ namespace MachineLearningBP.Entities.Sports.Nba
         public virtual int ParticipantId { get; set; }
 
         public double Points { get; set; }
+        public double KnnPoints { get; set; }
         public bool Home { get; set; }
 
         public bool TwoInTwoDays { get; set; }

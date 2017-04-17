@@ -15,6 +15,7 @@ using MachineLearningBP.Core.Services;
 using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dtos;
 using Abp.BackgroundJobs;
 using MachineLearningBP.BackgroundJobs.Sports;
+using Abp.Timing;
 
 namespace MachineLearningBP.Services.Sports.Nba
 {
@@ -76,7 +77,7 @@ namespace MachineLearningBP.Services.Sports.Nba
 
                         while (season.Within(currentDate))
                         {
-                            if (currentDate == now) break;
+                            if (currentDate > now) break;
 
                             this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Populating {currentDate.ToShortDateString()} ..."));
 
@@ -116,7 +117,7 @@ namespace MachineLearningBP.Services.Sports.Nba
 
                     NbaExampleGenerationInfo homeInfo = new NbaExampleGenerationInfo(game, games, teams, true, rollingWindowPeriod, scaleFactor);
                     NbaPointsExample homeExample = new NbaPointsExample();
-                    homeExample.SetFields(awayInfo.TeamStatLine1, homeInfo);
+                    homeExample.SetFields(homeInfo.TeamStatLine1, homeInfo);
                     await this._exampleRepository.InsertAsync(homeExample);
 
                     await unitOfWork.CompleteAsync();
@@ -221,13 +222,47 @@ namespace MachineLearningBP.Services.Sports.Nba
 
             using (var unitOfWork = this.UnitOfWorkManager.Begin())
             {
-                data = (await this._exampleRepository.GetAllListAsync()).ToArray();
-                //data = this._exampleRepository.GetAll().OrderByDescending(x => x.StatLine.Sample.Date).Take(500).ToArray();
+                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
+                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(500).ToArray();
                 unitOfWork.Complete();
             }
 
             return data;
         }
+        #endregion
+
+        #region PredictToday
+        public async Task PredictToday()
+        {
+            try
+            {
+                using (GuerillaTimer timer = new GuerillaTimer(this._consoleHubProxy))
+                {
+                    NbaPointsExample[] data = await this.GetExamples();
+                    //public double[] WeightedKnn(TExample[] data, TExample v1, Func<Double, Double> weightf, int[] ks)
+                    Func<Double, Double> weightf = (d) => this._kNearestNeighborsDomainService.InverseWeight(d);
+
+                    using (var unitOfWork = this.UnitOfWorkManager.Begin())
+                    {
+                        DateTime now = Clock.Now;
+                        List<NbaPointsExample> todaysExamples = this._exampleRepository.GetAll().Where(x => x.Date.Year == now.Year && x.Date.Month == now.Month && x.Date.Day == now.Day).ToList();
+
+                        foreach (NbaPointsExample example in todaysExamples)
+                        {
+                            NbaStatLine statLine = await this._statLineRepository.GetAsync(example.StatLineId);
+                            statLine.KnnPoints = this._kNearestNeighborsDomainService.WeightedKnn(data, example, weightf, new int[] { 25 }).First();
+                        }
+
+                        unitOfWork.Complete();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Exception: {ex.Message} {Environment.NewLine} Stacktrace: {ex.StackTrace}"));
+                throw ex;
+            }
+        } 
         #endregion
     }
 }
