@@ -41,28 +41,37 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 
             while(T > .1)
             {
-                //Choose one of the indices
-                int i = random.Next(0, domain.Count);
+                using (GuerillaTimer timer = new GuerillaTimer(this._consoleHubProxy, $"T: {T}"))
+                {
+                    //Choose one of the indices
+                    int i = random.Next(0, domain.Count);
 
-                //Choose a direction to change it
-                int dir = random.Next(-step, step + 1);
+                    //Choose a direction to change it
+                    int dir = random.Next(-step, step + 1);
 
-                //Create a new list with one of the values changed
-                List<int> vecb = vec.ToList();
-                vecb[i] += dir;
-                if (vecb[i] < domain[i].Lower) vecb[i] = domain[i].Lower;
-                else if (vecb[i] > domain[i].Upper) vecb[i] = domain[i].Upper;
+                    //Create a new list with one of the values changed
+                    List<int> vecb = vec.ToList();
+                    vecb[i] += dir;
+                    if (vecb[i] < domain[i].Lower) vecb[i] = domain[i].Lower;
+                    else if (vecb[i] > domain[i].Upper) vecb[i] = domain[i].Upper;
 
-                //Calculate the current cost and the new cost
-                Double ea = costf(vec);
-                Double eb = costf(vecb);
-                Double p = Math.Pow(Math.E, (-eb - ea) / T);
+                    //Calculate the current cost and the new cost
+                    Double ea = costf(vec);
+                    Double score = ea;
+                    Double eb = costf(vecb);
+                    Double p = Math.Pow(Math.E, (-eb - ea) / T);
 
-                //Is it better, or does it make the probability cutoff?
-                if (eb < ea || random.NextDouble() < p)
-                    vec = vecb.ToList();
+                    //Is it better, or does it make the probability cutoff?
+                    if (eb < ea || random.NextDouble() < p)
+                    {
+                        vec = vecb.ToList();
+                        score = eb;
+                    }
 
-                T *= cool;
+                    T *= cool;
+
+                    this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Current best score: {score}, {String.Join(",", vec)}"));
+                }
             }
 
             return new OptimizeResult { Vec = vec };

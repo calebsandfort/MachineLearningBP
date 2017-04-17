@@ -55,14 +55,14 @@
                         </div>
                         <div class="row" style="padding-top: 30px;">
                             <div class="col-xs-4">
-                                <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Optimize.showGeneticOptimizeModal(0);">Genetic</button>
+                                <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Optimize.showOptimizeModal(0);">Genetic</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Optimize.showOptimizeModal(1);">Annealing</button>
                             </div>
                             <div class="col-xs-4">
                                 <button type="button" class="btn btn-warning btn-block" onclick="MachineLearningBP.Nba.predictTodayKnnPoints();">Predict</button>
                             </div>
-                            @*<div class="col-xs-4">
-                                <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Optimize.showGeneticOptimizeModal(0);">Genetic</button>
-                            </div>*@
                         </div>
                         @Html.Partial("_Admin")
                     </div>

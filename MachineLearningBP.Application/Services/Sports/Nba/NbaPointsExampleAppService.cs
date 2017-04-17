@@ -42,7 +42,7 @@ namespace MachineLearningBP.Services.Sports.Nba
         [UnitOfWork(IsDisabled = true)]
         public async Task AnnealingOptimize(AnnealingOptimizeInput input)
         {
-            await this._nbaPointsExampleDomainService.AnnealingOptimizeEnqueue(input);
+            await this._nbaPointsExampleDomainService.AnnealingOptimize(input);
         }
 
         [UnitOfWork(IsDisabled = true)]

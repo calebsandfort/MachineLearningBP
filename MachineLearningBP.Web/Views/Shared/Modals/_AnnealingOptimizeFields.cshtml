@@ -1,0 +1,41 @@
+﻿@model OptimizeTargets
+
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="T">T</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().NumericTextBox<Double>()
+            .Name("T")
+            .Value(10000)
+            .Min(0)
+            .Placeholder("Enter T")
+            .HtmlAttributes(new { style = "width: 100%", id = "T", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="cool">cool</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().NumericTextBox<Double>()
+            .Name("cool")
+            .Value(.95)
+            .Min(0)
+            .Max(1)
+            .Placeholder("Enter cool")
+            .HtmlAttributes(new { style = "width: 100%", id = "cool", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="step">step</label>
+    <div class="col-sm-9">
+        @(Html.Kendo().NumericTextBox<int>()
+            .Name("step")
+            .Value(1)
+            .Decimals(0)
+            .Placeholder("Enter step")
+            .HtmlAttributes(new { style = "width: 100%", id = "step", required = "", @class = "includeHidden" })
+        )
+    </div>
+</div>
+
+<input type="hidden" id="target" name="target" value="@((int)Model)" />

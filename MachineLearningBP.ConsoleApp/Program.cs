@@ -32,6 +32,7 @@ namespace MachineLearningBP.ConsoleApp
                     Console.WriteLine(" 2 - Ping");
                     Console.WriteLine(" 3 - NbaPoints.FindOptimalParameters");
                     Console.WriteLine(" 4 - NbaPoints.GeneticOptimize");
+                    Console.WriteLine(" 5 - NbaPoints.AnnealingOptimize");
 
                     bool keepGoing = true;
                     Stopwatch timer = new Stopwatch();
@@ -91,6 +92,21 @@ namespace MachineLearningBP.ConsoleApp
                                         input.maxiter = 100;
 
                                         _nbaPointsExampleDomainService.Object.GeneticOptimize(input);
+                                    }
+                                    break;
+                                case 5:
+                                    using (var _nbaPointsExampleDomainService = bootstrapper.IocManager.ResolveAsDisposable<INbaPointsExampleDomainService>())
+                                    {
+                                        AnnealingOptimizeInput input = new AnnealingOptimizeInput();
+                                        input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
+                                        input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
+                                        input.Trials = 25;
+                                        input.K = 25;
+                                        input.T = 10000;
+                                        input.step = 1;
+                                        input.cool = .95;
+
+                                        _nbaPointsExampleDomainService.Object.AnnealingOptimize(input);
                                     }
                                     break;
                             }

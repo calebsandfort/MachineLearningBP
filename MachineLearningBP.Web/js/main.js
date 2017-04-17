@@ -7,8 +7,9 @@ if (!MachineLearningBP) MachineLearningBP = {
     Mlb: {},
     Util: {},
     Enums: {
-        GeneticOptimizeTargets: {
-            NbaPoints: 0
+        OptimizeTargets: {
+            NbaPointsGenetic: 0,
+            NbaPointsAnnealing: 1
         }
     }
 };
@@ -113,28 +114,31 @@ MachineLearningBP.Admin.getAccessTokenUrl = function () {
     });
 }
 
-MachineLearningBP.Optimize.showGeneticOptimizeModal = function (target) {
+MachineLearningBP.Optimize.showOptimizeModal = function (target) {
     $.ajax({
         type: "POST",
-        url: abp.appPath + 'ViewRenderer/GeneticOptimizeModal',
+        url: abp.appPath + 'ViewRenderer/OptimizeModal',
         data: JSON.stringify({
             target: target
         }),
         success: function (r) {
-            $("#geneticOptimizeModalWrapper").html(r);
-            MachineLearningBP.Util.initForm("geneticOptimizeForm", MachineLearningBP.Optimize.geneticOptimize);
-            MachineLearningBP.Util.showModalForm("geneticOptimizeModal", false);
+            $("#optimizeModalWrapper").html(r);
+            MachineLearningBP.Util.initForm("optimizeForm", MachineLearningBP.Optimize.optimize);
+            MachineLearningBP.Util.showModalForm("optimizeModal", false);
         },
         contentType: "application/json"
     });
 }
 
-MachineLearningBP.Optimize.geneticOptimize = function (input) {
-    MachineLearningBP.Util.hideModalForm("geneticOptimizeModal");
+MachineLearningBP.Optimize.optimize = function (input) {
+    MachineLearningBP.Util.hideModalForm("optimizeModal");
 
     switch (parseInt(input.target)) {
-        case MachineLearningBP.Enums.GeneticOptimizeTargets.NbaPoints:
+        case MachineLearningBP.Enums.OptimizeTargets.NbaPointsGenetic:
             abp.services.app.nbaPointsExample.geneticOptimize(input).done(function () { });
+            break;
+        case MachineLearningBP.Enums.OptimizeTargets.NbaPointsAnnealing:
+            abp.services.app.nbaPointsExample.annealingOptimize(input).done(function () { });
             break;
     }
 }

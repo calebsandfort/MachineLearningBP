@@ -13,9 +13,9 @@ namespace MachineLearningBP.Web.Controllers
     {
         // GET: ViewRenderer
         [HttpPost]
-        public ActionResult GeneticOptimizeModal(GeneticOptimizeTargets target)
+        public ActionResult OptimizeModal(OptimizeTargets target)
         {
-            return PartialView("Modals/_GeneticOptimizeModal", target);
+            return PartialView("Modals/_OptimizeModal", target);
         }
 
         public ActionResult GetKNearestNeighborsGuessMethods()

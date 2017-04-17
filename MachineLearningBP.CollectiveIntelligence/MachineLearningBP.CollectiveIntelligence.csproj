@@ -89,7 +89,7 @@
     <Compile Include="ApplicationServices\BaseApplicationService.cs" />
     <Compile Include="ApplicationServices\IExampleApplicationService.cs" />
     <Compile Include="ApplicationServices\ISampleApplicationService.cs" />
-    <Compile Include="DomainServices\Algorithms\Dtos\Enums\GeneticOptimizeTargets.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\Enums\OptimizeTargets.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\AnnealingOptimizeInput.cs">
       <DependentUpon>IAnnealingOptimizeInput.cs</DependentUpon>
     </Compile>

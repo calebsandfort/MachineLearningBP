@@ -15,7 +15,7 @@ namespace MachineLearningBP.Web
                 f => f.UseAbpLog4Net().WithConfig("log4net.config")
             );
 
-            ModelBinders.Binders.Add(typeof(GeneticOptimizeTargets), new EnumModelBinder<GeneticOptimizeTargets>());
+            ModelBinders.Binders.Add(typeof(OptimizeTargets), new EnumModelBinder<OptimizeTargets>());
 
             base.Application_Start(sender, e);
         }

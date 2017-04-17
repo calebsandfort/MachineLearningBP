@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dtos.Enums
 {
-    public enum GeneticOptimizeTargets
+    public enum OptimizeTargets
     {
-        NbaPoints
+        NbaPointsGenetic,
+        NbaPointsAnnealing
     }
 }

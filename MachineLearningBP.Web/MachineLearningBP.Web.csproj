@@ -551,10 +551,11 @@
     <Content Include="Views\Nba\Index.cshtml" />
     <Content Include="Views\Mlb\Index.cshtml" />
     <Content Include="Views\Shared\_Admin.cshtml" />
-    <Content Include="Views\Shared\Modals\_GeneticOptimizeModal.cshtml" />
+    <Content Include="Views\Shared\Modals\_OptimizeModal.cshtml" />
     <Content Include="Views\Shared\Modals\_GeneticOptimizeFields.cshtml" />
-    <Content Include="Views\Shared\Modals\_KnnGeneticOptimizeFields.cshtml" />
+    <Content Include="Views\Shared\Modals\_KnnOptimizeFields.cshtml" />
     <Content Include="Views\Nba\_TodayGrid.cshtml" />
+    <Content Include="Views\Shared\Modals\_AnnealingOptimizeFields.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
