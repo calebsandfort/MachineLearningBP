@@ -222,8 +222,8 @@ namespace MachineLearningBP.Services.Sports.Nba
 
             using (var unitOfWork = this.UnitOfWorkManager.Begin())
             {
-                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
-                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(500).ToArray();
+                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
+                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(750).ToArray();
                 unitOfWork.Complete();
             }
 
@@ -250,7 +250,7 @@ namespace MachineLearningBP.Services.Sports.Nba
                         foreach (NbaPointsExample example in todaysExamples)
                         {
                             NbaStatLine statLine = await this._statLineRepository.GetAsync(example.StatLineId);
-                            statLine.KnnPoints = this._kNearestNeighborsDomainService.WeightedKnn(data, example, weightf, new int[] { 25 }).First();
+                            statLine.KnnPoints = this._kNearestNeighborsDomainService.WeightedKnn(data, new NbaPointsExample[] { example }, weightf, new int[] { 25 }).First().First();
                         }
 
                         unitOfWork.Complete();

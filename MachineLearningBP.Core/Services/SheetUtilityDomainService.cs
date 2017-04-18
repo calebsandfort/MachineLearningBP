@@ -99,7 +99,7 @@ namespace MachineLearningBP.Core.Services
 
                 SpreadsheetQuery spreadsheetQuery = new SpreadsheetQuery();
                 spreadsheetQuery.NumberToRetrieve = 1;
-                spreadsheetQuery.StartDate = now;
+                //spreadsheetQuery.StartDate = now;
                 SpreadsheetFeed feed = spreadsheetsService.Query(spreadsheetQuery);
 
                 SpreadsheetEntry spreadsheet = (SpreadsheetEntry)feed.Entries[0];

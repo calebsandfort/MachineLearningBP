@@ -71,29 +71,34 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         #endregion
 
         #region GetDistances
-        public ValueIndexPair<Double>[] GetDistances(TExample[] data, TExample v1)
+        public ValueIndexPair<Double>[][] GetDistances(TExample[] data, TExample[] v1)
         {
-            ValueIndexPair<Double>[] distanceList = new ValueIndexPair<double>[data.Length];
-
-            var rangePartitioner = Partitioner.Create(0, data.Length, 200);
+            int v1Length = v1.Length;
+            ValueIndexPair<Double>[][] distanceList = new ValueIndexPair<double>[v1Length][];
 
             try
             {
-                int length = data.Length;
-                for (int i = 0; i < length; i++)
+                int dataLength = data.Length;
+
+                for (int j = 0; j < v1Length; j++)
                 {
-                    distanceList[i] = this.Euclidean(v1, data[i], i);
+                    distanceList[j] = new ValueIndexPair<double>[dataLength];
                 }
 
-                //Parallel.ForEach(rangePartitioner, (range, loopState) =>
-                //{
-                //    for (int i = range.Item1; i < range.Item2; i++)
-                //    {
-                //        distanceList[i] = this.Euclidean(v1, data[i], i);
-                //    }
-                //});
+                for (int i = 0; i < dataLength; i++)
+                {
+                    for (int j = 0; j < v1Length; j++)
+                    {
+                        distanceList[j][i] = this.Euclidean(v1[j], data[i], i);
+                    }
+                }
 
-                return distanceList.OrderBy(x => x.Value).ToArray();
+                for (int j = 0; j < v1Length; j++)
+                {
+                    distanceList[j] = distanceList[j].OrderBy(x => x.Value).ToArray();
+                }
+
+                return distanceList;
             }
             catch (Exception ex)
             {
@@ -105,35 +110,43 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 
         #region algf
         #region KnnEstimate
-        public double[] KnnEstimate(TExample[] data, TExample v1, int[] ks)
+        public double[][] KnnEstimate(TExample[] data, TExample[] v1, int[] ks)
         {
-            ValueIndexPair<Double>[] distanceList = this.GetDistances(data, v1);
-            Double[] avgs = ks.Select(k => distanceList.Take(k).Average(x => ToDouble(data[x.Index].Result))).ToArray();
+            ValueIndexPair<Double>[][] distanceList = this.GetDistances(data, v1);
+
+            Double[][] avgs = new double[v1.Length][];
+            for (int j = 0; j < v1.Length; j++)
+            {
+                avgs[j] = ks.Select(k => distanceList[j].Take(k).Average(x => ToDouble(data[x.Index].Result))).ToArray();
+            }
 
             return avgs;
         }
         #endregion 
 
         #region WeightedKnn
-        public double[] WeightedKnn(TExample[] data, TExample v1, Func<Double, Double> weightf, int[] ks)
+        public double[][] WeightedKnn(TExample[] data, TExample[] v1, Func<Double, Double> weightf, int[] ks)
         {
-            ValueIndexPair<Double>[] distanceList = this.GetDistances(data, v1);
+            ValueIndexPair<Double>[][] distanceList = this.GetDistances(data, v1);
             Double avg = 0.0;
             Double totalWeight = 0.0;
             int k = 0;
 
-            Double[] avgs = ks.Select(x => 0.0).ToArray();
-
-            for (int i = 0; i < ks.Length; i++)
+            Double[][] avgs = new double[v1.Length][];
+            for (int j = 0; j < v1.Length; j++)
             {
-                k = ks[i];
-                avg = distanceList.Take(k).Sum(x => weightf(x.Value) * ToDouble(data[x.Index].Result));
-                totalWeight = distanceList.Take(k).Sum(x => weightf(x.Value));
+                avgs[j] = ks.Select(x => 0.0).ToArray();
+                for (int i = 0; i < ks.Length; i++)
+                {
+                    k = ks[i];
+                    avg = distanceList[j].Take(k).Sum(x => weightf(x.Value) * ToDouble(data[x.Index].Result));
+                    totalWeight = distanceList[j].Take(k).Sum(x => weightf(x.Value));
 
-                if (totalWeight == 0)
-                    avgs[i] = 0;
-                else
-                    avgs[i] = avg / totalWeight;
+                    if (totalWeight == 0)
+                        avgs[j][i] = 0;
+                    else
+                        avgs[j][i] = avg / totalWeight;
+                }
             }
 
             return avgs;
@@ -142,32 +155,20 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         #endregion
 
         #region TestAlgorithm
-        public Double[] TestAlgorithm(Func<TExample[], TExample, int[], Double[]> algf, TExample[] trainSet, TExample[] testSet, int[] ks)
+        public Double[] TestAlgorithm(Func<TExample[], TExample[], int[], Double[][]> algf, TExample[] trainSet, TExample[] testSet, int[] ks)
         {
             Double[] errors = ks.Select(x => 0.0).ToArray();
 
-            Parallel.For(0, testSet.Length,
-                j =>
-                {
-                    try
-                    {
-                        TExample example = testSet[j];
-                        Double[] guesses = algf(trainSet, example, ks);
+            Double[][] guesses = algf(trainSet, testSet, ks);
+            //Double[][] errors = new double[testSet.Length][];
 
-                        lock (testAlgorithmLock)
-                        {
-                            for (int i = 0; i < guesses.Length; i++)
-                            {
-                                errors[i] += Math.Pow(ToDouble(example.Result) - guesses[i], 2.0);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Exception: {ex.Message} {Environment.NewLine} Stacktrace: {ex.StackTrace}"));
-                        throw ex;
-                    }
-                });
+            for (int j = 0; j < testSet.Length; j++)
+            {
+                for (int i = 0; i < ks.Length; i++)
+                {
+                    errors[i] += Math.Pow(ToDouble(testSet[i].Result) - guesses[j][i], 2.0);
+                }
+            }
 
             errors = errors.Select(x => x / testSet.Length).ToArray();
 
@@ -180,7 +181,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         {
             using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy, prefix: $"CrossValidate: {input}", show: doTimer))
             {
-                Func<TExample[], TExample, int[], Double[]> algf;
+                Func<TExample[], TExample[], int[], Double[][]> algf;
                 Func<Double, Double> weightf;
 
                 switch (input.GuessMethod)
@@ -228,7 +229,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
             }
         }
 
-        public Double[] CrossValidate(Func<TExample[], TExample, int[], Double[]> algf, TExample[] data, int[] ks, int trials = 100, Double test = .05)
+        public Double[] CrossValidate(Func<TExample[], TExample[], int[], Double[][]> algf, TExample[] data, int[] ks, int trials = 100, Double test = .05)
         {
             Double[] errors = ks.Select(x => 0.0).ToArray();
 
