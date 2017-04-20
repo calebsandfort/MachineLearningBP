@@ -90,7 +90,25 @@ namespace MachineLearningBP.Entities.Sports.Nba
             {
                 return this.HomeStatLine.KnnPoints;
             }
-        } 
+        }
+
+        [NotMapped]
+        public Double AwayTreePoints
+        {
+            get
+            {
+                return this.AwayStatLine.TreePoints;
+            }
+        }
+
+        [NotMapped]
+        public Double HomeTreePoints
+        {
+            get
+            {
+                return this.HomeStatLine.TreePoints;
+            }
+        }
         #endregion
     }
 }

@@ -12,8 +12,10 @@
         columns.Bound(x => x.HomeTeam).Width(120);
         columns.Bound(x => x.Spread).Format("{0:n1}").Width(90);
         columns.Bound(x => x.KnnSpread).Format("{0:n1}").Width(90);
+        //columns.Bound(x => x.TreeSpread).Format("{0:n1}").Width(90);
         columns.Bound(x => x.Total).Format("{0:n1}").Width(90);
         columns.Bound(x => x.KnnTotal).Format("{0:n1}").Width(90);
+        //columns.Bound(x => x.TreeTotal).Format("{0:n1}").Width(90);
     })
     .HtmlAttributes(new { style = "height: 600px; overflow: auto;" })
     .Scrollable()

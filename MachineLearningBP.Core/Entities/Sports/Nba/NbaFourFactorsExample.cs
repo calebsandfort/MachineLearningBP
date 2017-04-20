@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MachineLearningBP.Entities.Sports.Nba
 {
-    public abstract class NbaFourFactorsExample : ExampleMinimum<NbaStatLine, Double, NbaExampleGenerationInfo>
+    public abstract class NbaFourFactorsExample<TResult> : ExampleMinimum<NbaStatLine, TResult, NbaExampleGenerationInfo>
     {
         #region Properties
         [NotMapped]

@@ -2,11 +2,13 @@
 using Abp.Dependency;
 using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dtos;
 using MachineLearningBP.Services.Sports.Nba;
+using MachineLearningBP.Shared.CommandRunner;
 using MachineLearningBP.Shared.Dtos;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +35,8 @@ namespace MachineLearningBP.ConsoleApp
                     Console.WriteLine(" 3 - NbaPoints.FindOptimalParameters");
                     Console.WriteLine(" 4 - NbaPoints.GeneticOptimize");
                     Console.WriteLine(" 5 - NbaPoints.AnnealingOptimize");
+                    Console.WriteLine(" 6 - NbaAtsTree.BuildDecisionTree");
+                    Console.WriteLine(" 7 - CommandRunner.PythonTest");
 
                     bool keepGoing = true;
                     Stopwatch timer = new Stopwatch();
@@ -83,8 +87,8 @@ namespace MachineLearningBP.ConsoleApp
                                         GeneticOptimizeInput input = new GeneticOptimizeInput();
                                         input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
                                         input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
-                                        input.Trials = 25;
-                                        input.K = 25;
+                                        input.Trials = 5;
+                                        input.K = 50;
                                         input.popsize = 50;
                                         input.step = 1;
                                         input.mutprob = .20;
@@ -100,13 +104,31 @@ namespace MachineLearningBP.ConsoleApp
                                         AnnealingOptimizeInput input = new AnnealingOptimizeInput();
                                         input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
                                         input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
-                                        input.Trials = 25;
-                                        input.K = 25;
+                                        input.Trials = 5;
+                                        input.K = 50;
                                         input.T = 10000;
                                         input.step = 1;
                                         input.cool = .95;
 
                                         _nbaPointsExampleDomainService.Object.AnnealingOptimize(input);
+                                    }
+                                    break;
+                                case 6:
+                                    using (var _nbaAtsTreeExampleDomainService = bootstrapper.IocManager.ResolveAsDisposable<INbaAtsTreeExampleDomainService>())
+                                    {
+                                        _nbaAtsTreeExampleDomainService.Object.BuildDecisionTree();
+                                    }
+                                    break;
+                                case 7:
+                                    using (StreamWriter testPyFile = new StreamWriter("DomainServices/Algorithms/Scripts/Python/test.py", false))
+                                    {
+                                        testPyFile.WriteLine("print(\"I'm a python file\")");
+                                        testPyFile.Close();
+                                    }
+
+                                    using (var _commandRunner = bootstrapper.IocManager.ResolveAsDisposable<ICommandRunner>())
+                                    {
+                                        _commandRunner.Object.RunCmd("python", "DomainServices/Algorithms/Scripts/Python/test.py");
                                     }
                                     break;
                             }

@@ -164,6 +164,22 @@
     <Compile Include="Migrations\201704171832495_AddPointsExampleDate.Designer.cs">
       <DependentUpon>201704171832495_AddPointsExampleDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704181624354_AddNbaAtsTreeExamples.cs" />
+    <Compile Include="Migrations\201704181624354_AddNbaAtsTreeExamples.Designer.cs">
+      <DependentUpon>201704181624354_AddNbaAtsTreeExamples.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704182120576_AddDecisionTree.cs" />
+    <Compile Include="Migrations\201704182120576_AddDecisionTree.Designer.cs">
+      <DependentUpon>201704182120576_AddDecisionTree.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191733170_AddAtsTreeToNbaStatLine.cs" />
+    <Compile Include="Migrations\201704191733170_AddAtsTreeToNbaStatLine.Designer.cs">
+      <DependentUpon>201704191733170_AddAtsTreeToNbaStatLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191801305_ChangeSomeTreeStuff.cs" />
+    <Compile Include="Migrations\201704191801305_ChangeSomeTreeStuff.Designer.cs">
+      <DependentUpon>201704191801305_ChangeSomeTreeStuff.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AbpZeroDbMigrator.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MachineLearningBPDataModule.cs" />
@@ -216,6 +232,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704171832495_AddPointsExampleDate.resx">
       <DependentUpon>201704171832495_AddPointsExampleDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704181624354_AddNbaAtsTreeExamples.resx">
+      <DependentUpon>201704181624354_AddNbaAtsTreeExamples.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704182120576_AddDecisionTree.resx">
+      <DependentUpon>201704182120576_AddDecisionTree.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191733170_AddAtsTreeToNbaStatLine.resx">
+      <DependentUpon>201704191733170_AddAtsTreeToNbaStatLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191801305_ChangeSomeTreeStuff.resx">
+      <DependentUpon>201704191801305_ChangeSomeTreeStuff.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

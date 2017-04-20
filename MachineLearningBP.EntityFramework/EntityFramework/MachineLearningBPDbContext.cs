@@ -6,6 +6,7 @@ using MachineLearningBP.Users;
 using System.Data.Entity;
 using MachineLearningBP.Entities.Sports.Nba;
 using MachineLearningBP.Entities.Sports.Mlb;
+using MachineLearningBP.Entities;
 
 namespace MachineLearningBP.EntityFramework
 {
@@ -16,11 +17,14 @@ namespace MachineLearningBP.EntityFramework
         public virtual IDbSet<NbaTeam> NbaTeams { get; set; }
         public virtual IDbSet<NbaStatLine> NbaStatLines { get; set; }
         public virtual IDbSet<NbaPointsExample> NbaPointsExamples { get; set; }
+        public virtual IDbSet<NbaAtsTreeExample> NbaAtsTreeExamples { get; set; }
 
         public virtual IDbSet<MlbSeason> MlbSeasons { get; set; }
         public virtual IDbSet<MlbGame> MlbGames { get; set; }
         public virtual IDbSet<MlbTeam> MlbTeams { get; set; }
         public virtual IDbSet<MlbStatLine> MlbStatLines { get; set; }
+
+        public virtual IDbSet<DecisionTree> DecisionTrees { get; set; }
 
         /* NOTE: 
          *   Setting "Default" to base class helps us when working migration commands on Package Manager Console.

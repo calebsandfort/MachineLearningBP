@@ -206,6 +206,22 @@ MachineLearningBP.Nba.predictTodayKnnPoints = function () {
     });
 }
 
+MachineLearningBP.Nba.populateAtsTreeExamples = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.nbaAtsTreeExample.populateExamples().done(function (result) {
+
+    });
+}
+
+MachineLearningBP.Nba.predictTodayAtsTree = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.nbaAtsTreeExample.predictToday().done(function () {
+        $("#todayGrid").data("kendoGrid").dataSource.read();
+    });
+}
+
 MachineLearningBP.Mlb.populateGames = function () {
     MachineLearningBP.Console.clear();
 

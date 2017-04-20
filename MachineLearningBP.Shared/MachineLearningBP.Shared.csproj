@@ -103,12 +103,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandRunner\CommandRunner.cs" />
     <Compile Include="Console\ConsoleHubProxy.cs" />
     <Compile Include="Console\Dtos\ConsoleWriteLineInput.cs" />
     <Compile Include="Console\IConsoleHubProxy.cs" />
     <Compile Include="Framework\Extensions.cs" />
     <Compile Include="GuerillaTimer\IGuerillaTimer.cs" />
     <Compile Include="GuerillaTimer\GuerillaTimer.cs" />
+    <Compile Include="CommandRunner\ICommandRunner.cs" />
     <Compile Include="MachineLearningBPSharedModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlExecutor\ISqlExecuter.cs" />

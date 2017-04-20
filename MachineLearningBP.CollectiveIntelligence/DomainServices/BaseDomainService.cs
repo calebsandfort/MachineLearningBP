@@ -2,6 +2,7 @@
 using Abp.Configuration;
 using Abp.Domain.Services;
 using MachineLearningBP.Shared;
+using MachineLearningBP.Shared.CommandRunner;
 using MachineLearningBP.Shared.SqlExecuter;
 using System;
 using System.Collections.Generic;

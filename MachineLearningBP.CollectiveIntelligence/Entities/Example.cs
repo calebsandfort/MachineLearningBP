@@ -57,5 +57,25 @@ namespace MachineLearningBP.CollectiveIntelligence.Entities
                     this.DelimitedCategoricalData = String.Join(":", value);
             }
         }
+
+        [NotMapped]
+        private List<String> combinedData = new List<string>();
+        [NotMapped]
+        public List<String> CombinedData
+        {
+            get
+            {
+                if(combinedData.Count == 0)
+                {
+                    if (this.NumericalData.Count > 0)
+                        combinedData.AddRange(this.NumericalData.Select(x => x.ToString("N2")));
+
+                    if (this.CategoricalData.Count > 0)
+                        combinedData.AddRange(this.CategoricalData);
+                }
+
+                return this.combinedData;
+            }
+        }
     }
 }

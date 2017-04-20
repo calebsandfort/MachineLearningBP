@@ -12,6 +12,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dtos;
 using Abp.BackgroundJobs;
+using MachineLearningBP.Shared.CommandRunner;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 {
@@ -24,14 +25,16 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         Object crossValidateLock = new Object();
 
         private readonly IOptimizationDomainService _optimizationDomainService;
+        public readonly ICommandRunner _commandRunner;
         #endregion
 
         #region Constructor
         public KNearestNeighborsDomainService(ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy,
-            ISettingManager settingManager, IOptimizationDomainService optimizationDomainService, IBackgroundJobManager backgroundJobManager)
+            ISettingManager settingManager, IOptimizationDomainService optimizationDomainService, IBackgroundJobManager backgroundJobManager, ICommandRunner commandRunner)
             : base(sqlExecuter, consoleHubProxy, settingManager, backgroundJobManager)
         {
             _optimizationDomainService = optimizationDomainService;
+            _commandRunner = commandRunner;
         }
         #endregion
 
@@ -285,20 +288,23 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                 List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = new List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>>();
 
                 List<KNearestNeighborsGuessMethods> guessMethods = new List<KNearestNeighborsGuessMethods>();
-                guessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
+                //guessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
                 guessMethods.Add(KNearestNeighborsGuessMethods.WeightedKnn);
 
                 List<KNearestNeighborsWeightMethods> weightMethods = new List<KNearestNeighborsWeightMethods>();
-                weightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
+                //weightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
                 weightMethods.Add(KNearestNeighborsWeightMethods.InverseWeight);
-                weightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
+                //weightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
 
                 List<int> ks = new List<int>();
-                ks.Add(5);
-                ks.Add(10);
                 ks.Add(15);
                 ks.Add(20);
                 ks.Add(25);
+                ks.Add(30);
+                ks.Add(35);
+                ks.Add(40);
+                ks.Add(45);
+                ks.Add(50);
 
                 foreach (KNearestNeighborsGuessMethods guessMethod in guessMethods)
                 {

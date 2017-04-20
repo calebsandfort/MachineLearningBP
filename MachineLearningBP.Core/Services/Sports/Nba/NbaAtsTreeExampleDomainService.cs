@@ -16,26 +16,35 @@ using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dtos;
 using Abp.BackgroundJobs;
 using MachineLearningBP.BackgroundJobs.Sports;
 using Abp.Timing;
+using MachineLearningBP.Entities;
+using MachineLearningBP.Enums;
+using Newtonsoft.Json;
 
 namespace MachineLearningBP.Services.Sports.Nba
 {
-    public class NbaPointsExampleDomainService : MaximumExampleDomainService<NbaGame, NbaStatLine, NbaPointsExample, Double, NbaExampleGenerationInfo, NbaSeason, NbaTeam>, INbaPointsExampleDomainService
+    public class NbaAtsTreeExampleDomainService : MaximumExampleDomainService<NbaGame, NbaStatLine, NbaAtsTreeExample, Double, NbaExampleGenerationInfo, NbaSeason, NbaTeam>, INbaAtsTreeExampleDomainService
     {
         #region Properties
-        public readonly IKNearestNeighborsDomainService<NbaPointsExample, NbaStatLine, Double> _kNearestNeighborsDomainService;
+        public readonly IKNearestNeighborsDomainService<NbaAtsTreeExample, NbaStatLine, Double> _kNearestNeighborsDomainService;
+        public readonly IDecisionTreeDomainService<NbaAtsTreeExample, NbaStatLine, Double> _decisionTreeDomainService;
         private readonly ISheetUtilityDomainService _sheetUtilityDomainService;
+        readonly IRepository<DecisionTree> _decisionTreeRepository;
         #endregion
 
         #region Constructor
-        public NbaPointsExampleDomainService(IRepository<NbaGame> sampleRepository, IRepository<NbaStatLine> statLineRepository,
+        public NbaAtsTreeExampleDomainService(IRepository<NbaGame> sampleRepository, IRepository<NbaStatLine> statLineRepository,
             ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager,
-            IRepository<NbaPointsExample> exampleRepository, IRepository<NbaSeason> timeGroupingRepository, ISheetUtilityDomainService sheetUtilityDomainService,
-            IRepository<NbaTeam> participantRepository, IKNearestNeighborsDomainService<NbaPointsExample, NbaStatLine, Double> kNearestNeighborsDomainService, IBackgroundJobManager backgroundJobManager)
+            IRepository<NbaAtsTreeExample> exampleRepository, IRepository<NbaSeason> timeGroupingRepository, ISheetUtilityDomainService sheetUtilityDomainService,
+            IRepository<NbaTeam> participantRepository, IKNearestNeighborsDomainService<NbaAtsTreeExample, NbaStatLine, Double> kNearestNeighborsDomainService,
+            IBackgroundJobManager backgroundJobManager, IDecisionTreeDomainService<NbaAtsTreeExample, NbaStatLine, Double> decisionTreeDomainService,
+            IRepository<DecisionTree> decisionTreeRepository)
             : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy,
                 settingManager, exampleRepository, timeGroupingRepository, participantRepository, backgroundJobManager)
         {
             this._kNearestNeighborsDomainService = kNearestNeighborsDomainService;
+            this._decisionTreeDomainService = decisionTreeDomainService;
             this._sheetUtilityDomainService = sheetUtilityDomainService;
+            this._decisionTreeRepository = decisionTreeRepository;
         }
         #endregion
 
@@ -48,6 +57,7 @@ namespace MachineLearningBP.Services.Sports.Nba
                 {
                     this.DeleteExamples();
 
+                    #region First run-thru
                     DateTime now = DateTime.Now.Date;
                     DateTime currentDate;
                     List<NbaSeason> seasons;
@@ -93,6 +103,29 @@ namespace MachineLearningBP.Services.Sports.Nba
 
                         this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Completed {season.Start.ToShortDateString()} - {season.End.ToShortDateString()} season."));
                     }
+                    #endregion
+
+                    #region Standard Deviation
+                    this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Starting standard deviation calculations..."));
+                    List<NbaAtsTreeExample> examples;
+                    using (var unitOfWork = this.UnitOfWorkManager.Begin())
+                    {
+                        examples = await this._exampleRepository.GetAllListAsync();
+                        List<StandardDeviationCalculator> standardDeviations = new List<StandardDeviationCalculator>();
+                        for(int i = 0; i < examples[0].NumericalData.Count; i++)
+                        {
+                            standardDeviations.Add(new StandardDeviationCalculator(examples.Select(x => x.NumericalData[i])));
+                        }
+
+                        foreach(NbaAtsTreeExample example in examples)
+                        {
+                            example.DelimitedNumericalData = String.Join(":", example.NumericalData.Select((x, idx) => standardDeviations[idx].CalculateZScore(x).ToString("N1")));
+                        }
+
+                        await unitOfWork.CompleteAsync();
+                        this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Completed standard deviation calculations."));
+                    }
+                    #endregion
                 }
             }
             catch (Exception ex)
@@ -111,12 +144,12 @@ namespace MachineLearningBP.Services.Sports.Nba
                 using (var unitOfWork = this.UnitOfWorkManager.Begin())
                 {
                     NbaExampleGenerationInfo awayInfo = new NbaExampleGenerationInfo(game, games, teams, false, rollingWindowPeriod, scaleFactor);
-                    NbaPointsExample awayExample = new NbaPointsExample();
+                    NbaAtsTreeExample awayExample = new NbaAtsTreeExample();
                     awayExample.SetFields(awayInfo.TeamStatLine1, awayInfo);
                     await this._exampleRepository.InsertAsync(awayExample);
 
                     NbaExampleGenerationInfo homeInfo = new NbaExampleGenerationInfo(game, games, teams, true, rollingWindowPeriod, scaleFactor);
-                    NbaPointsExample homeExample = new NbaPointsExample();
+                    NbaAtsTreeExample homeExample = new NbaAtsTreeExample();
                     homeExample.SetFields(homeInfo.TeamStatLine1, homeInfo);
                     await this._exampleRepository.InsertAsync(homeExample);
 
@@ -134,22 +167,22 @@ namespace MachineLearningBP.Services.Sports.Nba
         #region DeleteExamples
         public void DeleteExamples()
         {
-            this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create("Deleting NbaPointsExamples..."));
+            this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create("Deleting NbaAtsTreeExamples..."));
 
             using (var unitOfWork = this.UnitOfWorkManager.Begin())
             {
-                this._sqlExecuter.Execute($"DELETE FROM [NbaPointsExamples]");
+                this._sqlExecuter.Execute($"DELETE FROM [NbaAtsTreeExamples]");
                 unitOfWork.Complete();
             }
 
-            this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Deleting NbaPointsExamples finished."));
+            this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Deleting NbaAtsTreeExamples finished."));
         }
         #endregion
 
         #region KNearestNeighborsDoStuff
         public async Task KNearestNeighborsDoStuff()
         {
-            KNearestNeighborsCrossValidateInput<NbaPointsExample, NbaStatLine, Double> input = new KNearestNeighborsCrossValidateInput<NbaPointsExample, NbaStatLine, double>();
+            KNearestNeighborsCrossValidateInput<NbaAtsTreeExample, NbaStatLine, Double> input = new KNearestNeighborsCrossValidateInput<NbaAtsTreeExample, NbaStatLine, Double>();
             input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
             input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
             input.Trials = 5;
@@ -167,12 +200,12 @@ namespace MachineLearningBP.Services.Sports.Nba
         #region FindOptimalParameters
         public async Task FindOptimalParametersEnqueue(bool record)
         {
-            await _backgroundJobManager.EnqueueAsync<NbaPointsFindOptimalParametersBackgroundJob, bool>(record);
+            //await _backgroundJobManager.EnqueueAsync<NbaAtsTreeFindOptimalParametersBackgroundJob, bool>(record);
         }
 
         public async Task<List<KNearestNeighborsCrossValidateResult>> FindOptimalParameters(bool record)
         {
-            NbaPointsExample[] data = await this.GetExamples();
+            NbaAtsTreeExample[] data = await this.GetExamples();
 
             List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParameters(data);
 
@@ -186,20 +219,51 @@ namespace MachineLearningBP.Services.Sports.Nba
         #region BuildDecisionTree
         public async Task<DecisionNode> BuildDecisionTree()
         {
-            DecisionNode decisionTree = new DecisionNode();
-            return decisionTree;
-        } 
+            using (GuerillaTimer timer = new GuerillaTimer(this._consoleHubProxy))
+            {
+                List<NbaAtsTreeExample> data = (await this.GetExamples()).ToList();
+                DecisionNode root = this._decisionTreeDomainService.BuildTree(data, this._decisionTreeDomainService.Variance);
+
+                this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Pruning {JsonConvert.SerializeObject(root).Length}..."));
+                this._decisionTreeDomainService.Prune(root, this._decisionTreeDomainService.Variance);
+                this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Pruned {JsonConvert.SerializeObject(root).Length}."));
+
+                try
+                {
+                    using (var unitOfWork = this.UnitOfWorkManager.Begin())
+                    {
+                        DecisionTree decisionTree = await this._decisionTreeRepository.FirstOrDefaultAsync(x => x.Target == DecisionTreeTargets.NbaAts);
+                        if (decisionTree == null)
+                        {
+                            decisionTree = new DecisionTree { Target = DecisionTreeTargets.NbaAts };
+                            await this._decisionTreeRepository.InsertAsync(decisionTree);
+                        }
+
+                        decisionTree.Root = root;
+
+                        unitOfWork.Complete();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Exception: {ex.Message} {Environment.NewLine} Stacktrace: {ex.StackTrace}"));
+                    throw ex;
+                }
+
+                return root;
+            }
+        }
         #endregion
 
         #region AnnealingOptimize
         public async Task AnnealingOptimizeEnqueue(AnnealingOptimizeInput input)
         {
-            await _backgroundJobManager.EnqueueAsync<NbaPointsAnnealingOptimizeBackgroundJob, AnnealingOptimizeInput>(input);
+            //await _backgroundJobManager.EnqueueAsync<NbaAtsTreeAnnealingOptimizeBackgroundJob, AnnealingOptimizeInput>(input);
         }
 
         public async Task AnnealingOptimize(AnnealingOptimizeInput input)
         {
-            NbaPointsExample[] data = await this.GetExamples();
+            NbaAtsTreeExample[] data = await this.GetExamples();
             OptimizeResult result = this._kNearestNeighborsDomainService.AnnealingOptimize(input, data);
 
             if (input.record)
@@ -210,12 +274,12 @@ namespace MachineLearningBP.Services.Sports.Nba
         #region GeneticOptimize
         public async Task GeneticOptimizeEnqueue(GeneticOptimizeInput input)
         {
-            await _backgroundJobManager.EnqueueAsync<NbaPointsGeneticOptimizeBackgroundJob, GeneticOptimizeInput>(input);
+            //await _backgroundJobManager.EnqueueAsync<NbaAtsTreeGeneticOptimizeBackgroundJob, GeneticOptimizeInput>(input);
         }
 
         public async Task GeneticOptimize(GeneticOptimizeInput input)
         {
-            NbaPointsExample[] data = await this.GetExamples();
+            NbaAtsTreeExample[] data = await this.GetExamples();
             OptimizeResult result = this._kNearestNeighborsDomainService.GeneticOptimize(input, data);
 
             if (input.record)
@@ -224,14 +288,14 @@ namespace MachineLearningBP.Services.Sports.Nba
         #endregion
 
         #region GetExamples
-        public async Task<NbaPointsExample[]> GetExamples()
+        public async Task<NbaAtsTreeExample[]> GetExamples()
         {
-            NbaPointsExample[] data;
+            NbaAtsTreeExample[] data;
 
             using (var unitOfWork = this.UnitOfWorkManager.Begin())
             {
-                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
-                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(1500).ToArray();
+                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
+                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(2500).ToArray();
                 unitOfWork.Complete();
             }
 
@@ -246,19 +310,17 @@ namespace MachineLearningBP.Services.Sports.Nba
             {
                 using (GuerillaTimer timer = new GuerillaTimer(this._consoleHubProxy))
                 {
-                    NbaPointsExample[] data = await this.GetExamples();
-                    //public double[] WeightedKnn(TExample[] data, TExample v1, Func<Double, Double> weightf, int[] ks)
-                    Func<Double, Double> weightf = (d) => this._kNearestNeighborsDomainService.InverseWeight(d);
+                    DecisionTree decisionTree = await this._decisionTreeRepository.FirstOrDefaultAsync(x => x.Target == DecisionTreeTargets.NbaAts);
 
                     using (var unitOfWork = this.UnitOfWorkManager.Begin())
                     {
                         DateTime now = Clock.Now;
-                        List<NbaPointsExample> todaysExamples = this._exampleRepository.GetAll().Where(x => x.Date.Year == now.Year && x.Date.Month == now.Month && x.Date.Day == now.Day).ToList();
+                        List<NbaAtsTreeExample> todaysExamples = this._exampleRepository.GetAll().Where(x => x.Date.Year == now.Year && x.Date.Month == now.Month && x.Date.Day == now.Day).ToList();
 
-                        foreach (NbaPointsExample example in todaysExamples)
+                        foreach (NbaAtsTreeExample example in todaysExamples)
                         {
                             NbaStatLine statLine = await this._statLineRepository.GetAsync(example.StatLineId);
-                            statLine.KnnPoints = this._kNearestNeighborsDomainService.WeightedKnn(data, new NbaPointsExample[] { example }, weightf, new int[] { 25 }).First().First();
+                            statLine.TreePoints = Double.Parse(this._decisionTreeDomainService.Classify(example, decisionTree.Root).OrderByDescending(x => x.count).First().value);
                         }
 
                         unitOfWork.Complete();
@@ -270,7 +332,7 @@ namespace MachineLearningBP.Services.Sports.Nba
                 this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Exception: {ex.Message} {Environment.NewLine} Stacktrace: {ex.StackTrace}"));
                 throw ex;
             }
-        }
-        #endregion
+        } 
+        #endregion        
     }
 }

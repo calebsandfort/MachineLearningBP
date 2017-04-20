@@ -89,6 +89,7 @@
     <Compile Include="ApplicationServices\BaseApplicationService.cs" />
     <Compile Include="ApplicationServices\IExampleApplicationService.cs" />
     <Compile Include="ApplicationServices\ISampleApplicationService.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\DecisionNode.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\Enums\OptimizeTargets.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\AnnealingOptimizeInput.cs">
       <DependentUpon>IAnnealingOptimizeInput.cs</DependentUpon>
@@ -100,18 +101,24 @@
     <Compile Include="DomainServices\Algorithms\Dtos\IGeneticOptimizeInput.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\IRecordContainer.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\KnnOptimizeInput.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\Bucket.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\OptimizationScore.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\OptimizationRange.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\OptimizeInput.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\OptimizeResult.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\StandardDeviationCalculator.cs" />
     <Compile Include="DomainServices\Algorithms\IKNearestNeighborsDomainService.cs" />
     <Compile Include="DomainServices\Algorithms\IOptimizationDomainService.cs" />
     <Compile Include="DomainServices\Algorithms\IOptimizeInput.cs" />
+    <Compile Include="DomainServices\Algorithms\IDecisionTreeDomainService.cs" />
     <Compile Include="DomainServices\Algorithms\KNearestNeighborsDomainService.cs">
       <DependentUpon>IKNearestNeighborsDomainService.cs</DependentUpon>
     </Compile>
     <Compile Include="DomainServices\Algorithms\OptimizationDomainService.cs">
       <DependentUpon>IOptimizationDomainService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DomainServices\Algorithms\DecisionTreeDomainService.cs">
+      <DependentUpon>IDecisionTreeDomainService.cs</DependentUpon>
     </Compile>
     <Compile Include="DomainServices\BaseDomainService.cs" />
     <Compile Include="DomainServices\Examples\IExampleDomainService.cs" />
@@ -161,6 +168,14 @@
       <Project>{0B322986-37F2-4213-9785-A74775746D57}</Project>
       <Name>MachineLearningBP.Shared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DomainServices\Algorithms\Scripts\R\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DomainServices\Algorithms\Scripts\Python\GowerTest.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

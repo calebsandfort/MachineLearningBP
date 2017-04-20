@@ -64,6 +64,21 @@
                                 <button type="button" class="btn btn-warning btn-block" onclick="MachineLearningBP.Nba.predictTodayKnnPoints();">Predict</button>
                             </div>
                         </div>
+                        <div class="row" style="padding-top: 30px;">
+                            <div class="col-xs-12 block-header block-header-info block-header-white">
+                                <h2 class="layout-margin-tb-20">
+                                    <span class="title">Learn ATS Tree</span><span class="decoration"></span><span class="decoration"></span><span class="decoration"></span>
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Nba.populateAtsTreeExamples();">Populate</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-warning btn-block" onclick="MachineLearningBP.Nba.predictTodayAtsTree();">Predict</button>
+                            </div>
+                        </div>
                         @Html.Partial("_Admin")
                     </div>
                     <div class="col-xs-7">

@@ -163,6 +163,7 @@
   <ItemGroup>
     <Compile Include="BackgroundJobs\Sports\NbaBackgroundJobs.cs" />
     <Compile Include="DataPointMethods\NbaMethods.cs" />
+    <Compile Include="Entities\DecisionTree.cs" />
     <Compile Include="Entities\Sports\Mlb\MlbTeam.cs" />
     <Compile Include="Entities\Sports\Mlb\MlbGame.cs" />
     <Compile Include="Entities\Sports\Mlb\MlbSeason.cs" />
@@ -171,8 +172,10 @@
     <Compile Include="Entities\Sports\Nba\NbaFourFactorsExample.cs" />
     <Compile Include="Entities\Sports\Nba\NbaExampleGenerationInfo.cs" />
     <Compile Include="Entities\Sports\Nba\Dtos\NbaGameDto.cs" />
+    <Compile Include="Entities\Sports\Nba\NbaAtsTreeExample.cs" />
     <Compile Include="Entities\Sports\Nba\NbaPointsExample.cs" />
     <Compile Include="Entities\Sports\SportExampleGenerationInfo.cs" />
+    <Compile Include="Enums\DecisionTreeTargets.cs" />
     <Compile Include="Enums\Targets.cs" />
     <Compile Include="Framework\Extensions.cs" />
     <Compile Include="Framework\MySettingProvider.cs" />
@@ -193,7 +196,11 @@
       <DependentUpon>IMlbSeasonDomainService.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\Sports\Nba\INbaGameDomainService.cs" />
+    <Compile Include="Services\Sports\Nba\INbaAtsTreeExampleDomainService.cs" />
     <Compile Include="Services\Sports\Nba\INbaPointsExampleDomainService.cs" />
+    <Compile Include="Services\Sports\Nba\NbaAtsTreeExampleDomainService.cs">
+      <DependentUpon>INbaAtsTreeExampleDomainService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\Sports\Nba\NbaGameDomainService.cs">
       <DependentUpon>INbaGameDomainService.cs</DependentUpon>
     </Compile>

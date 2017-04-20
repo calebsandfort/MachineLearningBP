@@ -8,18 +8,21 @@ using MachineLearningBP.Shared.SqlExecuter;
 using MachineLearningBP.Shared.Dtos;
 using Abp.BackgroundJobs;
 using MachineLearningBP.Shared.GuerillaTimer;
+using MachineLearningBP.Shared.CommandRunner;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 {
     public class OptimizationDomainService : BaseDomainService, IOptimizationDomainService
     {
         Random random { get; set; }
+        public readonly ICommandRunner _commandRunner;
 
         #region Constructor
-        public OptimizationDomainService(ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager, IBackgroundJobManager backgroundJobManager)
+        public OptimizationDomainService(ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager, IBackgroundJobManager backgroundJobManager, ICommandRunner commandRunner)
             : base(sqlExecuter, consoleHubProxy, settingManager, backgroundJobManager)
         {
             random = new Random(DateTime.Now.Millisecond);
+            _commandRunner = commandRunner;
         }
         #endregion
 

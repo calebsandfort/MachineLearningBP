@@ -151,7 +151,11 @@
     <Compile Include="Services\Sports\Mlb\MlbSeasonAppService.cs">
       <DependentUpon>IMlbSeasonAppService.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\Sports\Nba\INbaAtsTreeExampleAppService.cs" />
     <Compile Include="Services\Sports\Nba\INbaPointsExampleAppService.cs" />
+    <Compile Include="Services\Sports\Nba\NbaAtsTreeExampleAppService.cs">
+      <DependentUpon>INbaAtsTreeExampleAppService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\Sports\Nba\NbaGameAppService.cs">
       <DependentUpon>INbaGameAppService.cs</DependentUpon>
     </Compile>

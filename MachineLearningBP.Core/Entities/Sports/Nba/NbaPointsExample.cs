@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace MachineLearningBP.Entities.Sports.Nba
 {
     [Table("NbaPointsExamples")]
-    public class NbaPointsExample : NbaFourFactorsExample
+    public class NbaPointsExample : NbaFourFactorsExample<Double>
     {
         public DateTime Date { get; set; }
 
