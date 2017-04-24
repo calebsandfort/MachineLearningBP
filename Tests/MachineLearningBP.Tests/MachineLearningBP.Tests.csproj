@@ -187,6 +187,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sessions\SessionAppService_Tests.cs" />
     <Compile Include="MachineLearningBPTestBase.cs" />
+    <Compile Include="Sports\Nba\Nba_Tests.cs" />
     <Compile Include="Users\UserAppService_Tests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +201,10 @@
       <Project>{EDF5D964-4C0F-4F19-B674-58A38A5E5401}</Project>
       <Name>MachineLearningBP.Application</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MachineLearningBP.CollectiveIntelligence\MachineLearningBP.CollectiveIntelligence.csproj">
+      <Project>{7d1d8906-9c35-4a99-b46f-513377177665}</Project>
+      <Name>MachineLearningBP.CollectiveIntelligence</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MachineLearningBP.Core\MachineLearningBP.Core.csproj">
       <Project>{17298EA0-AF73-4F30-B6F1-2066100D7D74}</Project>
       <Name>MachineLearningBP.Core</Name>
@@ -208,9 +213,19 @@
       <Project>{3979F157-DEB0-4878-AB1D-4CEF6B5A1300}</Project>
       <Name>MachineLearningBP.EntityFramework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MachineLearningBP.Shared\MachineLearningBP.Shared.csproj">
+      <Project>{0B322986-37F2-4213-9785-A74775746D57}</Project>
+      <Name>MachineLearningBP.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="connection.example.xml" />
+    <Content Include="connection.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

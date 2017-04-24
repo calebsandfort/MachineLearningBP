@@ -1,30 +1,29 @@
-﻿using Abp.Modules;
+﻿using Abp.Configuration.Startup;
+using Abp.Modules;
 using Abp.MultiTenancy;
 using Abp.TestBase;
 using Abp.Zero.Configuration;
 using Castle.MicroKernel.Registration;
+using MachineLearningBP.Shared;
 using NSubstitute;
+using System.Reflection;
 
 namespace MachineLearningBP.Tests
 {
-    [DependsOn(
-        typeof(MachineLearningBPApplicationModule),
-        typeof(MachineLearningBPDataModule),
-        typeof(AbpTestBaseModule))]
+    [DependsOn(typeof(MachineLearningBPApplicationModule), typeof(MachineLearningBPSharedModule), typeof(MachineLearningBPCollectiveIntelligenceModule),
+        typeof(MachineLearningBPCoreModule), typeof(MachineLearningBPDataModule), typeof(AbpTestBaseModule))]
     public class MachineLearningBPTestModule : AbpModule
     {
-        public override void PreInitialize()
+        private readonly string _connectionString;
+
+        public MachineLearningBPTestModule()
         {
-            //Use database for language management
-            Configuration.Modules.Zero().LanguageManagement.EnableDbLocalization();
+            
+        }
 
-            //Registering fake services
-
-            IocManager.IocContainer.Register(
-                Component.For<IAbpZeroDbMigrator>()
-                    .UsingFactoryMethod(() => Substitute.For<IAbpZeroDbMigrator>())
-                    .LifestyleSingleton()
-                );
+        public override void Initialize()
+        {
+            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
         }
     }
 }
