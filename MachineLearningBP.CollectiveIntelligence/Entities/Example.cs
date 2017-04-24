@@ -16,45 +16,66 @@ namespace MachineLearningBP.CollectiveIntelligence.Entities
         public abstract int StatLineId { get; set; }
 
         public TResult Result { get; set; }
-        public String DelimitedNumericalData { get; set; }
+        public String DelimitedOrdinalData { get; set; }
 
         [NotMapped]
-        public List<Double> NumericalData
+        public List<Double> OrdinalData
         {
             get
             {
-                if (String.IsNullOrEmpty(this.DelimitedNumericalData))
+                if (String.IsNullOrEmpty(this.DelimitedOrdinalData))
                     return new List<double>();
                 else
-                    return this.DelimitedNumericalData.Split(":".ToCharArray()).Select(x => Double.Parse(x)).ToList();
+                    return this.DelimitedOrdinalData.Split(":".ToCharArray()).Select(x => Double.Parse(x)).ToList();
             }
             set
             {
                 if (value.Count == 0)
-                    this.DelimitedNumericalData = String.Empty;
+                    this.DelimitedOrdinalData = String.Empty;
                 else
-                    this.DelimitedNumericalData = String.Join(":", value.Select(x => String.Format("{0:N4}", x)));
+                    this.DelimitedOrdinalData = String.Join(":", value.Select(x => String.Format("{0:N4}", x)));
             }
         }
 
-        public String DelimitedCategoricalData { get; set; }
+        public String DelimitedNominalData { get; set; }
 
         [NotMapped]
-        public List<String> CategoricalData
+        public List<String> NominalData
         {
             get
             {
-                if (String.IsNullOrEmpty(this.DelimitedCategoricalData))
+                if (String.IsNullOrEmpty(this.DelimitedNominalData))
                     return new List<String>();
                 else
-                    return this.DelimitedCategoricalData.Split(":".ToCharArray()).ToList();
+                    return this.DelimitedNominalData.Split(":".ToCharArray()).ToList();
             }
             set
             {
                 if (value.Count == 0)
-                    this.DelimitedCategoricalData = String.Empty;
+                    this.DelimitedNominalData = String.Empty;
                 else
-                    this.DelimitedCategoricalData = String.Join(":", value);
+                    this.DelimitedNominalData = String.Join(":", value);
+            }
+        }
+
+        public String DelimitedBinaryData { get; set; }
+
+        [NotMapped]
+        public List<bool> BinaryData
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this.DelimitedBinaryData))
+                    return new List<bool>();
+                else
+                    return this.DelimitedBinaryData.Split(":".ToCharArray()).Select(x => Boolean.Parse(x)).ToList();
+            }
+            set
+            {
+                if (value.Count == 0)
+                    this.DelimitedBinaryData = String.Empty;
+                else
+                    this.DelimitedBinaryData = String.Join(":", value);
             }
         }
 
@@ -67,11 +88,14 @@ namespace MachineLearningBP.CollectiveIntelligence.Entities
             {
                 if(combinedData.Count == 0)
                 {
-                    if (this.NumericalData.Count > 0)
-                        combinedData.AddRange(this.NumericalData.Select(x => x.ToString("N2")));
+                    if (this.OrdinalData.Count > 0)
+                        combinedData.AddRange(this.OrdinalData.Select(x => x.ToString("N2")));
 
-                    if (this.CategoricalData.Count > 0)
-                        combinedData.AddRange(this.CategoricalData);
+                    if (this.NominalData.Count > 0)
+                        combinedData.AddRange(this.NominalData);
+
+                    if (this.BinaryData.Count > 0)
+                        combinedData.AddRange(this.BinaryData.Select(x => x.ToString()));
                 }
 
                 return this.combinedData;

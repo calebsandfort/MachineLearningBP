@@ -180,6 +180,10 @@
     <Compile Include="Migrations\201704191801305_ChangeSomeTreeStuff.Designer.cs">
       <DependentUpon>201704191801305_ChangeSomeTreeStuff.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704241742201_RenameExampleDataFields.cs" />
+    <Compile Include="Migrations\201704241742201_RenameExampleDataFields.Designer.cs">
+      <DependentUpon>201704241742201_RenameExampleDataFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AbpZeroDbMigrator.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MachineLearningBPDataModule.cs" />
@@ -244,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704191801305_ChangeSomeTreeStuff.resx">
       <DependentUpon>201704191801305_ChangeSomeTreeStuff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704241742201_RenameExampleDataFields.resx">
+      <DependentUpon>201704241742201_RenameExampleDataFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

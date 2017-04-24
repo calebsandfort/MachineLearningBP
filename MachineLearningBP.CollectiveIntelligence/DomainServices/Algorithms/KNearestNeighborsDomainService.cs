@@ -65,9 +65,9 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         {
             Double d = 0;
 
-            for (int i = 0; i < v1.NumericalData.Count; i++)
+            for (int i = 0; i < v1.OrdinalData.Count; i++)
             {
-                d += Math.Pow(v1.NumericalData[i] - v2.NumericalData[i], 2.0);
+                d += Math.Pow(v1.OrdinalData[i] - v2.OrdinalData[i], 2.0);
             }
 
             return new ValueIndexPair<double>(Math.Sqrt(d), index);
@@ -390,7 +390,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                 crossValidateInput.Ks = new int[] { input.K };
                 crossValidateInput.SubtractWeightConstant = 30.0;
 
-                input.domain = data.First().NumericalData.Select(x => new OptimizationRange { Lower = 0, Upper = 20 }).ToList();
+                input.domain = data.First().OrdinalData.Select(x => new OptimizationRange { Lower = 0, Upper = 20 }).ToList();
                 input.costf = CreateCostFunction(crossValidateInput);
 
                 OptimizeResult result = this._optimizationDomainService.AnnealingOptimize(input);
@@ -414,7 +414,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                 crossValidateInput.Ks = new int[] { input.K };
                 crossValidateInput.SubtractWeightConstant = 30.0;
 
-                input.domain = data.First().NumericalData.Select(x => new OptimizationRange { Lower = 0, Upper = 10 }).ToList();
+                input.domain = data.First().OrdinalData.Select(x => new OptimizationRange { Lower = 0, Upper = 10 }).ToList();
                 input.costf = CreateCostFunction(crossValidateInput);
 
                 OptimizeResult result = this._optimizationDomainService.GeneticOptimize(input);
@@ -434,7 +434,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
             {
                 TExample example = data[i];
                 TExample scaled = new TExample();
-                scaled.NumericalData = data[i].NumericalData.Select((x, idx) => x * scale[idx]).ToList();
+                scaled.OrdinalData = data[i].OrdinalData.Select((x, idx) => x * scale[idx]).ToList();
                 scaled.Result = example.Result;
                 rescaledData[i] = scaled;
             }
@@ -493,7 +493,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 
                 foreach (TExample example in data)
                 {
-                    guerillaknnPyFile.WriteLine($"    rows.append({{'input': ({String.Join(", ", example.NumericalData)}), 'result': {example.Result}}})");
+                    guerillaknnPyFile.WriteLine($"    rows.append({{'input': ({String.Join(", ", example.OrdinalData)}), 'result': {example.Result}}})");
                 }
 
                 guerillaknnPyFile.WriteLine("    return rows");

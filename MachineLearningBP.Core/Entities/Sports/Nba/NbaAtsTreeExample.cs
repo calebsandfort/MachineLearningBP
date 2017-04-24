@@ -59,8 +59,8 @@ namespace MachineLearningBP.Entities.Sports.Nba
             categoricalData.Add(info.TeamStatLine2.TwoInTwoDays ? "yes" : "no");
             #endregion
 
-            this.NumericalData = numericalData.Select(x => x * info.ScaleFactor).ToList();
-            this.CategoricalData = categoricalData;
+            this.OrdinalData = numericalData.Select(x => x * info.ScaleFactor).ToList();
+            this.NominalData = categoricalData;
             this.Date = info.Game.Date;
         }
 

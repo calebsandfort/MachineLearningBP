@@ -119,7 +119,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dto
                 guerillaknnPyFile.WriteLine();
                 if (this.Observation != null)
                 {
-                    guerillaknnPyFile.WriteLine($"result = myknn(data, [{string.Join(",", this.Observation.NumericalData)}], [{string.Join(",", this.Ks)}])");
+                    guerillaknnPyFile.WriteLine($"result = myknn(data, [{string.Join(",", this.Observation.OrdinalData)}], [{string.Join(",", this.Ks)}])");
                 }
                 else
                 {

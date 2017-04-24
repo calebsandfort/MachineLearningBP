@@ -112,14 +112,14 @@ namespace MachineLearningBP.Services.Sports.Nba
                     {
                         examples = await this._exampleRepository.GetAllListAsync();
                         List<StandardDeviationCalculator> standardDeviations = new List<StandardDeviationCalculator>();
-                        for(int i = 0; i < examples[0].NumericalData.Count; i++)
+                        for(int i = 0; i < examples[0].OrdinalData.Count; i++)
                         {
-                            standardDeviations.Add(new StandardDeviationCalculator(examples.Select(x => x.NumericalData[i])));
+                            standardDeviations.Add(new StandardDeviationCalculator(examples.Select(x => x.OrdinalData[i])));
                         }
 
                         foreach(NbaAtsTreeExample example in examples)
                         {
-                            example.DelimitedNumericalData = String.Join(":", example.NumericalData.Select((x, idx) => standardDeviations[idx].CalculateZScore(x).ToString("N1")));
+                            example.DelimitedOrdinalData = String.Join(":", example.OrdinalData.Select((x, idx) => standardDeviations[idx].CalculateZScore(x).ToString("N1")));
                         }
 
                         await unitOfWork.CompleteAsync();

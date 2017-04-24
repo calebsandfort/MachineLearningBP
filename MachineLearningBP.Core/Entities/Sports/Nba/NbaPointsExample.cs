@@ -52,8 +52,8 @@ namespace MachineLearningBP.Entities.Sports.Nba
             dataPoints.Add(FreeThrowsOpponentDefense);
             #endregion
 
-            this.NumericalData = dataPoints.Select(x => x * info.ScaleFactor).ToList();
-            this.DelimitedCategoricalData = String.Empty;
+            this.OrdinalData = dataPoints.Select(x => x * info.ScaleFactor).ToList();
+            this.DelimitedNominalData = String.Empty;
             this.Date = info.Game.Date;
         }
 
