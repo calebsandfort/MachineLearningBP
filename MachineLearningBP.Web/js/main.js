@@ -198,6 +198,13 @@ MachineLearningBP.Nba.getPointsKnnBestParametersCsv = function () {
     });
 }
 
+MachineLearningBP.Nba.getPointsKnnBestParametersPythonCsv = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.nbaPointsExample.findOptimalParametersPython().done(function () {
+    });
+}
+
 MachineLearningBP.Nba.predictTodayKnnPoints = function () {
     MachineLearningBP.Console.clear();
 

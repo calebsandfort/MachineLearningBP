@@ -54,6 +54,11 @@ namespace MachineLearningBP.Framework
                         scopes: SettingScopes.Application
                         ),
                     new SettingDefinition(
+                        "DriveFolder.NbaPointsExampleDomainService.FindOptimalParametersPython",
+                        "0B-lqH9hRWMWCam50TGhFdFEyb0U",
+                        scopes: SettingScopes.Application
+                        ),
+                    new SettingDefinition(
                         "DriveFolder.NbaPointsExampleDomainService.GeneticOptimize",
                         "0B-lqH9hRWMWCOWNqV3picUp1Qjg",
                         scopes: SettingScopes.Application

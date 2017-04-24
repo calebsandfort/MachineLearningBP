@@ -9,7 +9,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dto
     public class OptimizeInput
     {
         public List<OptimizationRange> domain { get; set; }
-        public Func<List<int>, double> costf { get; set; }
+        public Func<List<int>, int, double> costf { get; set; }
         public bool record { get; set; }
     }
 }

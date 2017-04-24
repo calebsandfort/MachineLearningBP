@@ -260,3 +260,12 @@ paket-files/
 __pycache__/
 *.pyc
 **/connection.xml
+/MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerilladata.py
+/MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/test.py
+/MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerillaknn_weightedknn_inverseweight_50.py
+/MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerillaknn_weightedknn_inverseweight_35.py
+/MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerillaknn_weightedknn_inverseweight_20.py
+/MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerillaknn_weightedknn_inverseweight_1.py
+/MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerillaknn_weightedknn_inverseweight_0.py
+/MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerillaknn_weightedknn_inverseweight.py
+/MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerillaknn.py

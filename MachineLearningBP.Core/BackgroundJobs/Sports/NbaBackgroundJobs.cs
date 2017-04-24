@@ -25,6 +25,21 @@ namespace MachineLearningBP.BackgroundJobs.Sports
         }
     }
 
+    public class NbaPointsFindOptimalParametersPythonBackgroundJob : BackgroundJob<bool>, ITransientDependency
+    {
+        private readonly INbaPointsExampleDomainService _nbaPointsExampleDomainService;
+
+        public NbaPointsFindOptimalParametersPythonBackgroundJob(INbaPointsExampleDomainService nbaPointsExampleDomainService)
+        {
+            _nbaPointsExampleDomainService = nbaPointsExampleDomainService;
+        }
+
+        public override void Execute(bool args)
+        {
+            this._nbaPointsExampleDomainService.FindOptimalParametersPython(args).GetAwaiter().GetResult();
+        }
+    }
+
     public class NbaPointsAnnealingOptimizeBackgroundJob : BackgroundJob<AnnealingOptimizeInput>, ITransientDependency
     {
         private readonly INbaPointsExampleDomainService _nbaPointsExampleDomainService;

@@ -21,11 +21,11 @@ namespace MachineLearningBP.Shared.CommandRunner
         #endregion
 
         #region RunCmd
-        public void RunCmd(string executable, string cmd, string args = "")
+        public String RunCmd(string executable, string cmd, string args = "")
         {
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = $"{executable}.exe";
-            start.Arguments = string.Format("{0} {1}", cmd, args);
+            start.Arguments = string.Format("\"{0}\" {1}", cmd, args);
             start.UseShellExecute = false;
             start.RedirectStandardOutput = true;
             using (Process process = Process.Start(start))
@@ -33,8 +33,9 @@ namespace MachineLearningBP.Shared.CommandRunner
                 using (StreamReader reader = process.StandardOutput)
                 {
                     string result = reader.ReadToEnd();
-                    Console.Write(result);
-                    this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create(result));
+                    //Console.Write(result);
+                    //this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create(result));
+                    return result;
                 }
             }
         } 

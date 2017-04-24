@@ -9,6 +9,7 @@ using MachineLearningBP.Shared.Dtos;
 using Abp.BackgroundJobs;
 using MachineLearningBP.Shared.GuerillaTimer;
 using MachineLearningBP.Shared.CommandRunner;
+using System.Threading.Tasks;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 {
@@ -32,7 +33,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
             return AnnealingOptimize(input.domain, input.costf, input.T, input.cool, input.step);
         }
 
-        public OptimizeResult AnnealingOptimize(List<OptimizationRange> domain, Func<List<int>, double> costf, double T = 10000, double cool = 0.95, int step = 1)
+        public OptimizeResult AnnealingOptimize(List<OptimizationRange> domain, Func<List<int>, int, double> costf, double T = 10000, double cool = 0.95, int step = 1)
         {
             //Initialize the values randomly
             List<int> vec = new List<int>();
@@ -59,9 +60,18 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     else if (vecb[i] > domain[i].Upper) vecb[i] = domain[i].Upper;
 
                     //Calculate the current cost and the new cost
-                    Double ea = costf(vec);
+                    List<List<int>> parallelVecs = new List<List<int>>() { vec, vecb };
+                    Double[] parallelScores = new double[2];
+
+                    Parallel.For(0, parallelVecs.Count(),
+                    j =>
+                    {
+                        parallelScores[j] = costf(parallelVecs[j], j);
+                    });
+
+                    Double ea = parallelScores[0];
                     Double score = ea;
-                    Double eb = costf(vecb);
+                    Double eb = parallelScores[1];
                     Double p = Math.Pow(Math.E, (-eb - ea) / T);
 
                     //Is it better, or does it make the probability cutoff?
@@ -87,7 +97,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
             return GeneticOptimize(input.domain, input.costf, input.popsize, input.step, input.mutprob, input.elite, input.maxiter);
         }
 
-        public OptimizeResult GeneticOptimize(List<OptimizationRange> domain, Func<List<int>, double> costf, int popsize = 50, int step = 1, double mutprob = 0.2, double elite = 0.2, int maxiter = 100)
+        public OptimizeResult GeneticOptimize(List<OptimizationRange> domain, Func<List<int>, int, double> costf, int popsize = 50, int step = 1, double mutprob = 0.2, double elite = 0.2, int maxiter = 100)
         {
             //Mutation Operation
             Func<List<int>, List<int>> mutate = (v) =>
@@ -144,7 +154,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     scores = new List<OptimizationScore>();
                     foreach (List<int> v in pop)
                     {
-                        scores.Add(new OptimizationScore { Cost = costf(v), Vec = v });
+                        scores.Add(new OptimizationScore { Cost = costf(v, 0), Vec = v });
                     }
                     scores = scores.OrderBy(x => x.Cost).ToList();
 

@@ -8,6 +8,7 @@ namespace MachineLearningBP.Application.Services.Sports
     {
         Task KNearestNeighborsDoStuff();
         Task FindOptimalParameters();
+        Task FindOptimalParametersPython();
         Task AnnealingOptimize(AnnealingOptimizeInput input);
         Task GeneticOptimize(GeneticOptimizeInput input);
         Task PredictToday();

@@ -18,6 +18,8 @@ namespace MachineLearningBP.Services.Sports
         Task KNearestNeighborsDoStuff();
         Task FindOptimalParametersEnqueue(bool record);
         Task<List<KNearestNeighborsCrossValidateResult>> FindOptimalParameters(bool record);
+        Task FindOptimalParametersPythonEnqueue(bool record);
+        Task<List<KNearestNeighborsCrossValidateResult>> FindOptimalParametersPython(bool record);
         Task<DecisionNode> BuildDecisionTree();
         Task<TExample[]> GetExamples();
 

@@ -25,6 +25,9 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         OptimizeResult AnnealingOptimize(AnnealingOptimizeInput input, TExample[] data);
         OptimizeResult GeneticOptimize(GeneticOptimizeInput input, TExample[] data);
         TExample[] Rescale(TExample[] data, List<int> scale);
-        Func<List<int>, double> CreateCostFunction(KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input, TExample[] data);
+        Func<List<int>, int, double> CreateCostFunction(KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input);
+
+
+        List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPython(TExample[] data);
     }
 }

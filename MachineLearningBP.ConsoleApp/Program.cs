@@ -87,8 +87,8 @@ namespace MachineLearningBP.ConsoleApp
                                         GeneticOptimizeInput input = new GeneticOptimizeInput();
                                         input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
                                         input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
-                                        input.Trials = 5;
-                                        input.K = 50;
+                                        input.Trials = 25;
+                                        input.K = 40;
                                         input.popsize = 50;
                                         input.step = 1;
                                         input.mutprob = .20;
@@ -104,8 +104,8 @@ namespace MachineLearningBP.ConsoleApp
                                         AnnealingOptimizeInput input = new AnnealingOptimizeInput();
                                         input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
                                         input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
-                                        input.Trials = 5;
-                                        input.K = 50;
+                                        input.Trials = 25;
+                                        input.K = 40;
                                         input.T = 10000;
                                         input.step = 1;
                                         input.cool = .95;
@@ -120,7 +120,7 @@ namespace MachineLearningBP.ConsoleApp
                                     }
                                     break;
                                 case 7:
-                                    using (StreamWriter testPyFile = new StreamWriter("DomainServices/Algorithms/Scripts/Python/test.py", false))
+                                    using (StreamWriter testPyFile = new StreamWriter("C:\\Users\\csandfort\\Documents\\Visual Studio 2017\\Projects\\MachineLearningBP\\MachineLearningBP.CollectiveIntelligence\\DomainServices\\Algorithms\\Scripts\\Python\\test.py", false))
                                     {
                                         testPyFile.WriteLine("print(\"I'm a python file\")");
                                         testPyFile.Close();
@@ -128,7 +128,7 @@ namespace MachineLearningBP.ConsoleApp
 
                                     using (var _commandRunner = bootstrapper.IocManager.ResolveAsDisposable<ICommandRunner>())
                                     {
-                                        _commandRunner.Object.RunCmd("python", "DomainServices/Algorithms/Scripts/Python/test.py");
+                                        _commandRunner.Object.RunCmd("python", "C:\\Users\\csandfort\\Documents\\Visual Studio 2017\\Projects\\MachineLearningBP\\MachineLearningBP.CollectiveIntelligence\\DomainServices\\Algorithms\\Scripts\\Python\\GowerTest.py");
                                     }
                                     break;
                             }

@@ -56,5 +56,10 @@ namespace MachineLearningBP.Services.Sports.Nba
         {
             await this._nbaAtsTreeExampleDomainService.PredictToday();
         }
+
+        public Task FindOptimalParametersPython()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

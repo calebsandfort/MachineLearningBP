@@ -40,6 +40,12 @@ namespace MachineLearningBP.Services.Sports.Nba
         }
 
         [UnitOfWork(IsDisabled = true)]
+        public async Task FindOptimalParametersPython()
+        {
+            await this._nbaPointsExampleDomainService.FindOptimalParametersPythonEnqueue(true);
+        }
+
+        [UnitOfWork(IsDisabled = true)]
         public async Task AnnealingOptimize(AnnealingOptimizeInput input)
         {
             await this._nbaPointsExampleDomainService.AnnealingOptimize(input);

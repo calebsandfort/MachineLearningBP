@@ -197,6 +197,18 @@ namespace MachineLearningBP.Services.Sports.Nba
         }
         #endregion
 
+        #region FindOptimalParametersPython
+        public Task FindOptimalParametersPythonEnqueue(bool record)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<KNearestNeighborsCrossValidateResult>> FindOptimalParametersPython(bool record)
+        {
+            throw new NotImplementedException();
+        } 
+        #endregion
+
         #region FindOptimalParameters
         public async Task FindOptimalParametersEnqueue(bool record)
         {
@@ -332,7 +344,7 @@ namespace MachineLearningBP.Services.Sports.Nba
                 this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Exception: {ex.Message} {Environment.NewLine} Stacktrace: {ex.StackTrace}"));
                 throw ex;
             }
-        } 
-        #endregion        
+        }
+        #endregion
     }
 }

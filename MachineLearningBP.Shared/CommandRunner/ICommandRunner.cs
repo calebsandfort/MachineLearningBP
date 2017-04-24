@@ -9,6 +9,6 @@ namespace MachineLearningBP.Shared.CommandRunner
 {
     public interface ICommandRunner : ISingletonDependency
     {
-        void RunCmd(string executable, string cmd, string args = "");
+        String RunCmd(string executable, string cmd, string args = "");
     }
 }

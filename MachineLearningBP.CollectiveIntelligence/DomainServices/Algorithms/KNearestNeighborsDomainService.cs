@@ -13,6 +13,7 @@ using System.Collections.Concurrent;
 using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dtos;
 using Abp.BackgroundJobs;
 using MachineLearningBP.Shared.CommandRunner;
+using System.IO;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 {
@@ -280,59 +281,32 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         }
         #endregion
 
+        #region FindOptimalParametersPython
+        public List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPython(TExample[] data)
+        {
+            using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
+            {
+                WritePythonDataFile(data);
+
+                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(data);
+                List<KNearestNeighborsCrossValidateResult> results = new List<KNearestNeighborsCrossValidateResult>();
+
+                foreach (KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input in inputs)
+                {
+                    results.AddRange(input.GetPythonResults(this._commandRunner));
+                }
+
+                return results.OrderBy(x => x.Result).ToList();
+            }
+        }
+        #endregion
+
         #region FindOptimalParameters
         public List<KNearestNeighborsCrossValidateResult> FindOptimalParameters(TExample[] data)
         {
             using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
             {
-                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = new List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>>();
-
-                List<KNearestNeighborsGuessMethods> guessMethods = new List<KNearestNeighborsGuessMethods>();
-                //guessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
-                guessMethods.Add(KNearestNeighborsGuessMethods.WeightedKnn);
-
-                List<KNearestNeighborsWeightMethods> weightMethods = new List<KNearestNeighborsWeightMethods>();
-                //weightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
-                weightMethods.Add(KNearestNeighborsWeightMethods.InverseWeight);
-                //weightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
-
-                List<int> ks = new List<int>();
-                ks.Add(15);
-                ks.Add(20);
-                ks.Add(25);
-                ks.Add(30);
-                ks.Add(35);
-                ks.Add(40);
-                ks.Add(45);
-                ks.Add(50);
-
-                foreach (KNearestNeighborsGuessMethods guessMethod in guessMethods)
-                {
-                    if (guessMethod == KNearestNeighborsGuessMethods.WeightedKnn)
-                    {
-                        foreach (KNearestNeighborsWeightMethods weightMethod in weightMethods)
-                        {
-                            KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input = new KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>();
-                            input.GuessMethod = guessMethod;
-                            input.WeightMethod = weightMethod;
-                            input.Trials = 25;
-                            input.Ks = ks.ToArray();
-                            input.SubtractWeightConstant = 30.0;
-                            input.Data = data;
-                            inputs.Add(input);
-                        }
-                    }
-                    else
-                    {
-                        KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input = new KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>();
-                        input.GuessMethod = guessMethod;
-                        input.Trials = 25;
-                        input.Ks = ks.ToArray();
-                        input.SubtractWeightConstant = 30.0;
-                        input.Data = data;
-                        inputs.Add(input);
-                    }
-                }
+                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(data);
 
                 List<KNearestNeighborsCrossValidateResult> results = new List<KNearestNeighborsCrossValidateResult>();
                 foreach (KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input in inputs)
@@ -345,11 +319,70 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         }
         #endregion
 
+        #region GetInputs
+        static List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> GetInputs(TExample[] data)
+        {
+            List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = new List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>>();
+
+            List<KNearestNeighborsGuessMethods> guessMethods = new List<KNearestNeighborsGuessMethods>();
+            //guessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
+            guessMethods.Add(KNearestNeighborsGuessMethods.WeightedKnn);
+
+            List<KNearestNeighborsWeightMethods> weightMethods = new List<KNearestNeighborsWeightMethods>();
+            //weightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
+            weightMethods.Add(KNearestNeighborsWeightMethods.InverseWeight);
+            //weightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
+
+            List<int> ks = new List<int>();
+            ks.Add(10);
+            ks.Add(15);
+            ks.Add(20);
+            ks.Add(25);
+            ks.Add(30);
+            ks.Add(35);
+            ks.Add(40);
+            ks.Add(45);
+            ks.Add(50);
+
+            foreach (KNearestNeighborsGuessMethods guessMethod in guessMethods)
+            {
+                if (guessMethod == KNearestNeighborsGuessMethods.WeightedKnn)
+                {
+                    foreach (KNearestNeighborsWeightMethods weightMethod in weightMethods)
+                    {
+                        KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input = new KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>();
+                        input.GuessMethod = guessMethod;
+                        input.WeightMethod = weightMethod;
+                        input.Trials = 25;
+                        input.Ks = ks.ToArray();
+                        input.SubtractWeightConstant = 30.0;
+                        input.Data = data;
+                        inputs.Add(input);
+                    }
+                }
+                else
+                {
+                    KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input = new KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>();
+                    input.GuessMethod = guessMethod;
+                    input.Trials = 25;
+                    input.Ks = ks.ToArray();
+                    input.SubtractWeightConstant = 30.0;
+                    input.Data = data;
+                    inputs.Add(input);
+                }
+            }
+
+            return inputs;
+        } 
+        #endregion
+
         #region AnnealingOptimize
         public OptimizeResult AnnealingOptimize(AnnealingOptimizeInput input, TExample[] data)
         {
             using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
             {
+                WritePythonDataFile(data);
+
                 KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> crossValidateInput = new KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>();
                 crossValidateInput.GuessMethod = input.GuessMethod;
                 crossValidateInput.WeightMethod = input.WeightMethod;
@@ -357,8 +390,8 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                 crossValidateInput.Ks = new int[] { input.K };
                 crossValidateInput.SubtractWeightConstant = 30.0;
 
-                input.domain = data.First().NumericalData.Select(x => new OptimizationRange { Lower = 0, Upper = 10 }).ToList();
-                input.costf = CreateCostFunction(crossValidateInput, data);
+                input.domain = data.First().NumericalData.Select(x => new OptimizationRange { Lower = 0, Upper = 20 }).ToList();
+                input.costf = CreateCostFunction(crossValidateInput);
 
                 OptimizeResult result = this._optimizationDomainService.AnnealingOptimize(input);
 
@@ -382,7 +415,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                 crossValidateInput.SubtractWeightConstant = 30.0;
 
                 input.domain = data.First().NumericalData.Select(x => new OptimizationRange { Lower = 0, Upper = 10 }).ToList();
-                input.costf = CreateCostFunction(crossValidateInput, data);
+                input.costf = CreateCostFunction(crossValidateInput);
 
                 OptimizeResult result = this._optimizationDomainService.GeneticOptimize(input);
 
@@ -411,13 +444,12 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         #endregion
 
         #region CreateCostFunction
-        public Func<List<int>, double> CreateCostFunction(KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input, TExample[] data)
+        public Func<List<int>, int, double> CreateCostFunction(KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input)
         {
-            Func<List<int>, double> costf = (s) =>
+            Func<List<int>, int, double> costf = (s, i) =>
             {
-                TExample[] sdata = Rescale(data, s);
-                input.Data = sdata;
-                List<KNearestNeighborsCrossValidateResult> results = CrossValidate(input, false);
+                input.Scale = s;
+                List<KNearestNeighborsCrossValidateResult> results = input.GetPythonResults(this._commandRunner, $"_{i}");
                 return results.First().Result;
             };
 
@@ -449,6 +481,25 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
             return Math.Pow(Math.E, (Math.Pow(-dist, 2.0) / (2.0 * Math.Pow(sigma, 2.0))));
         }
         #endregion
+        #endregion
+
+        #region WritePythonDataFile
+        private static void WritePythonDataFile(TExample[] data)
+        {
+            using (StreamWriter guerillaknnPyFile = new StreamWriter("C:\\Users\\csandfort\\Documents\\Visual Studio 2017\\Projects\\MachineLearningBP\\MachineLearningBP.CollectiveIntelligence\\DomainServices\\Algorithms\\Scripts\\Python\\guerilladata.py", false))
+            {
+                guerillaknnPyFile.WriteLine("def getdata():");
+                guerillaknnPyFile.WriteLine("    rows = []");
+
+                foreach (TExample example in data)
+                {
+                    guerillaknnPyFile.WriteLine($"    rows.append({{'input': ({String.Join(", ", example.NumericalData)}), 'result': {example.Result}}})");
+                }
+
+                guerillaknnPyFile.WriteLine("    return rows");
+                guerillaknnPyFile.Close();
+            }
+        } 
         #endregion
 
         #region Static Methods

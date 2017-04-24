@@ -16,6 +16,7 @@ using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dtos;
 using Abp.BackgroundJobs;
 using MachineLearningBP.BackgroundJobs.Sports;
 using Abp.Timing;
+using MachineLearningBP.Shared.CommandRunner;
 
 namespace MachineLearningBP.Services.Sports.Nba
 {
@@ -24,18 +25,21 @@ namespace MachineLearningBP.Services.Sports.Nba
         #region Properties
         public readonly IKNearestNeighborsDomainService<NbaPointsExample, NbaStatLine, Double> _kNearestNeighborsDomainService;
         private readonly ISheetUtilityDomainService _sheetUtilityDomainService;
+        public readonly ICommandRunner _commandRunner;
         #endregion
 
         #region Constructor
         public NbaPointsExampleDomainService(IRepository<NbaGame> sampleRepository, IRepository<NbaStatLine> statLineRepository,
             ISqlExecuter sqlExecuter, IConsoleHubProxy consoleHubProxy, ISettingManager settingManager,
             IRepository<NbaPointsExample> exampleRepository, IRepository<NbaSeason> timeGroupingRepository, ISheetUtilityDomainService sheetUtilityDomainService,
-            IRepository<NbaTeam> participantRepository, IKNearestNeighborsDomainService<NbaPointsExample, NbaStatLine, Double> kNearestNeighborsDomainService, IBackgroundJobManager backgroundJobManager)
+            IRepository<NbaTeam> participantRepository, IKNearestNeighborsDomainService<NbaPointsExample, NbaStatLine, Double> kNearestNeighborsDomainService,
+            IBackgroundJobManager backgroundJobManager, ICommandRunner commandRunner)
             : base(sampleRepository, statLineRepository, sqlExecuter, consoleHubProxy,
                 settingManager, exampleRepository, timeGroupingRepository, participantRepository, backgroundJobManager)
         {
             this._kNearestNeighborsDomainService = kNearestNeighborsDomainService;
             this._sheetUtilityDomainService = sheetUtilityDomainService;
+            this._commandRunner = commandRunner;
         }
         #endregion
 
@@ -176,7 +180,26 @@ namespace MachineLearningBP.Services.Sports.Nba
 
             List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParameters(data);
 
-            if (record)
+            if (record && results.Count > 0)
+                await this._sheetUtilityDomainService.Record(new List<IRecordContainer>(results));
+
+            return results;
+        }
+        #endregion
+
+        #region FindOptimalParametersPython
+        public async Task FindOptimalParametersPythonEnqueue(bool record)
+        {
+            await _backgroundJobManager.EnqueueAsync<NbaPointsFindOptimalParametersPythonBackgroundJob, bool>(record);
+        }
+
+        public async Task<List<KNearestNeighborsCrossValidateResult>> FindOptimalParametersPython(bool record)
+        {
+            NbaPointsExample[] data = await this.GetExamples();
+
+            List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParametersPython(data);
+
+            if (record && results.Count > 0)
                 await this._sheetUtilityDomainService.Record(new List<IRecordContainer>(results));
 
             return results;
@@ -230,8 +253,8 @@ namespace MachineLearningBP.Services.Sports.Nba
 
             using (var unitOfWork = this.UnitOfWorkManager.Begin())
             {
-                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
-                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(1500).ToArray();
+                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
+                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(1500).ToArray();
                 unitOfWork.Complete();
             }
 
@@ -250,6 +273,12 @@ namespace MachineLearningBP.Services.Sports.Nba
                     //public double[] WeightedKnn(TExample[] data, TExample v1, Func<Double, Double> weightf, int[] ks)
                     Func<Double, Double> weightf = (d) => this._kNearestNeighborsDomainService.InverseWeight(d);
 
+                    KNearestNeighborsCrossValidateInput<NbaPointsExample, NbaStatLine, Double> input = new KNearestNeighborsCrossValidateInput<NbaPointsExample, NbaStatLine, double>();
+                    input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
+                    input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
+                    input.Ks = new int[] { 40 };
+                    
+
                     using (var unitOfWork = this.UnitOfWorkManager.Begin())
                     {
                         DateTime now = Clock.Now;
@@ -258,7 +287,8 @@ namespace MachineLearningBP.Services.Sports.Nba
                         foreach (NbaPointsExample example in todaysExamples)
                         {
                             NbaStatLine statLine = await this._statLineRepository.GetAsync(example.StatLineId);
-                            statLine.KnnPoints = this._kNearestNeighborsDomainService.WeightedKnn(data, new NbaPointsExample[] { example }, weightf, new int[] { 25 }).First().First();
+                            input.Observation = example;
+                            statLine.KnnPoints = input.GetPythonResults(this._commandRunner).First().Result;
                         }
 
                         unitOfWork.Complete();
