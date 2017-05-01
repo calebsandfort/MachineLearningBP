@@ -182,7 +182,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InflationCalculator\InflationCalculator_Tests.cs" />
     <Compile Include="MachineLearningBPTestModule.cs" />
+    <Compile Include="Movies\MovieMaint_Tests.cs" />
     <Compile Include="MultiTenantFactAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sessions\SessionAppService_Tests.cs" />

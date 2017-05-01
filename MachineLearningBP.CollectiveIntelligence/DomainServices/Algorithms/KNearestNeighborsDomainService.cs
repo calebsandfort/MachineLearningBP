@@ -14,6 +14,8 @@ using MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dtos;
 using Abp.BackgroundJobs;
 using MachineLearningBP.Shared.CommandRunner;
 using System.IO;
+using System.Globalization;
+using MachineLearningBP.CollectiveIntelligence.Framework;
 
 namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 {
@@ -22,6 +24,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         where TStatLine : StatLine
     {
         #region Properties
+        readonly String rdataPathAndName = "C:\\Users\\csandfort\\Documents\\Visual Studio 2017\\Projects\\MachineLearningBP\\MachineLearningBP.CollectiveIntelligence\\DomainServices\\Algorithms\\Scripts\\R\\guerilladata.R";
         Object testAlgorithmLock = new Object();
         Object crossValidateLock = new Object();
 
@@ -288,7 +291,28 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
             {
                 WritePythonDataFile(data);
 
-                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(data);
+                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(data, KNearestNeighborsDistanceMethods.Euclidean);
+                List<KNearestNeighborsCrossValidateResult> results = new List<KNearestNeighborsCrossValidateResult>();
+
+                foreach (KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input in inputs)
+                {
+                    results.AddRange(input.GetPythonResults(this._commandRunner));
+                }
+
+                return results.OrderBy(x => x.Result).ToList();
+            }
+        }
+        #endregion
+
+        #region FindOptimalParametersPythonAndR
+        public List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPythonAndR(TExample[] data)
+        {
+            using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
+            {
+                Double[] gowerDistances = GetGowerDistances(data);
+                WritePythonDataFile(data, gowerDistances, 0.000005);
+
+                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(data, KNearestNeighborsDistanceMethods.Gower);
                 List<KNearestNeighborsCrossValidateResult> results = new List<KNearestNeighborsCrossValidateResult>();
 
                 foreach (KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input in inputs)
@@ -306,7 +330,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         {
             using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
             {
-                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(data);
+                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(data, KNearestNeighborsDistanceMethods.Euclidean);
 
                 List<KNearestNeighborsCrossValidateResult> results = new List<KNearestNeighborsCrossValidateResult>();
                 foreach (KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input in inputs)
@@ -320,29 +344,30 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         #endregion
 
         #region GetInputs
-        static List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> GetInputs(TExample[] data)
+        static List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> GetInputs(TExample[] data, KNearestNeighborsDistanceMethods distanceMethod)
         {
             List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = new List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>>();
 
             List<KNearestNeighborsGuessMethods> guessMethods = new List<KNearestNeighborsGuessMethods>();
-            //guessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
+            guessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
             guessMethods.Add(KNearestNeighborsGuessMethods.WeightedKnn);
 
             List<KNearestNeighborsWeightMethods> weightMethods = new List<KNearestNeighborsWeightMethods>();
-            //weightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
+            weightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
             weightMethods.Add(KNearestNeighborsWeightMethods.InverseWeight);
-            //weightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
+            weightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
 
             List<int> ks = new List<int>();
+            ks.Add(1);
+            ks.Add(2);
+            ks.Add(3);
+            ks.Add(4);
+            ks.Add(5);
+            ks.Add(6);
+            ks.Add(7);
+            ks.Add(8);
+            ks.Add(9);
             ks.Add(10);
-            ks.Add(15);
-            ks.Add(20);
-            ks.Add(25);
-            ks.Add(30);
-            ks.Add(35);
-            ks.Add(40);
-            ks.Add(45);
-            ks.Add(50);
 
             foreach (KNearestNeighborsGuessMethods guessMethod in guessMethods)
             {
@@ -355,7 +380,8 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                         input.WeightMethod = weightMethod;
                         input.Trials = 25;
                         input.Ks = ks.ToArray();
-                        input.SubtractWeightConstant = 30.0;
+                        input.SubtractWeightConstant = 1.0;
+                        input.DistanceMethod = distanceMethod;
                         input.Data = data;
                         inputs.Add(input);
                     }
@@ -366,7 +392,8 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     input.GuessMethod = guessMethod;
                     input.Trials = 25;
                     input.Ks = ks.ToArray();
-                    input.SubtractWeightConstant = 30.0;
+                    input.SubtractWeightConstant = 1.0;
+                    input.DistanceMethod = distanceMethod;
                     input.Data = data;
                     inputs.Add(input);
                 }
@@ -484,22 +511,154 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         #endregion
 
         #region WritePythonDataFile
-        private static void WritePythonDataFile(TExample[] data)
+        public void WritePythonDataFile(TExample[] data, Double[] gowerDistances = null, Double resultScale = 1)
         {
             using (StreamWriter guerillaknnPyFile = new StreamWriter("C:\\Users\\csandfort\\Documents\\Visual Studio 2017\\Projects\\MachineLearningBP\\MachineLearningBP.CollectiveIntelligence\\DomainServices\\Algorithms\\Scripts\\Python\\guerilladata.py", false))
             {
                 guerillaknnPyFile.WriteLine("def getdata():");
                 guerillaknnPyFile.WriteLine("    rows = []");
 
+                int idx = 0;
                 foreach (TExample example in data)
                 {
-                    guerillaknnPyFile.WriteLine($"    rows.append({{'input': ({String.Join(", ", example.OrdinalData)}), 'result': {example.Result}}})");
+                    if(example.PythonIndexOnly) guerillaknnPyFile.WriteLine($"    rows.append({{'index': {idx}, 'result': {ToDouble(example.Result) * resultScale}}})");
+                    else guerillaknnPyFile.WriteLine($"    rows.append({{'index': {idx}, 'input': ({String.Join(", ", example.OrdinalData)}), 'result': {ToDouble(example.Result) * resultScale}}})");
+
+                    idx++;
                 }
 
                 guerillaknnPyFile.WriteLine("    return rows");
+
+                if(gowerDistances != null && gowerDistances.Count() > 0)
+                {
+                    guerillaknnPyFile.WriteLine();
+
+                    guerillaknnPyFile.WriteLine($"n = {data.Count()}");
+                    guerillaknnPyFile.WriteLine($"gowerdistances = [{String.Join(",", gowerDistances)}]");
+
+                    guerillaknnPyFile.WriteLine();
+
+                    guerillaknnPyFile.WriteLine("def getgowerdistance(row1, row2):");
+                    guerillaknnPyFile.WriteLine("    i = row1['index'] + 1");
+                    guerillaknnPyFile.WriteLine("    j = row2['index'] + 1");
+                    guerillaknnPyFile.WriteLine();
+                    guerillaknnPyFile.WriteLine("    if i > j:");
+                    guerillaknnPyFile.WriteLine("        t = i");
+                    guerillaknnPyFile.WriteLine("        i = j");
+                    guerillaknnPyFile.WriteLine("        j = t");
+                    guerillaknnPyFile.WriteLine();
+                    guerillaknnPyFile.WriteLine("    idx = int((n*(i-1) - i*((i-1)/2) + (j-i)) - 1)");
+                    guerillaknnPyFile.WriteLine();
+                    guerillaknnPyFile.WriteLine("    return gowerdistances[idx]");
+                }
+
                 guerillaknnPyFile.Close();
             }
+        }
+        #endregion
+
+        #region GetGowerDistances
+        public Double[] GetGowerDistances(TExample[] data)
+        {
+            WriteRDataFile(data);
+            Double[] distances = _commandRunner.RunCmd("RScript", rdataPathAndName).Trim().Split(",".ToCharArray()).Select(x => Double.Parse(x)).ToArray();
+            return distances;
         } 
+        #endregion
+
+        #region WriteRDataFile
+        public void WriteRDataFile(TExample[] data)
+        {
+            try
+            {
+                using (StreamWriter guerillakdataRFile = new StreamWriter(rdataPathAndName, false))
+                {
+                    guerillakdataRFile.WriteLine("library(cluster)");
+                    guerillakdataRFile.WriteLine();
+
+                    guerillakdataRFile.WriteLine("getData <- function() {");
+
+                    TExample dummy = data[0];
+                    List<String> columns = new List<string>();
+
+                    NumberFormatInfo noComma = new CultureInfo("en-US", false).NumberFormat;
+                    noComma.NumberGroupSeparator = String.Empty;
+
+                    //Numeric
+                    double[] numericNaValues = { 0 };
+                    for (int i = 0; i < dummy.NumericData.Count; i++)
+                    {
+                        guerillakdataRFile.WriteLine($" num{i} = c({String.Join(",", data.Select(x => x.NumericData[i].ToRDouble(noComma, numericNaValues)))})");
+                        columns.Add($"num{i}");
+                    }
+
+                    //Ordinal
+                    double[] ordinalNaValues = { 0 };
+                    for (int i = 0; i < dummy.OrdinalData.Count; i++)
+                    {
+                        guerillakdataRFile.WriteLine($" ord{i} = ordered(c({String.Join(",", data.Select(x => x.OrdinalData[i].ToRInt(noComma, ordinalNaValues)))}))");
+                        columns.Add($"ord{i}");
+                    }
+
+                    //Nominal
+                    string[] nominalNaValues = { "0" };
+                    for (int i = 0; i < dummy.NominalData.Count; i++)
+                    {
+                        guerillakdataRFile.WriteLine($" nom{i} = factor(c({String.Join(",", data.Select(x => x.NominalData[i].ToRString(nominalNaValues)))}))");
+                        columns.Add($"nom{i}");
+                    }
+
+                    //Asymm
+                    for (int i = 0; i < dummy.AsymmBinaryData.Count; i++)
+                    {
+                        guerillakdataRFile.WriteLine($" asymm{i} = factor(c({String.Join(",", data.Select(x => x.AsymmBinaryData[i].ToRBool()))}))");
+                        columns.Add($"asymm{i}");
+                    }
+
+                    //Symm
+                    for (int i = 0; i < dummy.SymmBinaryData.Count; i++)
+                    {
+                        guerillakdataRFile.WriteLine($" symm{i} = factor(c({String.Join(",", data.Select(x => x.SymmBinaryData[i].ToRBool()))}))");
+                        columns.Add($"symm{i}");
+                    }
+
+                    guerillakdataRFile.WriteLine($" return (data.frame({String.Join(",", columns)}))");
+
+                    guerillakdataRFile.WriteLine("}");
+                    guerillakdataRFile.WriteLine();
+                    guerillakdataRFile.WriteLine("rows = getData()");
+                    guerillakdataRFile.WriteLine();
+                    guerillakdataRFile.Write("D = daisy(rows, metric=\"gower\"");
+
+                    if(dummy.AsymmBinaryData.Count > 0 || dummy.SymmBinaryData.Count > 0)
+                    {
+                        List<String> typeList = new List<string>();
+                        if (dummy.AsymmBinaryData.Count > 0)
+                        {
+                            typeList.Add(String.Format("asymm = c({0})", String.Join(",", Enumerable.Range(0, dummy.AsymmBinaryData.Count).Select(x => $"\"asymm{x}\""))));
+                        }
+
+                        if (dummy.SymmBinaryData.Count > 0)
+                        {
+                            typeList.Add(String.Format("symm = c({0})", String.Join(",", Enumerable.Range(0, dummy.SymmBinaryData.Count).Select(x => $"\"symm{x}\""))));
+                        }
+
+                        guerillakdataRFile.Write($", type = list({String.Join(",", typeList)})");
+                    }
+
+                    guerillakdataRFile.Write(")");
+                    guerillakdataRFile.WriteLine();
+                    guerillakdataRFile.WriteLine();
+                    guerillakdataRFile.WriteLine("cat(D,sep=\",\")");
+                    guerillakdataRFile.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Exception: {ex.Message} {Environment.NewLine} Stacktrace: {ex.StackTrace}"));
+                throw ex;
+            }
+        }
         #endregion
 
         #region Static Methods

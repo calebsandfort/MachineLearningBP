@@ -490,6 +490,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ConsoleSignalRController.cs" />
     <Compile Include="Controllers\MlbController.cs" />
+    <Compile Include="Controllers\MoviesController.cs" />
     <Compile Include="Controllers\NbaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Results\ChallengeResult.cs" />
@@ -556,6 +557,8 @@
     <Content Include="Views\Shared\Modals\_KnnOptimizeFields.cshtml" />
     <Content Include="Views\Nba\_TodayGrid.cshtml" />
     <Content Include="Views\Shared\Modals\_AnnealingOptimizeFields.cshtml" />
+    <Content Include="Views\Movies\_TodayGrid.cshtml" />
+    <Content Include="Views\Movies\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

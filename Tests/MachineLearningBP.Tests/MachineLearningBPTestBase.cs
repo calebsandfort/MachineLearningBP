@@ -37,15 +37,15 @@ namespace MachineLearningBP.Tests
         {
             base.PreInitialize();
 
-            LocalIocManager.IocContainer.Register(
-                Component.For<DbConnection>()
-                         .UsingFactoryMethod(() =>
-                         {
-                             var connection = new SqlConnection(_connectionString);
-                             return connection;
-                         })
-                         .LifestyleSingleton()
-            );
+            //LocalIocManager.IocContainer.Register(
+            //    Component.For<DbConnection>()
+            //             .UsingFactoryMethod(() =>
+            //             {
+            //                 var connection = new SqlConnection(_connectionString);
+            //                 return connection;
+            //             })
+            //             .LifestyleSingleton()
+            //);
         }
     }
 }

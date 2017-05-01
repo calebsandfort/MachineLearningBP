@@ -1,0 +1,37 @@
+﻿@(Html.Kendo().Grid<NbaGameDto>()
+    .Name("todayGrid")
+
+    .Columns(columns =>
+    {
+        //columns.Bound(x => x.Key).Width(200);
+        //columns.Bound(x => x.Btb).ClientTemplate("#= Btb ? 'Yes' : '' #").Width(80);
+        //columns.Bound(x => x.OppBtb).ClientTemplate("#= OppBtb ? 'Yes' : '' #").Width(80);
+        //columns.Bound(x => x.RecAts).Format("{0:n2}").Width(90);
+        //columns.Bound(x => x.RecAtsDiff).Format("{0:n2}").Width(90);
+        columns.Bound(x => x.AwayTeam).Width(120);
+        columns.Bound(x => x.HomeTeam).Width(120);
+        columns.Bound(x => x.Spread).Format("{0:n1}").Width(90);
+        columns.Bound(x => x.KnnSpread).Format("{0:n1}").Width(90);
+        //columns.Bound(x => x.TreeSpread).Format("{0:n1}").Width(90);
+        columns.Bound(x => x.Total).Format("{0:n1}").Width(90);
+        columns.Bound(x => x.KnnTotal).Format("{0:n1}").Width(90);
+        //columns.Bound(x => x.TreeTotal).Format("{0:n1}").Width(90);
+    })
+    .HtmlAttributes(new { style = "height: 600px; overflow: auto;" })
+    .Scrollable()
+    .Sortable(sortable => sortable
+        .AllowUnsort(false))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Sort(sort => sort.Add(x => x.Id).Descending())
+        .Read(read =>
+        {
+            read.Action("Today_Read", "Nba");
+        }
+        )
+        .Model(model =>
+        {
+            model.Id(ce => ce.Id);
+        })
+    )
+)

@@ -6,6 +6,7 @@
     <text name="WellcomeMessage" value="Welcome to MachineLearningBP!" />
     <text name="NBA" value="NBA" />
     <text name="MLB" value="MLB" />
+    <text name="Movies" value="Movies" />
     
     <text name="FormIsNotValidMessage" value="Form is not valid. Please check and fix errors." />
     <text name="TenantNameCanNotBeEmpty" value="Tenant name can not be empty" />

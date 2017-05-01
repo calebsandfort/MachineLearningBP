@@ -138,6 +138,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Services\ISheetUtilityAppService.cs" />
+    <Compile Include="Services\Movies\IMovieOpeningWeekendExampleAppService.cs" />
+    <Compile Include="Services\Movies\MovieOpeningWeekendExampleAppService.cs">
+      <DependentUpon>IMovieOpeningWeekendExampleAppService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\SheetUtilityAppService.cs">
       <DependentUpon>ISheetUtilityAppService.cs</DependentUpon>
     </Compile>

@@ -157,6 +157,7 @@
     <Compile Include="Entities\TimeGrouping.cs" />
     <Compile Include="Entities\Sample.cs" />
     <Compile Include="Entities\ValueIndexPair.cs" />
+    <Compile Include="Framework\Extensions.cs" />
     <Compile Include="MachineLearningBPCollectiveIntelligenceModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -176,6 +177,7 @@
     <Content Include="DomainServices\Algorithms\Scripts\Python\GowerTest.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="DomainServices\Algorithms\Scripts\Python\numpredict.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

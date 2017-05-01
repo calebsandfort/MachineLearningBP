@@ -164,6 +164,18 @@
     <Compile Include="BackgroundJobs\Sports\NbaBackgroundJobs.cs" />
     <Compile Include="DataPointMethods\NbaMethods.cs" />
     <Compile Include="Entities\DecisionTree.cs" />
+    <Compile Include="Entities\Movies\Enums\MovieBrands.cs" />
+    <Compile Include="Entities\Movies\Enums\MovieGenres.cs" />
+    <Compile Include="Entities\Movies\Enums\MovieSeries.cs" />
+    <Compile Include="Entities\Movies\Enums\MpaaRatings.cs" />
+    <Compile Include="Entities\Movies\Movie.cs" />
+    <Compile Include="Entities\Movies\MovieExampleGenerationInfo.cs" />
+    <Compile Include="Entities\Movies\MovieOpeningWeekendExample.cs" />
+    <Compile Include="Entities\Movies\MovieParticipant.cs" />
+    <Compile Include="Entities\Movies\MovieScrapeDto.cs" />
+    <Compile Include="Entities\Movies\MovieStatLineScrapeDto.cs" />
+    <Compile Include="Entities\Movies\MovieStatLine.cs" />
+    <Compile Include="Entities\Movies\MovieYear.cs" />
     <Compile Include="Entities\Sports\Mlb\MlbTeam.cs" />
     <Compile Include="Entities\Sports\Mlb\MlbGame.cs" />
     <Compile Include="Entities\Sports\Mlb\MlbSeason.cs" />
@@ -177,11 +189,20 @@
     <Compile Include="Entities\Sports\SportExampleGenerationInfo.cs" />
     <Compile Include="Enums\DecisionTreeTargets.cs" />
     <Compile Include="Enums\Targets.cs" />
+    <Compile Include="Framework\EnumExtensions.cs" />
     <Compile Include="Framework\Extensions.cs" />
     <Compile Include="Framework\MySettingProvider.cs" />
     <Compile Include="Entities\Sports\Game.cs" />
     <Compile Include="Services\Dtos\GetAccessTokenInput.cs" />
     <Compile Include="Services\ISheetUtilityDomainService.cs" />
+    <Compile Include="Services\Movies\IMovieDomainService.cs" />
+    <Compile Include="Services\Movies\IMovieOpeningWeekendExampleDomainService.cs" />
+    <Compile Include="Services\Movies\MovieDomainService.cs">
+      <DependentUpon>IMovieDomainService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Movies\MovieOpeningWeekendExampleDomainService.cs">
+      <DependentUpon>IMovieOpeningWeekendExampleDomainService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\SheetUtilityDomainService.cs">
       <DependentUpon>ISheetUtilityDomainService.cs</DependentUpon>
     </Compile>
@@ -273,6 +294,7 @@
     <EmbeddedResource Include="Localization\Source\MachineLearningBP-vi.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CodeGen\Enums\" />
     <Folder Include="Framework\Dtos\" />
   </ItemGroup>
   <ItemGroup>

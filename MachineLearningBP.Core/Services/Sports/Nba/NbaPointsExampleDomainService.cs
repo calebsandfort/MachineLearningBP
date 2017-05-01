@@ -246,22 +246,6 @@ namespace MachineLearningBP.Services.Sports.Nba
         } 
         #endregion
 
-        #region GetExamples
-        public async Task<NbaPointsExample[]> GetExamples()
-        {
-            NbaPointsExample[] data;
-
-            using (var unitOfWork = this.UnitOfWorkManager.Begin())
-            {
-                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
-                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(1500).ToArray();
-                unitOfWork.Complete();
-            }
-
-            return data;
-        }
-        #endregion
-
         #region PredictToday
         public async Task PredictToday()
         {
@@ -270,6 +254,7 @@ namespace MachineLearningBP.Services.Sports.Nba
                 using (GuerillaTimer timer = new GuerillaTimer(this._consoleHubProxy))
                 {
                     NbaPointsExample[] data = await this.GetExamples();
+                    this._kNearestNeighborsDomainService.WritePythonDataFile(data);
                     //public double[] WeightedKnn(TExample[] data, TExample v1, Func<Double, Double> weightf, int[] ks)
                     Func<Double, Double> weightf = (d) => this._kNearestNeighborsDomainService.InverseWeight(d);
 
@@ -300,6 +285,22 @@ namespace MachineLearningBP.Services.Sports.Nba
                 this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Exception: {ex.Message} {Environment.NewLine} Stacktrace: {ex.StackTrace}"));
                 throw ex;
             }
+        }
+        #endregion
+
+        #region GetExamples
+        public async Task<NbaPointsExample[]> GetExamples()
+        {
+            NbaPointsExample[] data;
+
+            using (var unitOfWork = this.UnitOfWorkManager.Begin())
+            {
+                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
+                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(500).ToArray();
+                unitOfWork.Complete();
+            }
+
+            return data;
         }
         #endregion
     }

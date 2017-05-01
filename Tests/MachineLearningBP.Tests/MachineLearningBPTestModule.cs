@@ -4,8 +4,10 @@ using Abp.MultiTenancy;
 using Abp.TestBase;
 using Abp.Zero.Configuration;
 using Castle.MicroKernel.Registration;
+using MachineLearningBP.EntityFramework;
 using MachineLearningBP.Shared;
 using NSubstitute;
+using System.Data.Entity;
 using System.Reflection;
 
 namespace MachineLearningBP.Tests
@@ -19,6 +21,13 @@ namespace MachineLearningBP.Tests
         public MachineLearningBPTestModule()
         {
             
+        }
+
+        public override void PreInitialize()
+        {
+            Database.SetInitializer<MachineLearningBPDbContext>(null);
+
+            Configuration.BackgroundJobs.IsJobExecutionEnabled = false;
         }
 
         public override void Initialize()

@@ -53,6 +53,13 @@ namespace MachineLearningBP.Web
                         url: "Mlb",
                         icon: "fa fa-info"
                         )
+                ).AddItem(
+                    new MenuItemDefinition(
+                        "Movies",
+                        L("Movies"),
+                        url: "Movies",
+                        icon: "fa fa-film"
+                        )
                 );
         }
 

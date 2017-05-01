@@ -14,6 +14,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dto
         public TExample[] Data { get; set; }
         public KNearestNeighborsGuessMethods GuessMethod { get; set; }
         public KNearestNeighborsWeightMethods WeightMethod { get; set; }
+        public KNearestNeighborsDistanceMethods DistanceMethod { get; set; }
         public int Trials { get; set; }
         public int[] Ks { get; set; }
         public List<int> Scale { get; set; }
@@ -36,6 +37,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dto
             this.Scale = new List<int>();
 
             this.WeightMethod = KNearestNeighborsWeightMethods.None;
+            this.DistanceMethod = KNearestNeighborsDistanceMethods.Euclidean;
             this.InverseWeightNum = 1.0;
             this.InverseWeightConstant = .1;
             this.SubtractWeightConstant = 1.0;
@@ -84,15 +86,39 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dto
                 switch (this.GuessMethod)
                 {
                     case KNearestNeighborsGuessMethods.WeightedKnn:
-                        guessf = $"return numpredict.weightedknn(d, v, ks, weightf=myweight)";
+                        guessf = $"return numpredict.weightedknn(d, r, ks, weightf=myweight, distancef={this.PythonDistancef})";
                         break;
                     case KNearestNeighborsGuessMethods.KnnEstimate:
                     default:
-                        guessf = $"return numpredict.knnestimate(d, v, ks)";
+                        guessf = $"return numpredict.knnestimate(d, r, ks, distancef={this.PythonDistancef})";
                         break;
                 }
 
                 return guessf;
+            }
+        }
+        #endregion
+
+        #region PythonDistancef
+        public string PythonDistancef
+        {
+
+            get
+            {
+                string distancef = string.Empty;
+
+                switch (this.DistanceMethod)
+                {
+                    case KNearestNeighborsDistanceMethods.Gower:
+                        distancef = "guerilladata.getgowerdistance";
+                        break;
+                    case KNearestNeighborsDistanceMethods.Euclidean:
+                    default:
+                        distancef = "euclidean";
+                        break;
+                }
+
+                return distancef;
             }
         }
         #endregion
@@ -115,11 +141,11 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dto
                 guerillaknnPyFile.WriteLine("data = guerilladata.getdata()");
                 if(this.Scale.Count > 0) guerillaknnPyFile.WriteLine($"data = numpredict.rescale(data, [{string.Join(",", this.Scale)}])");
                 guerillaknnPyFile.WriteLine($"def myweight(dist): {this.PythonWeightf}");
-                guerillaknnPyFile.WriteLine($"def myknn(d, v, ks): {this.PythonGuessf}");
+                guerillaknnPyFile.WriteLine($"def myknn(d, r, ks): {this.PythonGuessf}");
                 guerillaknnPyFile.WriteLine();
                 if (this.Observation != null)
                 {
-                    guerillaknnPyFile.WriteLine($"result = myknn(data, [{string.Join(",", this.Observation.OrdinalData)}], [{string.Join(",", this.Ks)}])");
+                    guerillaknnPyFile.WriteLine($"result = myknn(data, {{'index': 0, 'input': [{string.Join(",", this.Observation.OrdinalData)}]}}, [{string.Join(",", this.Ks)}])");
                 }
                 else
                 {
@@ -160,5 +186,11 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dto
         InverseWeight,
         SubtractWeight,
         Gaussian
+    }
+
+    public enum KNearestNeighborsDistanceMethods
+    {
+        Euclidean,
+        Gower
     }
 }

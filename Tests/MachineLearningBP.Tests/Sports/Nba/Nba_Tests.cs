@@ -22,7 +22,7 @@ namespace MachineLearningBP.Tests.Sports.Nba
             _unitOfWorkManager = Resolve<IUnitOfWorkManager>();
         }
 
-        [Fact]
+        //[Fact]
         public async Task NbaTeamCount_Test()
         {
             using (IUnitOfWorkCompleteHandle uow = _unitOfWorkManager.Begin())

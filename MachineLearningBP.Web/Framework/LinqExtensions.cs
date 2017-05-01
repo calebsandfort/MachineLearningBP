@@ -1,4 +1,5 @@
 ﻿using Kendo.Mvc;
+using MachineLearningBP.Entities.Movies.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,10 +107,22 @@ namespace MachineLearningBP.Web.Framework
             {
                 val = Expression.Constant((DateTime)filterDescriptor.ConvertedValue);
             }
-            //else if (filterDescriptor.Member == "Sentiment")
-            //{
-            //    val = Expression.Constant((SentimentTypes)Int32.Parse(filterDescriptor.ConvertedValue.ToString()));
-            //}
+            else if (filterDescriptor.Member == "MpaaRating")
+            {
+                val = Expression.Constant((MpaaRatings)Int32.Parse(filterDescriptor.ConvertedValue.ToString()));
+            }
+            else if (filterDescriptor.Member == "Genre")
+            {
+                val = Expression.Constant((MovieGenres)Int32.Parse(filterDescriptor.ConvertedValue.ToString()));
+            }
+            else if (filterDescriptor.Member == "Brand")
+            {
+                val = Expression.Constant((MovieBrands)Int32.Parse(filterDescriptor.ConvertedValue.ToString()));
+            }
+            else if (filterDescriptor.Member == "MicroSeries" || filterDescriptor.Member == "MacroSeries")
+            {
+                val = Expression.Constant((MovieSeries)Int32.Parse(filterDescriptor.ConvertedValue.ToString()));
+            }
             else if (prop.Type == typeof(Int32) || prop.Type == typeof(int?))
             {
                 val = Expression.Constant(Int32.Parse(filterDescriptor.ConvertedValue.ToString()));

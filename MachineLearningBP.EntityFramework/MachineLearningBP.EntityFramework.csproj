@@ -184,6 +184,46 @@
     <Compile Include="Migrations\201704241742201_RenameExampleDataFields.Designer.cs">
       <DependentUpon>201704241742201_RenameExampleDataFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704241849307_AddMovieEntities.cs" />
+    <Compile Include="Migrations\201704241849307_AddMovieEntities.Designer.cs">
+      <DependentUpon>201704241849307_AddMovieEntities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704242250468_AddMovieMojoId.cs" />
+    <Compile Include="Migrations\201704242250468_AddMovieMojoId.Designer.cs">
+      <DependentUpon>201704242250468_AddMovieMojoId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704251955390_RenameRunTime.cs" />
+    <Compile Include="Migrations\201704251955390_RenameRunTime.Designer.cs">
+      <DependentUpon>201704251955390_RenameRunTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704261628250_AddMovieRatingAndGenre.cs" />
+    <Compile Include="Migrations\201704261628250_AddMovieRatingAndGenre.Designer.cs">
+      <DependentUpon>201704261628250_AddMovieRatingAndGenre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704272326406_AddMovieBrandAndSeries.cs" />
+    <Compile Include="Migrations\201704272326406_AddMovieBrandAndSeries.Designer.cs">
+      <DependentUpon>201704272326406_AddMovieBrandAndSeries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281642194_AddMoreExampleDataTypes.cs" />
+    <Compile Include="Migrations\201704281642194_AddMoreExampleDataTypes.Designer.cs">
+      <DependentUpon>201704281642194_AddMoreExampleDataTypes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281736386_AddMovieOpeningWeekendExample.cs" />
+    <Compile Include="Migrations\201704281736386_AddMovieOpeningWeekendExample.Designer.cs">
+      <DependentUpon>201704281736386_AddMovieOpeningWeekendExample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281749145_AddMovieParticipants.cs" />
+    <Compile Include="Migrations\201704281749145_AddMovieParticipants.Designer.cs">
+      <DependentUpon>201704281749145_AddMovieParticipants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281827558_AddMovieCompleted.cs" />
+    <Compile Include="Migrations\201704281827558_AddMovieCompleted.Designer.cs">
+      <DependentUpon>201704281827558_AddMovieCompleted.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281831272_AddMovieCompleted2.cs" />
+    <Compile Include="Migrations\201704281831272_AddMovieCompleted2.Designer.cs">
+      <DependentUpon>201704281831272_AddMovieCompleted2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AbpZeroDbMigrator.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MachineLearningBPDataModule.cs" />
@@ -195,6 +235,7 @@
     <Compile Include="Migrations\SeedData\InitialHostDbBuilder.cs" />
     <Compile Include="Migrations\SeedData\MlbSeasonsCreator.cs" />
     <Compile Include="Migrations\SeedData\MlbTeamsCreator.cs" />
+    <Compile Include="Migrations\SeedData\MovieYearsCreator.cs" />
     <Compile Include="Migrations\SeedData\NbaTeamsCreator.cs" />
     <Compile Include="Migrations\SeedData\NbaSeasonsCreator.cs" />
     <Compile Include="Migrations\SeedData\TenantRoleAndUserBuilder.cs" />
@@ -251,6 +292,36 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704241742201_RenameExampleDataFields.resx">
       <DependentUpon>201704241742201_RenameExampleDataFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704241849307_AddMovieEntities.resx">
+      <DependentUpon>201704241849307_AddMovieEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704242250468_AddMovieMojoId.resx">
+      <DependentUpon>201704242250468_AddMovieMojoId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704251955390_RenameRunTime.resx">
+      <DependentUpon>201704251955390_RenameRunTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704261628250_AddMovieRatingAndGenre.resx">
+      <DependentUpon>201704261628250_AddMovieRatingAndGenre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704272326406_AddMovieBrandAndSeries.resx">
+      <DependentUpon>201704272326406_AddMovieBrandAndSeries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281642194_AddMoreExampleDataTypes.resx">
+      <DependentUpon>201704281642194_AddMoreExampleDataTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281736386_AddMovieOpeningWeekendExample.resx">
+      <DependentUpon>201704281736386_AddMovieOpeningWeekendExample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281749145_AddMovieParticipants.resx">
+      <DependentUpon>201704281749145_AddMovieParticipants.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281827558_AddMovieCompleted.resx">
+      <DependentUpon>201704281827558_AddMovieCompleted.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281831272_AddMovieCompleted2.resx">
+      <DependentUpon>201704281831272_AddMovieCompleted2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

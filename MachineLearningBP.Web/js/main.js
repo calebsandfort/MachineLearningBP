@@ -5,6 +5,7 @@ if (!MachineLearningBP) MachineLearningBP = {
     Optimize: {},
     Nba: {},
     Mlb: {},
+    Movies: {},
     Util: {},
     Enums: {
         OptimizeTargets: {
@@ -149,6 +150,22 @@ MachineLearningBP.Console.clear = function () {
 
 MachineLearningBP.Console.writeLine = function (line) {
     $("#consoleWell").prepend("<div>" + line + "</div>");
+}
+
+MachineLearningBP.Movies.populateOpeningWeekendExamples = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.movieOpeningWeekendExample.populateExamples().done(function (result) {
+
+    });
+}
+
+MachineLearningBP.Movies.findOptimalParametersOpeningWeekendExamples = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.movieOpeningWeekendExample.findOptimalParametersPythonAndR().done(function (result) {
+
+    });
 }
 
 MachineLearningBP.Nba.populateGames = function () {

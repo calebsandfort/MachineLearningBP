@@ -2,22 +2,22 @@ from random import random, randint
 import math
 import numpy as np
 
-def euclidean(v1, v2):
+def euclidean(row1, row2):
+    v1 = row1['input']
+    v2 = row2['input']
     d = 0.0
     for i in range(len(v1)):
         d += (v1[i] - v2[i]) ** 2
     return math.sqrt(d)
 
 
-def getdistances(data, vec1):
+def getdistances(data, row, distancef=euclidean):
     distancelist = []
 
     # Loop over every item in the dataset
     for i in range(len(data)):
-        vec2 = data[i]['input']
-
         # Add the distance and the index
-        distancelist.append((euclidean(vec1, vec2), i))
+        distancelist.append((distancef(row, data[i]), i))
 
     # Sort by distance
     distancelist.sort()
@@ -39,9 +39,9 @@ def gaussian(dist, sigma=5.0):
     return math.e ** (-dist ** 2 / (2 * sigma ** 2))
 
 
-def weightedknn(data, vec1, ks, weightf=gaussian):
+def weightedknn(data, row, ks, weightf=gaussian, distancef=euclidean):
     # Get distances
-    dlist = getdistances(data, vec1)
+    dlist = getdistances(data, row, distancef)
     avgs = np.zeros(len(ks))
 
     for j in range(len(ks)):
@@ -64,9 +64,9 @@ def weightedknn(data, vec1, ks, weightf=gaussian):
     return avgs
 
 
-def knnestimate(data, vec1, ks):
+def knnestimate(data, row, ks, distancef=euclidean):
     # Get sorted distances
-    dlist = getdistances(data, vec1)
+    dlist = getdistances(data, row, distancef)
     avgs = np.zeros(len(ks))
 
     for j in range(len(ks)):
@@ -97,7 +97,7 @@ def dividedata(data, test=0.05):
 def testalgorithm(algf, trainset, testset, ks):
     errors = np.zeros(len(ks))
     for row in testset:
-        guesses = algf(trainset, row['input'], ks)
+        guesses = algf(trainset, row, ks)
         for i in range(len(ks)):
             errors[i] += (row['result'] - guesses[i]) ** 2
 

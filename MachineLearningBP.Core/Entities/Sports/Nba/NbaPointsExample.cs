@@ -18,6 +18,11 @@ namespace MachineLearningBP.Entities.Sports.Nba
         public override NbaStatLine StatLine { get; set; }
         public override int StatLineId { get; set; }
 
+        public override bool PythonIndexOnly
+        {
+            get { return false; }
+        }
+
         public override void SetData(NbaExampleGenerationInfo info)
         {
             base.SetData(info);

@@ -269,3 +269,5 @@ __pycache__/
 /MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerillaknn_weightedknn_inverseweight_0.py
 /MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerillaknn_weightedknn_inverseweight.py
 /MachineLearningBP.CollectiveIntelligence/DomainServices/Algorithms/Scripts/Python/guerillaknn.py
+
+/MachineLearningBP.Core/CodeGen/**/*.cs

@@ -29,5 +29,10 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 
 
         List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPython(TExample[] data);
+        List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPythonAndR(TExample[] data);
+
+        void WritePythonDataFile(TExample[] data, Double[] gowerDistances = null, Double resultScale = 1);
+        void WriteRDataFile(TExample[] data);
+        Double[] GetGowerDistances(TExample[] data);
     }
 }
