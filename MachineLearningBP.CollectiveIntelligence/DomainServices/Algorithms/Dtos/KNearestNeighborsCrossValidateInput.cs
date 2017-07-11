@@ -107,15 +107,22 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dto
             {
                 string distancef = string.Empty;
 
-                switch (this.DistanceMethod)
+                if (this.Observation == null)
                 {
-                    case KNearestNeighborsDistanceMethods.Gower:
-                        distancef = "guerilladata.getgowerdistance";
-                        break;
-                    case KNearestNeighborsDistanceMethods.Euclidean:
-                    default:
-                        distancef = "euclidean";
-                        break;
+                    switch (this.DistanceMethod)
+                    {
+                        case KNearestNeighborsDistanceMethods.Gower:
+                            distancef = "guerilladata.getdaisydistance";
+                            break;
+                        case KNearestNeighborsDistanceMethods.Euclidean:
+                        default:
+                            distancef = "guerilladata.getdaisydistance";
+                            break;
+                    } 
+                }
+                else
+                {
+                    distancef = "numpredict.euclidean";
                 }
 
                 return distancef;
@@ -139,13 +146,13 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms.Dto
                 guerillaknnPyFile.WriteLine("import guerilladata");
                 guerillaknnPyFile.WriteLine();
                 guerillaknnPyFile.WriteLine("data = guerilladata.getdata()");
-                if(this.Scale.Count > 0) guerillaknnPyFile.WriteLine($"data = numpredict.rescale(data, [{string.Join(",", this.Scale)}])");
+                //if(this.Scale.Count > 0) guerillaknnPyFile.WriteLine($"data = numpredict.rescale(data, [{string.Join(",", this.Scale)}])");
                 guerillaknnPyFile.WriteLine($"def myweight(dist): {this.PythonWeightf}");
                 guerillaknnPyFile.WriteLine($"def myknn(d, r, ks): {this.PythonGuessf}");
                 guerillaknnPyFile.WriteLine();
                 if (this.Observation != null)
                 {
-                    guerillaknnPyFile.WriteLine($"result = myknn(data, {{'index': 0, 'input': [{string.Join(",", this.Observation.OrdinalData)}]}}, [{string.Join(",", this.Ks)}])");
+                    guerillaknnPyFile.WriteLine($"result = myknn(data, {{'index': {this.Observation.Index}, 'input': [{string.Join(",", this.Observation.NumericData)}]}}, [{string.Join(",", this.Ks)}])");
                 }
                 else
                 {

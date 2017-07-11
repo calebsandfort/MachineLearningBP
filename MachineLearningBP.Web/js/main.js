@@ -5,6 +5,7 @@ if (!MachineLearningBP) MachineLearningBP = {
     Optimize: {},
     Nba: {},
     Mlb: {},
+    Nfl: {},
     Movies: {},
     Util: {},
     Enums: {
@@ -266,6 +267,22 @@ MachineLearningBP.Mlb.setSeasonsRollingWindowStart = function () {
     MachineLearningBP.Console.clear();
 
     abp.services.app.mlbSeason.setSeasonsRollingWindowStart().done(function (result) {
+
+    });
+}
+
+MachineLearningBP.Nfl.populatePointsExamples = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.nflPointsExample.populateExamples().done(function (result) {
+
+    });
+}
+
+MachineLearningBP.Nfl.setSeasonsRollingWindowStart = function () {
+    MachineLearningBP.Console.clear();
+
+    abp.services.app.nflSeason.setSeasonsRollingWindowStart().done(function (result) {
 
     });
 }

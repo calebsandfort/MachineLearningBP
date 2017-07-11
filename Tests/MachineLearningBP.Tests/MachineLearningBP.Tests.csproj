@@ -189,6 +189,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sessions\SessionAppService_Tests.cs" />
     <Compile Include="MachineLearningBPTestBase.cs" />
+    <Compile Include="Sports\Nfl\Nfl_Tests.cs" />
     <Compile Include="Sports\Nba\Nba_Tests.cs" />
     <Compile Include="Users\UserAppService_Tests.cs" />
   </ItemGroup>

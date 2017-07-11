@@ -20,7 +20,7 @@ namespace MachineLearningBP.Entities.Sports.Nba
 
         public override bool PythonIndexOnly
         {
-            get { return false; }
+            get { return true; }
         }
 
         public override void SetData(NbaExampleGenerationInfo info)
@@ -57,8 +57,7 @@ namespace MachineLearningBP.Entities.Sports.Nba
             dataPoints.Add(FreeThrowsOpponentDefense);
             #endregion
 
-            this.OrdinalData = dataPoints.Select(x => x * info.ScaleFactor).ToList();
-            this.DelimitedNominalData = String.Empty;
+            this.NumericData = dataPoints.Select(x => x * info.ScaleFactor).ToList();
             this.Date = info.Game.Date;
         }
 

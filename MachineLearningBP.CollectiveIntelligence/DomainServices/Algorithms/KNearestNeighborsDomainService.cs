@@ -285,13 +285,13 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         #endregion
 
         #region FindOptimalParametersPython
-        public List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPython(TExample[] data)
+        public List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPython(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput)
         {
             using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
             {
-                WritePythonDataFile(data);
+                WritePythonDataFile(optimalParametersInput.Data);
 
-                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(data, KNearestNeighborsDistanceMethods.Euclidean);
+                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(optimalParametersInput);
                 List<KNearestNeighborsCrossValidateResult> results = new List<KNearestNeighborsCrossValidateResult>();
 
                 foreach (KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input in inputs)
@@ -305,14 +305,14 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         #endregion
 
         #region FindOptimalParametersPythonAndR
-        public List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPythonAndR(TExample[] data)
+        public List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPythonAndR(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput)
         {
             using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
             {
-                Double[] gowerDistances = GetGowerDistances(data);
-                WritePythonDataFile(data, gowerDistances, 0.000005);
+                Double[] daisyDistances = GetDaisyDistances(optimalParametersInput);
+                WritePythonDataFile(optimalParametersInput.Data, daisyDistances, optimalParametersInput.ResultScale);
 
-                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(data, KNearestNeighborsDistanceMethods.Gower);
+                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(optimalParametersInput);
                 List<KNearestNeighborsCrossValidateResult> results = new List<KNearestNeighborsCrossValidateResult>();
 
                 foreach (KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input in inputs)
@@ -326,11 +326,11 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         #endregion
 
         #region FindOptimalParameters
-        public List<KNearestNeighborsCrossValidateResult> FindOptimalParameters(TExample[] data)
+        public List<KNearestNeighborsCrossValidateResult> FindOptimalParameters(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput)
         {
             using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
             {
-                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(data, KNearestNeighborsDistanceMethods.Euclidean);
+                List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = GetInputs(optimalParametersInput);
 
                 List<KNearestNeighborsCrossValidateResult> results = new List<KNearestNeighborsCrossValidateResult>();
                 foreach (KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input in inputs)
@@ -344,45 +344,24 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         #endregion
 
         #region GetInputs
-        static List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> GetInputs(TExample[] data, KNearestNeighborsDistanceMethods distanceMethod)
+        static List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> GetInputs(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput)
         {
             List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>> inputs = new List<KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>>();
 
-            List<KNearestNeighborsGuessMethods> guessMethods = new List<KNearestNeighborsGuessMethods>();
-            guessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
-            guessMethods.Add(KNearestNeighborsGuessMethods.WeightedKnn);
-
-            List<KNearestNeighborsWeightMethods> weightMethods = new List<KNearestNeighborsWeightMethods>();
-            weightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
-            weightMethods.Add(KNearestNeighborsWeightMethods.InverseWeight);
-            weightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
-
-            List<int> ks = new List<int>();
-            ks.Add(1);
-            ks.Add(2);
-            ks.Add(3);
-            ks.Add(4);
-            ks.Add(5);
-            ks.Add(6);
-            ks.Add(7);
-            ks.Add(8);
-            ks.Add(9);
-            ks.Add(10);
-
-            foreach (KNearestNeighborsGuessMethods guessMethod in guessMethods)
+            foreach (KNearestNeighborsGuessMethods guessMethod in optimalParametersInput.GuessMethods)
             {
                 if (guessMethod == KNearestNeighborsGuessMethods.WeightedKnn)
                 {
-                    foreach (KNearestNeighborsWeightMethods weightMethod in weightMethods)
+                    foreach (KNearestNeighborsWeightMethods weightMethod in optimalParametersInput.WeightMethods)
                     {
                         KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input = new KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>();
                         input.GuessMethod = guessMethod;
                         input.WeightMethod = weightMethod;
-                        input.Trials = 25;
-                        input.Ks = ks.ToArray();
-                        input.SubtractWeightConstant = 1.0;
-                        input.DistanceMethod = distanceMethod;
-                        input.Data = data;
+                        input.Trials = optimalParametersInput.Trials;
+                        input.Ks = optimalParametersInput.Ks;
+                        input.SubtractWeightConstant = optimalParametersInput.SubtractWeightConstant;
+                        input.DistanceMethod = optimalParametersInput.DistanceMethod;
+                        input.Data = optimalParametersInput.Data;
                         inputs.Add(input);
                     }
                 }
@@ -390,11 +369,11 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                 {
                     KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input = new KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult>();
                     input.GuessMethod = guessMethod;
-                    input.Trials = 25;
-                    input.Ks = ks.ToArray();
-                    input.SubtractWeightConstant = 1.0;
-                    input.DistanceMethod = distanceMethod;
-                    input.Data = data;
+                    input.Trials = optimalParametersInput.Trials;
+                    input.Ks = optimalParametersInput.Ks;
+                    input.SubtractWeightConstant = optimalParametersInput.SubtractWeightConstant;
+                    input.DistanceMethod = optimalParametersInput.DistanceMethod;
+                    input.Data = optimalParametersInput.Data;
                     inputs.Add(input);
                 }
             }
@@ -416,6 +395,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                 crossValidateInput.Trials = input.Trials;
                 crossValidateInput.Ks = new int[] { input.K };
                 crossValidateInput.SubtractWeightConstant = 30.0;
+                crossValidateInput.Data = data;
 
                 input.domain = data.First().OrdinalData.Select(x => new OptimizationRange { Lower = 0, Upper = 20 }).ToList();
                 input.costf = CreateCostFunction(crossValidateInput);
@@ -440,8 +420,9 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                 crossValidateInput.Trials = input.Trials;
                 crossValidateInput.Ks = new int[] { input.K };
                 crossValidateInput.SubtractWeightConstant = 30.0;
+                crossValidateInput.Data = data;
 
-                input.domain = data.First().OrdinalData.Select(x => new OptimizationRange { Lower = 0, Upper = 10 }).ToList();
+                input.domain = data.First().NumericData.Select(x => new OptimizationRange { Lower = 0, Upper = 10 }).ToList();
                 input.costf = CreateCostFunction(crossValidateInput);
 
                 OptimizeResult result = this._optimizationDomainService.GeneticOptimize(input);
@@ -461,7 +442,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
             {
                 TExample example = data[i];
                 TExample scaled = new TExample();
-                scaled.OrdinalData = data[i].OrdinalData.Select((x, idx) => x * scale[idx]).ToList();
+                scaled.NumericData = data[i].NumericData.Select((x, idx) => x * scale[idx]).ToList();
                 scaled.Result = example.Result;
                 rescaledData[i] = scaled;
             }
@@ -475,6 +456,12 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         {
             Func<List<int>, int, double> costf = (s, i) =>
             {
+                KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput = new KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult>();
+                optimalParametersInput.Data = Rescale(input.Data, s);
+
+                Double[] daisyDistances = GetDaisyDistances(optimalParametersInput);
+                WritePythonDataFile(optimalParametersInput.Data, daisyDistances, 1);
+
                 input.Scale = s;
                 List<KNearestNeighborsCrossValidateResult> results = input.GetPythonResults(this._commandRunner, $"_{i}");
                 return results.First().Result;
@@ -521,8 +508,9 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                 int idx = 0;
                 foreach (TExample example in data)
                 {
-                    if(example.PythonIndexOnly) guerillaknnPyFile.WriteLine($"    rows.append({{'index': {idx}, 'result': {ToDouble(example.Result) * resultScale}}})");
-                    else guerillaknnPyFile.WriteLine($"    rows.append({{'index': {idx}, 'input': ({String.Join(", ", example.OrdinalData)}), 'result': {ToDouble(example.Result) * resultScale}}})");
+                    guerillaknnPyFile.WriteLine($"    rows.append({{'index': {idx}, 'input': ({String.Join(", ", example.NumericData)}), 'result': {ToDouble(example.Result) * resultScale}}})");
+                    //if(example.PythonIndexOnly) guerillaknnPyFile.WriteLine($"    rows.append({{'index': {idx}, 'result': {ToDouble(example.Result) * resultScale}}})");
+                    //else guerillaknnPyFile.WriteLine($"    rows.append({{'index': {idx}, 'input': ({String.Join(", ", example.NumericData)}), 'result': {ToDouble(example.Result) * resultScale}}})");
 
                     idx++;
                 }
@@ -534,11 +522,11 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     guerillaknnPyFile.WriteLine();
 
                     guerillaknnPyFile.WriteLine($"n = {data.Count()}");
-                    guerillaknnPyFile.WriteLine($"gowerdistances = [{String.Join(",", gowerDistances)}]");
+                    guerillaknnPyFile.WriteLine($"daisydistances = [{String.Join(",", gowerDistances)}]");
 
                     guerillaknnPyFile.WriteLine();
 
-                    guerillaknnPyFile.WriteLine("def getgowerdistance(row1, row2):");
+                    guerillaknnPyFile.WriteLine("def getdaisydistance(row1, row2):");
                     guerillaknnPyFile.WriteLine("    i = row1['index'] + 1");
                     guerillaknnPyFile.WriteLine("    j = row2['index'] + 1");
                     guerillaknnPyFile.WriteLine();
@@ -549,7 +537,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     guerillaknnPyFile.WriteLine();
                     guerillaknnPyFile.WriteLine("    idx = int((n*(i-1) - i*((i-1)/2) + (j-i)) - 1)");
                     guerillaknnPyFile.WriteLine();
-                    guerillaknnPyFile.WriteLine("    return gowerdistances[idx]");
+                    guerillaknnPyFile.WriteLine("    return daisydistances[idx]");
                 }
 
                 guerillaknnPyFile.Close();
@@ -557,17 +545,20 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         }
         #endregion
 
-        #region GetGowerDistances
-        public Double[] GetGowerDistances(TExample[] data)
+        #region GetDaisyDistances
+        public Double[] GetDaisyDistances(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput)
         {
-            WriteRDataFile(data);
-            Double[] distances = _commandRunner.RunCmd("RScript", rdataPathAndName).Trim().Split(",".ToCharArray()).Select(x => Double.Parse(x)).ToArray();
-            return distances;
+            using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
+            {
+                WriteRDataFile(optimalParametersInput);
+                Double[] distances = _commandRunner.RunCmd("RScript", rdataPathAndName).Trim().Split(",".ToCharArray()).Select(x => Double.Parse(x)).ToArray();
+                return distances;
+            }
         } 
         #endregion
 
         #region WriteRDataFile
-        public void WriteRDataFile(TExample[] data)
+        public void WriteRDataFile(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput)
         {
             try
             {
@@ -578,7 +569,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
 
                     guerillakdataRFile.WriteLine("getData <- function() {");
 
-                    TExample dummy = data[0];
+                    TExample dummy = optimalParametersInput.Data[0];
                     List<String> columns = new List<string>();
 
                     NumberFormatInfo noComma = new CultureInfo("en-US", false).NumberFormat;
@@ -588,7 +579,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     double[] numericNaValues = { 0 };
                     for (int i = 0; i < dummy.NumericData.Count; i++)
                     {
-                        guerillakdataRFile.WriteLine($" num{i} = c({String.Join(",", data.Select(x => x.NumericData[i].ToRDouble(noComma, numericNaValues)))})");
+                        guerillakdataRFile.WriteLine($" num{i} = c({String.Join(",", optimalParametersInput.Data.Select(x => x.NumericData[i].ToRDouble(noComma, numericNaValues)))})");
                         columns.Add($"num{i}");
                     }
 
@@ -596,7 +587,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     double[] ordinalNaValues = { 0 };
                     for (int i = 0; i < dummy.OrdinalData.Count; i++)
                     {
-                        guerillakdataRFile.WriteLine($" ord{i} = ordered(c({String.Join(",", data.Select(x => x.OrdinalData[i].ToRInt(noComma, ordinalNaValues)))}))");
+                        guerillakdataRFile.WriteLine($" ord{i} = ordered(c({String.Join(",", optimalParametersInput.Data.Select(x => x.OrdinalData[i].ToRInt(noComma, ordinalNaValues)))}))");
                         columns.Add($"ord{i}");
                     }
 
@@ -604,21 +595,21 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     string[] nominalNaValues = { "0" };
                     for (int i = 0; i < dummy.NominalData.Count; i++)
                     {
-                        guerillakdataRFile.WriteLine($" nom{i} = factor(c({String.Join(",", data.Select(x => x.NominalData[i].ToRString(nominalNaValues)))}))");
+                        guerillakdataRFile.WriteLine($" nom{i} = factor(c({String.Join(",", optimalParametersInput.Data.Select(x => x.NominalData[i].ToRString(nominalNaValues)))}))");
                         columns.Add($"nom{i}");
                     }
 
                     //Asymm
                     for (int i = 0; i < dummy.AsymmBinaryData.Count; i++)
                     {
-                        guerillakdataRFile.WriteLine($" asymm{i} = factor(c({String.Join(",", data.Select(x => x.AsymmBinaryData[i].ToRBool()))}))");
+                        guerillakdataRFile.WriteLine($" asymm{i} = factor(c({String.Join(",", optimalParametersInput.Data.Select(x => x.AsymmBinaryData[i].ToRBool()))}))");
                         columns.Add($"asymm{i}");
                     }
 
                     //Symm
                     for (int i = 0; i < dummy.SymmBinaryData.Count; i++)
                     {
-                        guerillakdataRFile.WriteLine($" symm{i} = factor(c({String.Join(",", data.Select(x => x.SymmBinaryData[i].ToRBool()))}))");
+                        guerillakdataRFile.WriteLine($" symm{i} = factor(c({String.Join(",", optimalParametersInput.Data.Select(x => x.SymmBinaryData[i].ToRBool()))}))");
                         columns.Add($"symm{i}");
                     }
 
@@ -628,7 +619,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     guerillakdataRFile.WriteLine();
                     guerillakdataRFile.WriteLine("rows = getData()");
                     guerillakdataRFile.WriteLine();
-                    guerillakdataRFile.Write("D = daisy(rows, metric=\"gower\"");
+                    guerillakdataRFile.Write($"D = daisy(rows, metric=\"{optimalParametersInput.DistanceMethod.ToString().ToLower()}\"");
 
                     if(dummy.AsymmBinaryData.Count > 0 || dummy.SymmBinaryData.Count > 0)
                     {

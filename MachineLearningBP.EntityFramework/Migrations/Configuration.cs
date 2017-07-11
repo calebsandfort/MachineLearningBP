@@ -33,6 +33,8 @@ namespace MachineLearningBP.Migrations
                 new MlbTeamsCreator(context).Create();
                 new NbaSeasonsCreator(context).Create();
                 new NbaTeamsCreator(context).Create();
+                new NflSeasonsCreator(context).Create();
+                new NflTeamsCreator(context).Create();
                 new MovieYearsCreator(context).Create();
             }
             else

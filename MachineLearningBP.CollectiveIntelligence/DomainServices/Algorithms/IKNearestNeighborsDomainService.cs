@@ -21,18 +21,18 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
         Double[] TestAlgorithm(Func<TExample[], TExample[], int[], Double[][]> algf, TExample[] trainSet, TExample[] testSet, int[] ks);
         List<KNearestNeighborsCrossValidateResult> CrossValidate(KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input, bool doTimer = true);
         Double[] CrossValidate(Func<TExample[], TExample[], int[], Double[][]> algf, TExample[] data, int[] ks, int trials = 100, Double test = .05);
-        List<KNearestNeighborsCrossValidateResult> FindOptimalParameters(TExample[] data);
+        List<KNearestNeighborsCrossValidateResult> FindOptimalParameters(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput);
         OptimizeResult AnnealingOptimize(AnnealingOptimizeInput input, TExample[] data);
         OptimizeResult GeneticOptimize(GeneticOptimizeInput input, TExample[] data);
         TExample[] Rescale(TExample[] data, List<int> scale);
         Func<List<int>, int, double> CreateCostFunction(KNearestNeighborsCrossValidateInput<TExample, TStatLine, TResult> input);
 
 
-        List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPython(TExample[] data);
-        List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPythonAndR(TExample[] data);
+        List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPython(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput);
+        List<KNearestNeighborsCrossValidateResult> FindOptimalParametersPythonAndR(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput);
 
-        void WritePythonDataFile(TExample[] data, Double[] gowerDistances = null, Double resultScale = 1);
-        void WriteRDataFile(TExample[] data);
-        Double[] GetGowerDistances(TExample[] data);
+        void WritePythonDataFile(TExample[] data, Double[] daisyDistances = null, Double resultScale = 1);
+        void WriteRDataFile(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput);
+        Double[] GetDaisyDistances(KNearestNeighborsOptimalParametersInput<TExample, TStatLine, TResult> optimalParametersInput);
     }
 }

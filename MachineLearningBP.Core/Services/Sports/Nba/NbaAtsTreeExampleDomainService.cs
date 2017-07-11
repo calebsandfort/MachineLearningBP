@@ -219,7 +219,21 @@ namespace MachineLearningBP.Services.Sports.Nba
         {
             NbaAtsTreeExample[] data = await this.GetExamples();
 
-            List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParameters(data);
+            KNearestNeighborsOptimalParametersInput<NbaAtsTreeExample, NbaStatLine, Double> optimalParametersInput = new KNearestNeighborsOptimalParametersInput<NbaAtsTreeExample, NbaStatLine, double>();
+            optimalParametersInput.Data = data;
+            optimalParametersInput.DistanceMethod = KNearestNeighborsDistanceMethods.Euclidean;
+            optimalParametersInput.GuessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
+            optimalParametersInput.GuessMethods.Add(KNearestNeighborsGuessMethods.WeightedKnn);
+
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.InverseWeight);
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
+
+            optimalParametersInput.Ks = new int[] { 10, 15, 20, 25, 30, 35, 40, 45, 50 };
+            optimalParametersInput.SubtractWeightConstant = 30;
+            optimalParametersInput.Trials = 25;
+
+            List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParametersPythonAndR(optimalParametersInput);
 
             if (record)
                 await this._sheetUtilityDomainService.Record(new List<IRecordContainer>(results));

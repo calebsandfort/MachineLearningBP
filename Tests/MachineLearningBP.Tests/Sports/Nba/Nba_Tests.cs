@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Shouldly;
+using MachineLearningBP.Services.Sports.Nba;
 
 namespace MachineLearningBP.Tests.Sports.Nba
 {
@@ -15,11 +16,13 @@ namespace MachineLearningBP.Tests.Sports.Nba
     {
         private readonly IRepository<NbaTeam> _nbaTeamRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
+        readonly INbaPointsExampleDomainService _nbaPointsExampleDomainService;
 
         public Nba_Tests()
         {
             _nbaTeamRepository = Resolve<IRepository<NbaTeam>>();
             _unitOfWorkManager = Resolve<IUnitOfWorkManager>();
+            _nbaPointsExampleDomainService = Resolve<INbaPointsExampleDomainService>();
         }
 
         //[Fact]
@@ -32,6 +35,11 @@ namespace MachineLearningBP.Tests.Sports.Nba
 
                 uow.Complete();
             }
+        }
+        [Fact(DisplayName = "NbaPoints.FindOptimalParametersPython")]
+        public async Task NbaPointsFindOptimalParametersPython_Test()
+        {
+            await _nbaPointsExampleDomainService.FindOptimalParametersPython(true);
         }
     }
 }

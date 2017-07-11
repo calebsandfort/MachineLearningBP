@@ -61,6 +61,9 @@
       <HintPath>..\packages\Castle.Windsor.3.4.0\lib\net45\Castle.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="Fizzler, Version=0.1.15619.0, Culture=neutral, PublicKeyToken=4ebff4844e382110, processorArchitecture=MSIL">
       <HintPath>..\packages\Fizzler.1.0.0\lib\net35\Fizzler.dll</HintPath>
     </Reference>
@@ -181,11 +184,21 @@
     <Compile Include="Entities\Sports\Mlb\MlbSeason.cs" />
     <Compile Include="Entities\Sports\Mlb\MlbStatLine.cs" />
     <Compile Include="Entities\Sports\Mlb\MlbExampleGenerationInfo.cs" />
+    <Compile Include="Entities\Sports\Nfl\Dtos\NflGameDto.cs" />
+    <Compile Include="Entities\Sports\Nfl\Dtos\NflPlay.cs" />
+    <Compile Include="Entities\Sports\Nfl\NflExampleGenerationInfo.cs" />
+    <Compile Include="Entities\Sports\Nfl\NflFiveFactorsExample.cs" />
+    <Compile Include="Entities\Sports\Nfl\NflGame.cs" />
+    <Compile Include="Entities\Sports\Nfl\NflPointsExample.cs" />
+    <Compile Include="Entities\Sports\Nfl\NflSeason.cs" />
+    <Compile Include="Entities\Sports\Nfl\NflStatLine.cs" />
+    <Compile Include="Entities\Sports\Nfl\NflTeam.cs" />
     <Compile Include="Entities\Sports\Nba\NbaFourFactorsExample.cs" />
     <Compile Include="Entities\Sports\Nba\NbaExampleGenerationInfo.cs" />
     <Compile Include="Entities\Sports\Nba\Dtos\NbaGameDto.cs" />
     <Compile Include="Entities\Sports\Nba\NbaAtsTreeExample.cs" />
     <Compile Include="Entities\Sports\Nba\NbaPointsExample.cs" />
+    <Compile Include="Entities\Sports\Nfl\NflWeek.cs" />
     <Compile Include="Entities\Sports\SportExampleGenerationInfo.cs" />
     <Compile Include="Enums\DecisionTreeTargets.cs" />
     <Compile Include="Enums\Targets.cs" />
@@ -255,6 +268,18 @@
     <Compile Include="Entities\Sports\SportStatLine.cs" />
     <Compile Include="Entities\Sports\Nba\NbaTeam.cs" />
     <Compile Include="Entities\Sports\Team.cs" />
+    <Compile Include="Services\Sports\Nfl\INflGameDomainService.cs" />
+    <Compile Include="Services\Sports\Nfl\INflPointsExampleDomainService.cs" />
+    <Compile Include="Services\Sports\Nfl\INflSeasonDomainService.cs" />
+    <Compile Include="Services\Sports\Nfl\NflGameDomainService.cs">
+      <DependentUpon>INflGameDomainService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Sports\Nfl\NflPointsExampleDomainService.cs">
+      <DependentUpon>INflPointsExampleDomainService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Sports\Nfl\NflSeasonDomainService.cs">
+      <DependentUpon>INflSeasonDomainService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserManager.cs" />
     <Compile Include="Users\UserStore.cs" />

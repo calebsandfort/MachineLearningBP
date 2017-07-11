@@ -48,6 +48,13 @@ namespace MachineLearningBP.Web
                         )
                 ).AddItem(
                     new MenuItemDefinition(
+                        "NFL",
+                        L("NFL"),
+                        url: "Nfl",
+                        icon: "fa fa-info"
+                        )
+                ).AddItem(
+                    new MenuItemDefinition(
                         "MLB",
                         L("MLB"),
                         url: "Mlb",

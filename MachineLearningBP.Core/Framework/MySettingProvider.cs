@@ -24,6 +24,11 @@ namespace MachineLearningBP.Framework
                         scopes: SettingScopes.Application
                         ),
                     new SettingDefinition(
+                        "NflRollingWindowPeriod",
+                        "3",
+                        scopes: SettingScopes.Application
+                        ),
+                    new SettingDefinition(
                         "MlbRollingWindowPeriod",
                         "20",
                         scopes: SettingScopes.Application
@@ -66,6 +71,16 @@ namespace MachineLearningBP.Framework
                     new SettingDefinition(
                         "DriveFolder.MovieOpeningWeekendExampleDomainService.FindOptimalParametersPythonAndR",
                         "0B-lqH9hRWMWCUHltbEpvcmpRb0k",
+                        scopes: SettingScopes.Application
+                        ),
+                    new SettingDefinition(
+                        "DriveFolder.NflPointsExampleDomainService.FindOptimalParametersPython",
+                        "0B-lqH9hRWMWCam50TGhFdFEyb0U",
+                        scopes: SettingScopes.Application
+                        ),
+                    new SettingDefinition(
+                        "DriveFolder.NflPointsExampleDomainService.GeneticOptimize",
+                        "0B-lqH9hRWMWCOWNqV3picUp1Qjg",
                         scopes: SettingScopes.Application
                         )
                 };

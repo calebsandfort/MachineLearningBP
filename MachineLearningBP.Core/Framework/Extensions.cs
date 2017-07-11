@@ -75,5 +75,26 @@ namespace MachineLearningBP.Framework
         {
             return node.InnerText.Replace("(Estimate)", String.Empty);
         }
+
+        public static DateTime ScrapifyCoversDate(this String str, DateTime date)
+        {
+            DateTime d = DateTime.Now;
+
+            foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                if (str.Contains(day.ToString()))
+                {
+                    str = str.Replace($"{day.ToString()}, ", String.Empty);
+                    break;
+                }
+            }
+
+            int year = date.Year;
+            if (str.Contains("Jan.")) year += 1;
+
+            d = DateTime.Parse($"{str} {year}");
+
+            return d;
+        }
     }
 }

@@ -178,7 +178,21 @@ namespace MachineLearningBP.Services.Sports.Nba
         {
             NbaPointsExample[] data = await this.GetExamples();
 
-            List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParameters(data);
+            KNearestNeighborsOptimalParametersInput<NbaPointsExample, NbaStatLine, Double> optimalParametersInput = new KNearestNeighborsOptimalParametersInput<NbaPointsExample, NbaStatLine, double>();
+            optimalParametersInput.Data = data;
+            optimalParametersInput.DistanceMethod = KNearestNeighborsDistanceMethods.Euclidean;
+            optimalParametersInput.GuessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
+            optimalParametersInput.GuessMethods.Add(KNearestNeighborsGuessMethods.WeightedKnn);
+
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.InverseWeight);
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
+
+            optimalParametersInput.Ks = new int[] { 10, 15, 20, 25, 30, 35, 40, 45, 50 };
+            optimalParametersInput.SubtractWeightConstant = 30;
+            optimalParametersInput.Trials = 25;
+
+            List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParameters(optimalParametersInput);
 
             if (record && results.Count > 0)
                 await this._sheetUtilityDomainService.Record(new List<IRecordContainer>(results));
@@ -197,7 +211,21 @@ namespace MachineLearningBP.Services.Sports.Nba
         {
             NbaPointsExample[] data = await this.GetExamples();
 
-            List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParametersPython(data);
+            KNearestNeighborsOptimalParametersInput<NbaPointsExample, NbaStatLine, Double> optimalParametersInput = new KNearestNeighborsOptimalParametersInput<NbaPointsExample, NbaStatLine, double>();
+            optimalParametersInput.Data = data;
+            optimalParametersInput.DistanceMethod = KNearestNeighborsDistanceMethods.Euclidean;
+            optimalParametersInput.GuessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
+            optimalParametersInput.GuessMethods.Add(KNearestNeighborsGuessMethods.WeightedKnn);
+
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.InverseWeight);
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
+
+            optimalParametersInput.Ks = new int[] { 10, 15, 20, 25, 30, 35, 40, 45, 50 };
+            optimalParametersInput.SubtractWeightConstant = 30;
+            optimalParametersInput.Trials = 25;
+
+            List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParametersPythonAndR(optimalParametersInput);
 
             if (record && results.Count > 0)
                 await this._sheetUtilityDomainService.Record(new List<IRecordContainer>(results));
@@ -253,25 +281,33 @@ namespace MachineLearningBP.Services.Sports.Nba
             {
                 using (GuerillaTimer timer = new GuerillaTimer(this._consoleHubProxy))
                 {
-                    NbaPointsExample[] data = await this.GetExamples();
-                    this._kNearestNeighborsDomainService.WritePythonDataFile(data);
-                    //public double[] WeightedKnn(TExample[] data, TExample v1, Func<Double, Double> weightf, int[] ks)
-                    Func<Double, Double> weightf = (d) => this._kNearestNeighborsDomainService.InverseWeight(d);
-
-                    KNearestNeighborsCrossValidateInput<NbaPointsExample, NbaStatLine, Double> input = new KNearestNeighborsCrossValidateInput<NbaPointsExample, NbaStatLine, double>();
-                    input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
-                    input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
-                    input.Ks = new int[] { 40 };
-                    
-
                     using (var unitOfWork = this.UnitOfWorkManager.Begin())
                     {
+                        KNearestNeighborsOptimalParametersInput<NbaPointsExample, NbaStatLine, Double> optimalParametersInput = new KNearestNeighborsOptimalParametersInput<NbaPointsExample, NbaStatLine, double>();
+                        List<NbaPointsExample> data = new List<NbaPointsExample>();
+                        data.AddRange(await this.GetExamples());
+
                         DateTime now = Clock.Now;
                         List<NbaPointsExample> todaysExamples = this._exampleRepository.GetAll().Where(x => x.Date.Year == now.Year && x.Date.Month == now.Month && x.Date.Day == now.Day).ToList();
+                        //data.AddRange(todaysExamples);
+
+                        optimalParametersInput.Data = data.ToArray();
+                        optimalParametersInput.DistanceMethod = KNearestNeighborsDistanceMethods.Euclidean;
+
+                        //Double[] daisyDistances = this._kNearestNeighborsDomainService.GetDaisyDistances(optimalParametersInput);
+                        this._kNearestNeighborsDomainService.WritePythonDataFile(optimalParametersInput.Data);
+                        //public double[] WeightedKnn(TExample[] data, TExample v1, Func<Double, Double> weightf, int[] ks)
+                        Func<Double, Double> weightf = (d) => this._kNearestNeighborsDomainService.InverseWeight(d);
+
+                        KNearestNeighborsCrossValidateInput<NbaPointsExample, NbaStatLine, Double> input = new KNearestNeighborsCrossValidateInput<NbaPointsExample, NbaStatLine, double>();
+                        input.GuessMethod = KNearestNeighborsGuessMethods.WeightedKnn;
+                        input.WeightMethod = KNearestNeighborsWeightMethods.InverseWeight;
+                        input.Ks = new int[] { 40 };
 
                         foreach (NbaPointsExample example in todaysExamples)
                         {
                             NbaStatLine statLine = await this._statLineRepository.GetAsync(example.StatLineId);
+                            example.Index = data.IndexOf(example);
                             input.Observation = example;
                             statLine.KnnPoints = input.GetPythonResults(this._commandRunner).First().Result;
                         }
@@ -295,8 +331,8 @@ namespace MachineLearningBP.Services.Sports.Nba
 
             using (var unitOfWork = this.UnitOfWorkManager.Begin())
             {
-                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
-                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(500).ToArray();
+                data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).ToArray();
+                //data = this._exampleRepository.GetAll().Where(x => x.Date < Clock.Now.Date).OrderByDescending(x => x.StatLine.Sample.Date).Take(500).ToArray();
                 unitOfWork.Complete();
             }
 

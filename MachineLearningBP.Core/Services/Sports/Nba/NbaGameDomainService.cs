@@ -14,6 +14,7 @@ using MachineLearningBP.Entities.Sports.Nba;
 using MachineLearningBP.Shared.SqlExecuter;
 using MachineLearningBP.CollectiveIntelligence.DomainServices.Samples;
 using Abp.BackgroundJobs;
+using MachineLearningBP.Entities.Sports.Nfl.Dtos;
 
 namespace MachineLearningBP.Core.Services.Sports.Nba
 {
@@ -94,7 +95,7 @@ namespace MachineLearningBP.Core.Services.Sports.Nba
         #endregion
 
         #region ScrapeGamesForDate
-        public async Task ScrapeGamesForDate(DateTime currentDate, DateTime now, NbaSeason season)
+        public async Task ScrapeGamesForDate(DateTime currentDate, DateTime now, NbaSeason season, List<NflPlay> plays = null)
         {
             this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Scraping {currentDate.ToShortDateString()} ..."));
 
@@ -111,7 +112,7 @@ namespace MachineLearningBP.Core.Services.Sports.Nba
         #endregion
 
         #region ScrapeGame
-        public async Task ScrapeGame(HtmlNode matchupBox, DateTime currentDate, DateTime now, NbaSeason season)
+        public async Task ScrapeGame(HtmlNode matchupBox, DateTime currentDate, DateTime now, NbaSeason season, List<NflPlay> plays = null)
         {
             using (var unitOfWork = this.UnitOfWorkManager.Begin())
             {

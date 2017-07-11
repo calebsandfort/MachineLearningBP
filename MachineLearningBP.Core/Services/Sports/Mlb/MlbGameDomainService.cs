@@ -14,6 +14,7 @@ using MachineLearningBP.Shared.SqlExecuter;
 using MachineLearningBP.CollectiveIntelligence.DomainServices.Samples;
 using System.Text.RegularExpressions;
 using Abp.BackgroundJobs;
+using MachineLearningBP.Entities.Sports.Nfl.Dtos;
 
 namespace MachineLearningBP.Core.Services.Sports.Mlb
 {
@@ -88,7 +89,7 @@ namespace MachineLearningBP.Core.Services.Sports.Mlb
         #endregion
 
         #region ScrapeGamesForDate
-        public async Task ScrapeGamesForDate(DateTime currentDate, DateTime now, MlbSeason season)
+        public async Task ScrapeGamesForDate(DateTime currentDate, DateTime now, MlbSeason season, List<NflPlay> plays = null)
         {
             this._consoleHubProxy.WriteLine(ConsoleWriteLineInput.Create($"Scraping {currentDate.ToShortDateString()} ..."));
 
@@ -105,7 +106,7 @@ namespace MachineLearningBP.Core.Services.Sports.Mlb
         #endregion
 
         #region ScrapeGame
-        public async Task ScrapeGame(HtmlNode matchupBox, DateTime currentDate, DateTime now, MlbSeason season)
+        public async Task ScrapeGame(HtmlNode matchupBox, DateTime currentDate, DateTime now, MlbSeason season, List<NflPlay> plays = null)
         {
             using (var unitOfWork = this.UnitOfWorkManager.Begin())
             {
@@ -313,7 +314,7 @@ namespace MachineLearningBP.Core.Services.Sports.Mlb
         #endregion
 
         #region IGameDomainService<MlbSeason, MlbStatLine>.ScrapeStatTable(MlbStatLine statLine, HtmlNode summaryRow)
-        void IGameDomainService<MlbSeason, MlbStatLine>.ScrapeStatTable(MlbStatLine statLine, HtmlNode summaryRow)
+        public void ScrapeStatTable(MlbStatLine statLine, HtmlNode summaryRow)
         {
             throw new NotImplementedException();
         } 

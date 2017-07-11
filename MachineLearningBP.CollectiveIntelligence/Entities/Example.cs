@@ -18,6 +18,9 @@ namespace MachineLearningBP.CollectiveIntelligence.Entities
         public TResult Result { get; set; }
         public abstract bool PythonIndexOnly { get; }
 
+        [NotMapped]
+        public int Index { get; set; }
+
         #region Numeric
         public String DelimitedNumericData { get; set; }
 

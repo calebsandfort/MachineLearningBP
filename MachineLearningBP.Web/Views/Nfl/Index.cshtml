@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.ActiveMenu = "NFL"; //The menu item will be active for this page.
+}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#today" aria-controls="today" role="tab" data-toggle="tab">Today</a></li>
+            <li role="presentation"><a href="#admin" aria-controls="admin" role="tab" data-toggle="tab">Admin</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content" style="padding-top: 10px;">
+            <div role="tabpanel" class="tab-pane active" id="today">
+                @Html.Partial("_TodayGrid")
+            </div>
+            <div role="tabpanel" class="tab-pane" id="admin">
+                <div class="row">
+                    <div class="col-xs-5">
+                        @*<div class="row">
+                            <div class="col-xs-12 block-header block-header-info block-header-white">
+                                <h2 class="layout-margin-tb-20">
+                                    <span class="title">Populate</span><span class="decoration"></span><span class="decoration"></span><span class="decoration"></span>
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-primary btn-block" onclick="MachineLearningBP.Nba.populateGames();">Populate Games</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-primary btn-block" onclick="MachineLearningBP.Nba.fillGames();">Fill Games</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-primary btn-block" onclick="MachineLearningBP.Nba.setSeasonsRollingWindowStart();">Prep Seasons</button>
+                            </div>
+                        </div>*@
+                        <div class="row" style="padding-top: 30px;">
+                            <div class="col-xs-12 block-header block-header-info block-header-white">
+                                <h2 class="layout-margin-tb-20">
+                                    <span class="title">Learn Points</span><span class="decoration"></span><span class="decoration"></span><span class="decoration"></span>
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Nfl.populatePointsExamples();">Populate</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-primary btn-block" onclick="MachineLearningBP.Nfl.setSeasonsRollingWindowStart();">Prep Seasons</button>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 30px;">
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Optimize.showOptimizeModal(0);">Genetic</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-success btn-block" onclick="MachineLearningBP.Optimize.showOptimizeModal(1);">Annealing</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-warning btn-block" onclick="MachineLearningBP.Nba.predictTodayKnnPoints();">Predict</button>
+                            </div>
+                        </div>
+                        @Html.Partial("_Admin")
+                    </div>
+                    <div class="col-xs-7">
+                        <div id="consoleWell" class="well" style="max-height: 680px; overflow: auto;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

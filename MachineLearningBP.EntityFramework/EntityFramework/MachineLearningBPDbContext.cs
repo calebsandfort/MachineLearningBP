@@ -8,6 +8,7 @@ using MachineLearningBP.Entities.Sports.Nba;
 using MachineLearningBP.Entities.Sports.Mlb;
 using MachineLearningBP.Entities;
 using MachineLearningBP.Entities.Movies;
+using MachineLearningBP.Entities.Sports.Nfl;
 
 namespace MachineLearningBP.EntityFramework
 {
@@ -19,6 +20,12 @@ namespace MachineLearningBP.EntityFramework
         public virtual IDbSet<NbaStatLine> NbaStatLines { get; set; }
         public virtual IDbSet<NbaPointsExample> NbaPointsExamples { get; set; }
         public virtual IDbSet<NbaAtsTreeExample> NbaAtsTreeExamples { get; set; }
+
+        public virtual IDbSet<NflSeason> NflSeasons { get; set; }
+        public virtual IDbSet<NflGame> NflGames { get; set; }
+        public virtual IDbSet<NflTeam> NflTeams { get; set; }
+        public virtual IDbSet<NflStatLine> NflStatLines { get; set; }
+        public virtual IDbSet<NflPointsExample> NflPointsExamples { get; set; }
 
         public virtual IDbSet<MlbSeason> MlbSeasons { get; set; }
         public virtual IDbSet<MlbGame> MlbGames { get; set; }

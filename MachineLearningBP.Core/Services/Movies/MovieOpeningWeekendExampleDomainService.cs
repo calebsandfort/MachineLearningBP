@@ -119,8 +119,22 @@ namespace MachineLearningBP.Services.Movies
         public async Task<List<KNearestNeighborsCrossValidateResult>> FindOptimalParametersPythonAndR(bool record)
         {
             MovieOpeningWeekendExample[] data = await this.GetExamples();
-            
-            List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParametersPythonAndR(data);
+
+            KNearestNeighborsOptimalParametersInput<MovieOpeningWeekendExample, MovieStatLine, Double> optimalParametersInput = new KNearestNeighborsOptimalParametersInput<MovieOpeningWeekendExample, MovieStatLine, double>();
+            optimalParametersInput.Data = data;
+            optimalParametersInput.DistanceMethod = KNearestNeighborsDistanceMethods.Gower;
+            optimalParametersInput.GuessMethods.Add(KNearestNeighborsGuessMethods.KnnEstimate);
+            optimalParametersInput.GuessMethods.Add(KNearestNeighborsGuessMethods.WeightedKnn);
+
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.Gaussian);
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.InverseWeight);
+            optimalParametersInput.WeightMethods.Add(KNearestNeighborsWeightMethods.SubtractWeight);
+
+            optimalParametersInput.Ks = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+            optimalParametersInput.SubtractWeightConstant = 1;
+            optimalParametersInput.Trials = 25;
+
+            List<KNearestNeighborsCrossValidateResult> results = this._kNearestNeighborsDomainService.FindOptimalParametersPythonAndR(optimalParametersInput);
 
             if (record && results.Count > 0)
                 await this._sheetUtilityDomainService.Record(new List<IRecordContainer>(results));

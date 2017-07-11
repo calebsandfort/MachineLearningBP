@@ -24,7 +24,7 @@
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
-    <TypeScriptToolsVersion>2.1</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -491,6 +491,7 @@
     <Compile Include="Controllers\ConsoleSignalRController.cs" />
     <Compile Include="Controllers\MlbController.cs" />
     <Compile Include="Controllers\MoviesController.cs" />
+    <Compile Include="Controllers\NflController.cs" />
     <Compile Include="Controllers\NbaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Results\ChallengeResult.cs" />
@@ -559,6 +560,8 @@
     <Content Include="Views\Shared\Modals\_AnnealingOptimizeFields.cshtml" />
     <Content Include="Views\Movies\_TodayGrid.cshtml" />
     <Content Include="Views\Movies\Index.cshtml" />
+    <Content Include="Views\Nfl\_TodayGrid.cshtml" />
+    <Content Include="Views\Nfl\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

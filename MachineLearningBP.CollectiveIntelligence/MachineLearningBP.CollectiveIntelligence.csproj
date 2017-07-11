@@ -100,6 +100,7 @@
     <Compile Include="DomainServices\Algorithms\Dtos\IAnnealingOptimizeInput.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\IGeneticOptimizeInput.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\IRecordContainer.cs" />
+    <Compile Include="DomainServices\Algorithms\Dtos\KNearestNeighborsOptimalParametersInput.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\KnnOptimizeInput.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\Bucket.cs" />
     <Compile Include="DomainServices\Algorithms\Dtos\OptimizationScore.cs" />
