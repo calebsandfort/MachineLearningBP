@@ -27,7 +27,7 @@ namespace MachineLearningBP.CollectiveIntelligence.Framework
         {
             if (naValues != null && naValues.Contains(val)) return "NA";
 
-            return val;
+            return $"\"{val}\"";
         }
 
         public static String ToRBool(this bool val)

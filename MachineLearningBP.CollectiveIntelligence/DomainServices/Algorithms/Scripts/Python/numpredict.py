@@ -99,10 +99,12 @@ def testalgorithm(algf, trainset, testset, ks):
     for row in testset:
         guesses = algf(trainset, row, ks)
         for i in range(len(ks)):
-            errors[i] += (row['result'] - guesses[i]) ** 2
-
-        # print row['result'],guess
-    # print error/len(testset)
+            miss = (row['result'] - guesses[i])
+            missSquared = miss ** 2
+            errors[i] += abs(miss)
+            #errors[i] += (row['result'] - guesses[i])
+            #print(row['result'],guesses[i], miss, missSquared)
+    #print(errors, len(testset))
     return errors / len(testset)
 
 

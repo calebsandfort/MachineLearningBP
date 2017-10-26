@@ -1,6 +1,8 @@
 ﻿using HtmlAgilityPack;
+using MachineLearningBP.Entities.iSupport;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -95,6 +97,19 @@ namespace MachineLearningBP.Framework
             d = DateTime.Parse($"{str} {year}");
 
             return d;
+        }
+
+        public static IEnumerable<T> Select<T>(this IDataReader reader, Func<IDataReader, T> projection)
+        {
+            while (reader.Read())
+            {
+                yield return projection(reader);
+            }
+        }
+
+        public static T LoadValueFromReader<T>(this IDataReader reader, String columnName, T defaultValue)
+        {
+            return reader[columnName] is DBNull ? defaultValue : (T)reader[columnName];
         }
     }
 }

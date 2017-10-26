@@ -9,6 +9,7 @@ using MachineLearningBP.Entities.Sports.Mlb;
 using MachineLearningBP.Entities;
 using MachineLearningBP.Entities.Movies;
 using MachineLearningBP.Entities.Sports.Nfl;
+using MachineLearningBP.Entities.iSupport;
 
 namespace MachineLearningBP.EntityFramework
 {
@@ -37,6 +38,10 @@ namespace MachineLearningBP.EntityFramework
         public virtual IDbSet<MovieStatLine> MovieStatLines { get; set; }
         public virtual IDbSet<MovieParticipant> MovieParticipants { get; set; }
         public virtual IDbSet<MovieOpeningWeekendExample> MovieOpeningWeekendExamples { get; set; }
+
+        public virtual IDbSet<Incident> Incidents { get; set; }
+        public virtual IDbSet<IncidentStatLine> IncidentStatLines { get; set; }
+        public virtual IDbSet<IncidentExample> IncidentExamples { get; set; }
 
         public virtual IDbSet<DecisionTree> DecisionTrees { get; set; }
 

@@ -551,7 +551,8 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
             using (GuerillaTimer guerillaTimer = new GuerillaTimer(this._consoleHubProxy))
             {
                 WriteRDataFile(optimalParametersInput);
-                Double[] distances = _commandRunner.RunCmd("RScript", rdataPathAndName).Trim().Split(",".ToCharArray()).Select(x => Double.Parse(x)).ToArray();
+                String strResult = _commandRunner.RunCmd("RScript", rdataPathAndName);
+                Double[] distances = strResult.Trim().Split(",".ToCharArray()).Select(x => Double.Parse(x)).ToArray();
                 return distances;
             }
         } 
@@ -576,7 +577,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     noComma.NumberGroupSeparator = String.Empty;
 
                     //Numeric
-                    double[] numericNaValues = { 0 };
+                    double[] numericNaValues = { -1 };
                     for (int i = 0; i < dummy.NumericData.Count; i++)
                     {
                         guerillakdataRFile.WriteLine($" num{i} = c({String.Join(",", optimalParametersInput.Data.Select(x => x.NumericData[i].ToRDouble(noComma, numericNaValues)))})");
@@ -584,7 +585,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     }
 
                     //Ordinal
-                    double[] ordinalNaValues = { 0 };
+                    double[] ordinalNaValues = { -1 };
                     for (int i = 0; i < dummy.OrdinalData.Count; i++)
                     {
                         guerillakdataRFile.WriteLine($" ord{i} = ordered(c({String.Join(",", optimalParametersInput.Data.Select(x => x.OrdinalData[i].ToRInt(noComma, ordinalNaValues)))}))");
@@ -592,7 +593,7 @@ namespace MachineLearningBP.CollectiveIntelligence.DomainServices.Algorithms
                     }
 
                     //Nominal
-                    string[] nominalNaValues = { "0" };
+                    string[] nominalNaValues = { "" };
                     for (int i = 0; i < dummy.NominalData.Count; i++)
                     {
                         guerillakdataRFile.WriteLine($" nom{i} = factor(c({String.Join(",", optimalParametersInput.Data.Select(x => x.NominalData[i].ToRString(nominalNaValues)))}))");

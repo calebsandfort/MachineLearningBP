@@ -244,6 +244,26 @@
     <Compile Include="Migrations\201705041616397_ChangeFieldPositionName.Designer.cs">
       <DependentUpon>201705041616397_ChangeFieldPositionName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710251541277_AddIncidentTables1.cs" />
+    <Compile Include="Migrations\201710251541277_AddIncidentTables1.Designer.cs">
+      <DependentUpon>201710251541277_AddIncidentTables1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710251704207_ChangeIncidentStatLineFieldTypes.cs" />
+    <Compile Include="Migrations\201710251704207_ChangeIncidentStatLineFieldTypes.Designer.cs">
+      <DependentUpon>201710251704207_ChangeIncidentStatLineFieldTypes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710251739464_ChangeIncidentCategoryFields.cs" />
+    <Compile Include="Migrations\201710251739464_ChangeIncidentCategoryFields.Designer.cs">
+      <DependentUpon>201710251739464_ChangeIncidentCategoryFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710252316400_AddIncidentExamples.cs" />
+    <Compile Include="Migrations\201710252316400_AddIncidentExamples.Designer.cs">
+      <DependentUpon>201710252316400_AddIncidentExamples.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710261712142_ChangeIncidentExampleResultFromDoubleToInt.cs" />
+    <Compile Include="Migrations\201710261712142_ChangeIncidentExampleResultFromDoubleToInt.Designer.cs">
+      <DependentUpon>201710261712142_ChangeIncidentExampleResultFromDoubleToInt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AbpZeroDbMigrator.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MachineLearningBPDataModule.cs" />
@@ -359,6 +379,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705041616397_ChangeFieldPositionName.resx">
       <DependentUpon>201705041616397_ChangeFieldPositionName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710251541277_AddIncidentTables1.resx">
+      <DependentUpon>201710251541277_AddIncidentTables1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710251704207_ChangeIncidentStatLineFieldTypes.resx">
+      <DependentUpon>201710251704207_ChangeIncidentStatLineFieldTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710251739464_ChangeIncidentCategoryFields.resx">
+      <DependentUpon>201710251739464_ChangeIncidentCategoryFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710252316400_AddIncidentExamples.resx">
+      <DependentUpon>201710252316400_AddIncidentExamples.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710261712142_ChangeIncidentExampleResultFromDoubleToInt.resx">
+      <DependentUpon>201710261712142_ChangeIncidentExampleResultFromDoubleToInt.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
